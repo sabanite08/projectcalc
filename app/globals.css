@@ -566,6 +566,27 @@ header.site-header {
   margin-bottom: 14px;
 }
 
+/* ─── DISCLAIMER ─── */
+.disclaimer {
+  max-width: 720px;
+  margin-top: 28px;
+  padding: 16px 18px;
+  background: rgba(255, 90, 31, 0.06);
+  border: 1px solid rgba(255, 90, 31, 0.4);
+  border-left: 3px solid var(--safety);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.disclaimer strong {
+  color: var(--safety);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  margin-right: 4px;
+}
+
 /* ─── BLOG ─── */
 .post-list {
   display: grid;

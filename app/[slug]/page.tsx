@@ -46,6 +46,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
 
   const faq = getFAQ(calc.slug);
   const relatedPosts = getPostsForCalc(calc.slug);
+  const isFinanceAdvice = calc.category === 'finance' && calc.slug !== 'tip-calculator';
 
   // JSON-LD structured data for Google — combine WebApplication + FAQPage in @graph
   const ldGraph: object[] = [
@@ -91,6 +92,17 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
         </div>
 
         <CalculatorView slug={calc.slug} />
+
+        {isFinanceAdvice && (
+          <div className="disclaimer">
+            <strong>Not financial advice.</strong> This calculator provides
+            estimates using industry-standard formulas for educational purposes
+            only. Real loan terms vary based on your credit, lender fees, and
+            program-specific rates. For any major financial decision (home
+            purchase, large loan, refinance), consult a licensed loan officer or
+            financial advisor before signing anything.
+          </div>
+        )}
 
         <div className="seo-block">
           <h2>About this calculator</h2>

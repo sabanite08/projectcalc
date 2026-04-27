@@ -173,6 +173,15 @@ const Body = () => (
       <Link href="/personal-loan-calculator" style={{ color: 'var(--hi-vis)' }}>personal loan</Link>{' '}
       calculators too.
     </p>
+
+    <p style={{ marginTop: 24, padding: '14px 16px', background: 'rgba(255,90,31,0.06)', borderLeft: '3px solid var(--safety)', fontSize: 12, lineHeight: 1.6, color: 'var(--ink-3)' }}>
+      <strong style={{ color: 'var(--safety)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Not financial advice.</strong>{' '}
+      This article describes general principles of mortgage and home-buying
+      math for educational purposes. Your actual rates, terms, eligibility,
+      and tax situation depend on your credit, location, lender, and
+      regulations that change. Consult a licensed loan officer or financial
+      advisor before any home-purchase or refinance decision.
+    </p>
   </>
 );
 
