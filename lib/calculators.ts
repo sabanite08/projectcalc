@@ -384,7 +384,7 @@ export const calculators: Calculator[] = [
   {
     slug: 'siding-calculator',
     name: 'Siding',
-    category: 'home',
+    category: 'construction',
     desc: 'Squares needed',
     formula: 'squares = ft² ÷ 100',
     title: 'SIDING',

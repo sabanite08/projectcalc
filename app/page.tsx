@@ -10,7 +10,7 @@ const categoryLabels: Record<string, string> = {
 
 const categoryBlurbs: Record<string, string> = {
   construction:
-    'Pro-grade calculators for the trades — voltage drop to NEC spec, board feet for lumber orders, BTU sizing for HVAC, brick counts with mortar bag estimates, and pipe water capacity. Built for contractors, electricians, framers, and anyone bidding a job.',
+    'Pro-grade calculators for the trades — voltage drop to NEC spec, board feet for lumber orders, BTU sizing for HVAC, brick counts with mortar bag estimates, siding squares for vinyl and fiber cement jobs, and pipe water capacity. Built for contractors, electricians, framers, and anyone bidding a job.',
   home:
     'Material calculators for any project around the house — concrete bags or yards for slabs, drywall sheets for a remodel, paint gallons by room, mulch and gravel by the yard, sod pallets, deck stain, fence posts, tile, and roofing shingles. Get the right amount the first time so you\'re not making a second trip to Home Depot.',
   finance:
