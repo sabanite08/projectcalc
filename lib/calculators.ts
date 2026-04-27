@@ -648,6 +648,77 @@ export const calculators: Calculator[] = [
     }
   },
   {
+    slug: 'car-payment-calculator',
+    name: 'Car Payment',
+    category: 'finance',
+    desc: 'Auto loan',
+    formula: 'M = P·r(1+r)ⁿ / ((1+r)ⁿ-1)',
+    title: 'CAR PAYMENT',
+    metaTitle: 'Car Payment Calculator — Monthly Auto Loan Payment | ProjectCalc',
+    metaDesc: 'Free car payment calculator. Enter price, down payment, trade-in, term, and rate — get monthly payment, total interest, and amount financed.',
+    seoIntro: 'This car payment calculator estimates your monthly auto loan payment. Enter the vehicle price, your down payment in cash, the trade-in value of your current vehicle (if any), the loan term in months, and the interest rate. The calculator returns your monthly principal and interest payment along with the total amount financed and total interest paid over the life of the loan. Sales tax varies by state — some states tax the full price, others tax price minus trade-in. If you want to include sales tax, add it to the vehicle price.',
+    note: 'Principal & interest only. Doesn\'t include sales tax, title, registration, or extended warranty add-ons. Average new-car rates in 2026: 7–9%; used: 9–12%.',
+    inputs: [
+      { id: 'price', label: 'Vehicle price', unit: '$', default: 35000, step: 500 },
+      { id: 'down', label: 'Down payment', unit: '$', default: 5000, step: 500 },
+      { id: 'trade', label: 'Trade-in value', unit: '$', default: 0, step: 500 },
+      { id: 'months', label: 'Loan term', unit: '', type: 'select', default: '60',
+        options: [['36','36 months (3 yr)'],['48','48 months (4 yr)'],['60','60 months (5 yr)'],['72','72 months (6 yr)'],['84','84 months (7 yr)']] },
+      { id: 'rate', label: 'Interest rate (APR)', unit: '%', default: 8.5, step: 0.125 }
+    ],
+    calc: (data) => {
+      const price=+data.price, down=+data.down, trade=+data.trade, months=+data.months, rate=+data.rate;
+      const P = Math.max(0, price - down - trade);
+      const r = rate / 100 / 12;
+      const M = P === 0 ? 0 : (r === 0 ? P / months : P * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1));
+      const totalPaid = M * months;
+      const totalInterest = totalPaid - P;
+      return {
+        main: '$' + M.toLocaleString(undefined, {maximumFractionDigits: 2}), unit: 'PER MONTH',
+        detail: [
+          ['Amount financed', '$' + P.toLocaleString(undefined, {maximumFractionDigits: 0})],
+          ['Total interest', '$' + totalInterest.toLocaleString(undefined, {maximumFractionDigits: 0})],
+          ['Total paid (loan)', '$' + totalPaid.toLocaleString(undefined, {maximumFractionDigits: 0})],
+          ['Total cost (incl. down + trade)', '$' + (totalPaid + down + trade).toLocaleString(undefined, {maximumFractionDigits: 0})]
+        ]
+      };
+    }
+  },
+  {
+    slug: 'personal-loan-calculator',
+    name: 'Personal Loan',
+    category: 'finance',
+    desc: 'Monthly payment',
+    formula: 'M = P·r(1+r)ⁿ / ((1+r)ⁿ-1)',
+    title: 'PERSONAL LOAN',
+    metaTitle: 'Personal Loan Calculator — Monthly Payment & Total Interest | ProjectCalc',
+    metaDesc: 'Personal loan calculator. Enter loan amount, APR, and term — get monthly payment plus total interest you\'ll pay over the life of the loan.',
+    seoIntro: 'This personal loan calculator computes the monthly payment on an unsecured fixed-rate personal loan. Enter the loan amount, the APR (annual percentage rate) the lender quoted you, and the term in months. The calculator returns the monthly principal and interest payment plus the total interest you\'ll pay over the life of the loan. Personal loan APRs in 2026 typically range from 7% (excellent credit, top lenders) to 35% (subprime). Most personal loans run 24 to 84 months.',
+    note: 'Doesn\'t account for origination fees, which some lenders deduct from your funded amount (a 5% fee on a $10,000 loan means you receive $9,500 but still owe $10,000).',
+    inputs: [
+      { id: 'P', label: 'Loan amount', unit: '$', default: 15000, step: 500 },
+      { id: 'rate', label: 'Interest rate (APR)', unit: '%', default: 12, step: 0.25 },
+      { id: 'months', label: 'Term', unit: '', type: 'select', default: '60',
+        options: [['12','12 months (1 yr)'],['24','24 months (2 yr)'],['36','36 months (3 yr)'],['48','48 months (4 yr)'],['60','60 months (5 yr)'],['72','72 months (6 yr)'],['84','84 months (7 yr)']] }
+    ],
+    calc: (data) => {
+      const P=+data.P, rate=+data.rate, months=+data.months;
+      const r = rate / 100 / 12;
+      const M = r === 0 ? P / months : P * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+      const totalPaid = M * months;
+      const totalInterest = totalPaid - P;
+      return {
+        main: '$' + M.toLocaleString(undefined, {maximumFractionDigits: 2}), unit: 'PER MONTH',
+        detail: [
+          ['Total paid', '$' + totalPaid.toLocaleString(undefined, {maximumFractionDigits: 0})],
+          ['Total interest', '$' + totalInterest.toLocaleString(undefined, {maximumFractionDigits: 0})],
+          ['Loan amount', '$' + P.toLocaleString()],
+          ['Term', months + ' months']
+        ]
+      };
+    }
+  },
+  {
     slug: 'tip-calculator',
     name: 'Tip',
     category: 'finance',

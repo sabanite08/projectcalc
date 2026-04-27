@@ -267,6 +267,34 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Each point costs 1% of the loan and typically reduces rate by 0.25%. Break-even is usually 4–6 years. If you\'ll stay in the home longer than that, points save money. If you might move or refinance sooner, skip them.',
     },
   ],
+  'car-payment-calculator': [
+    {
+      q: 'What\'s a good interest rate on a car loan?',
+      a: 'In 2026, excellent credit (740+) gets 6–8% on new cars and 7–10% on used. Average credit (660–739) sees 9–12% new and 11–14% used. Subprime (under 660) ranges from 14–22%. Always check your bank or credit union before accepting dealer financing — credit unions usually beat dealer rates by 1–3 points.',
+    },
+    {
+      q: 'Should I take a 60-month or 72-month loan?',
+      a: '60 months (5 years) is the sweet spot: lower interest paid than 72 or 84, payment stays manageable, and the car is paid off before major repairs hit. 72 and 84 month loans look attractive for the lower payment but you\'ll be underwater (owe more than car is worth) for most of the loan, and you\'ll pay 30–60% more total interest.',
+    },
+    {
+      q: 'How much should I put down on a car?',
+      a: 'Aim for 20% down on new and 10% on used to avoid being underwater immediately (new cars lose 20% of value in year one). If you can\'t hit that, consider GAP insurance to cover the difference between loan balance and car value if it\'s totaled. Trade-in value counts as down payment.',
+    },
+  ],
+  'personal-loan-calculator': [
+    {
+      q: 'What credit score do I need for a personal loan?',
+      a: 'Most lenders require 600+ for any approval. To get good rates (under 12% APR), you typically need 670+. Excellent rates (under 9%) require 740+. Subprime lenders will go down to 580 but rates climb past 25%.',
+    },
+    {
+      q: 'What\'s an origination fee and does this calculator include it?',
+      a: 'An origination fee is a one-time charge some lenders deduct from your funded amount — typically 1–8% of the loan. On a $10,000 loan with a 5% fee, you receive $9,500 but still pay back $10,000 plus interest. This calculator doesn\'t subtract origination fees; check your loan estimate. Lenders like SoFi, Marcus, and LightStream typically have no origination fee.',
+    },
+    {
+      q: 'Personal loan vs credit card vs HELOC — which is cheapest?',
+      a: 'For balances you can pay in 12 months: 0% APR balance-transfer credit card (if you qualify) is cheapest. For 24–60 month payoff: personal loan typically beats credit cards (which average 22% APR). HELOC is usually cheapest of all (8–10%) but requires home equity and has variable rates that can rise.',
+    },
+  ],
   'tip-calculator': [
     {
       q: 'How much should I tip at a restaurant?',

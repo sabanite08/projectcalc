@@ -14,7 +14,7 @@ const categoryBlurbs: Record<string, string> = {
   home:
     'Material calculators for any project around the house — concrete bags or yards for slabs, drywall sheets for a remodel, paint gallons by room, mulch and gravel by the yard, sod pallets, deck stain, fence posts, tile, and roofing shingles. Get the right amount the first time so you\'re not making a second trip to Home Depot.',
   finance:
-    'Quick money math — mortgage monthly payment with full amortization summary, restaurant tips with bill split. More finance calculators coming.',
+    'Quick money math — mortgage payments with full amortization, car loan payments factoring in down payment and trade-in, personal loan payoff math, and restaurant tips with bill split. Skip the bank\'s overcomplicated calculator — these give you the real number in three inputs.',
 };
 
 export default function Home() {
