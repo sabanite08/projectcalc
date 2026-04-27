@@ -253,6 +253,20 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Type L copper ½" pipe (ID 0.545") holds about 1.21 gallons per 100 ft. PEX-A ½" (ID 0.475") holds 0.92 gallons. Schedule 40 PVC ½" (ID 0.602") holds 1.48 gallons. Always check actual ID — it varies by material.',
     },
   ],
+  'lumber-cut-calculator': [
+    {
+      q: 'What is a saw kerf and why does it matter?',
+      a: 'The kerf is the slot of material the blade removes on each cut — typically 1/8" for a standard circular or miter saw, 3/32" for a thin-kerf framing blade. Ignoring it underestimates waste: ten 12-inch cuts in a 120-inch board only yields nine cuts once kerf is factored in (10 × 12 + 10 × 0.125 = 121.25"), so you actually need a longer stick or accept one short piece.',
+    },
+    {
+      q: 'What is the standard length of a wall stud?',
+      a: 'Pre-cut wall studs run 92-5/8" for a standard 8-foot wall — that\'s 96" minus the 1-1/2" bottom plate and double 1-1/2" top plates. For a 9-foot wall use 104-5/8", and for a 10-foot wall use 116-5/8". Stud-grade SPF and Doug fir at the lumberyard are usually pre-cut to 92-5/8" so you can frame an 8-ft wall straight from the bunk.',
+    },
+    {
+      q: 'How do I handle a mixed cut list?',
+      a: 'Run the calculator once for each unique cut length, then sum the boards. A true cut-list optimizer would mix leftovers from one length into the next (a 30" leftover could yield two 14-1/2" cripples), which saves 5–15% on most jobs. The simple version here is conservative — accurate per length, but does not pool offcuts across lengths.',
+    },
+  ],
   'conduit-fill-calculator': [
     {
       q: 'What is the NEC fill limit for EMT?',

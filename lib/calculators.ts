@@ -620,6 +620,58 @@ export const calculators: Calculator[] = [
     }
   },
   {
+    slug: 'lumber-cut-calculator',
+    name: 'Lumber Cuts',
+    category: 'construction',
+    desc: 'Boards & waste',
+    formula: 'cuts/board = stock ÷ (cut + kerf)',
+    title: 'LUMBER CUT LIST',
+    metaTitle: 'Lumber Cut Calculator — Boards Needed & Waste | ProjectCalc',
+    metaDesc: 'Free lumber cut calculator for framers. Enter stock length, cut length, and quantity — get boards needed, cuts per board, and waste percent.',
+    seoIntro: 'This lumber cut calculator tells a framer or finish carpenter exactly how many boards to buy when every cut is the same length — wall studs, blocking, cripples, jack rafters, fascia returns, deck balusters, fence pickets. Pick the stock length you can buy at the lumberyard, enter the length each cut needs to be, set how many cuts the job calls for, and the calculator subtracts a saw kerf (default 1/8") from each cut. The output is the cuts you can get per board, total boards needed (rounded up), and the leftover waste per stick. For a mixed cut list, run the calculator separately for each unique length and add the boards together.',
+    note: 'Kerf-aware (default 1/8"). For mixed cut lists, run separately per length and sum.',
+    inputs: [
+      { id: 'stock', label: 'Stock board length', unit: '', type: 'select', default: '96',
+        options: [['72','6 ft (72")'],['96','8 ft (96")'],['120','10 ft (120")'],['144','12 ft (144")'],['168','14 ft (168")'],['192','16 ft (192")'],['240','20 ft (240")']] },
+      { id: 'cut', label: 'Cut length', unit: 'in', default: 92.625, step: 0.125,
+        tooltip: 'Pre-cut wall stud is 92-5/8" (8 ft wall) or 104-5/8" (9 ft wall). 16" o.c. cripples are 14-1/2".' },
+      { id: 'qty', label: 'Total cuts needed', unit: '', default: 30, step: 1 },
+      { id: 'kerf', label: 'Saw kerf', unit: 'in', default: 0.125, step: 0.0625,
+        tooltip: 'Width of material removed by the saw blade. 1/8" is standard for circular and miter saws; thin-kerf framing blades run 3/32".' }
+    ],
+    calc: (data) => {
+      const stock = +data.stock, cut = +data.cut, qty = +data.qty, kerf = +data.kerf;
+      const cutsPerBoard = Math.floor(stock / (cut + kerf));
+      if (cutsPerBoard === 0) {
+        return {
+          main: 'N/A', unit: 'CUT TOO LONG',
+          detail: [
+            ['Issue', 'Cut length exceeds stock board'],
+            ['Stock', (stock / 12).toFixed(2) + ' ft'],
+            ['Cut', cut + '"'],
+            ['Fix', 'Pick longer stock or use a scarf joint']
+          ]
+        };
+      }
+      const boards = Math.ceil(qty / cutsPerBoard);
+      const wastePerBoard = stock - cutsPerBoard * (cut + kerf);
+      const cutsOnLast = qty - cutsPerBoard * (boards - 1);
+      const totalLinearIn = boards * stock;
+      const totalUsedIn = qty * cut;
+      const wastePct = ((totalLinearIn - totalUsedIn) / totalLinearIn) * 100;
+      return {
+        main: boards, unit: 'BOARDS NEEDED',
+        detail: [
+          ['Cuts per board', cutsPerBoard],
+          ['Cuts on last board', cutsOnLast],
+          ['Waste per board', wastePerBoard.toFixed(2) + '"'],
+          ['Total waste', wastePct.toFixed(1) + '%'],
+          ['Stock length', (stock / 12).toFixed(0) + ' ft']
+        ]
+      };
+    }
+  },
+  {
     slug: 'conduit-fill-calculator',
     name: 'Conduit Fill',
     category: 'construction',
