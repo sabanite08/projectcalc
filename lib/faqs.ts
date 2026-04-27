@@ -199,16 +199,16 @@ export const faqs: Record<string, FAQItem[]> = {
   ],
   'lumber-calculator': [
     {
-      q: 'What\'s the difference between nominal and actual lumber size?',
-      a: 'A "2×4" measures 1.5"×3.5" actual. Nominal sizes are what lumber was before drying and planing. Use nominal for board feet calculations and ordering; use actual when measuring fits and clearances.',
+      q: 'What does "on center" or "o.c." mean?',
+      a: 'On-center is the distance between the center of one framing member and the center of the next. 16" o.c. means studs (or joists, rafters) are spaced so the centers are 16 inches apart, regardless of how thick the lumber actually is. Standard residential framing is 16" o.c.; ceiling joists and engineered floors often run 24" o.c.; 19.2" appears in advanced framing layouts (a 5-on-8 pattern that lines up with 8-ft sheet goods); 12" o.c. shows up in heavy-load areas or short-span situations.',
     },
     {
-      q: 'How much does a board foot of lumber cost?',
-      a: 'Construction-grade 2× SPF: $0.60–1.20/BF. Premium framing (Doug fir, southern yellow pine): $1–2/BF. Hardwoods at the lumber yard: oak $4–8/BF, walnut $10–15/BF, maple $5–9/BF. Big-box stores price by piece, not BF.',
+      q: 'What pre-cut stud length should I order?',
+      a: 'For an 8-ft wall, pre-cut studs are 92-5/8" — that gives a finished ceiling around 8\'1-1/8" once the bottom plate (1-1/2") and double top plate (3") are added on. For 9-ft walls use 104-5/8", for 10-ft walls use 116-5/8". For non-standard heights, take the ceiling height in inches and subtract 4-1/2" — that\'s your stud cut length.',
     },
     {
-      q: 'How do I convert linear feet to board feet?',
-      a: 'Multiply nominal thickness × nominal width × length (in feet) ÷ 12. A 2×6 that\'s 8 ft long is 2 × 6 × 8 ÷ 12 = 8 board feet. This calculator does it for you across multiple pieces.',
+      q: 'Do I need extras for corners and openings?',
+      a: 'Yes. This calculator gives the run count along a single wall or joist line — corners, T-intersections, and openings are layout-dependent. Add 2–3 studs per outside corner (a 3-stud corner is the standard), 2–3 per T-intersection where another wall ties in, and 4 studs per door or window opening (2 jacks + 2 kings). Add cripple studs at 16" o.c. above and below openings as needed. A typical room ends up 6–12% over the run count.',
     },
   ],
   'voltage-drop-calculator': [

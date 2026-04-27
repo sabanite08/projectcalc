@@ -62,12 +62,15 @@ export default function CalculatorView({ slug }: { slug: string }) {
   return (
     <div className="calc-body">
       <div className="inputs">
-        {calc.inputs.map(inp => (
+        {calc.inputs.map(inp => {
+          const label = typeof inp.label === 'function' ? inp.label(data) : inp.label;
+          const tooltip = typeof inp.tooltip === 'function' ? inp.tooltip(data) : inp.tooltip;
+          return (
           <div key={inp.id} className="input-group">
             <label>
-              {inp.label}
-              {inp.tooltip && (
-                <span className="tooltip-trigger" data-tooltip={inp.tooltip}>?</span>
+              {label}
+              {tooltip && (
+                <span className="tooltip-trigger" data-tooltip={tooltip}>?</span>
               )}
             </label>
             <div className="input-row">
@@ -94,7 +97,8 @@ export default function CalculatorView({ slug }: { slug: string }) {
               )}
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
       <div>
         <div className="result">

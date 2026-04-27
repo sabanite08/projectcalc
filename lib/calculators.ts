@@ -489,30 +489,76 @@ export const calculators: Calculator[] = [
     name: 'Lumber',
     category: 'construction',
     trade: 'Carpentry',
-    desc: 'Board feet',
-    formula: 'BF = T·W·L ÷ 12',
-    title: 'BOARD FEET',
-    metaTitle: 'Board Feet Calculator — Lumber Quantity | ProjectCalc',
-    metaDesc: 'Board feet calculator. Enter thickness, width, length, and quantity — get board feet for any lumber order.',
-    seoIntro: 'This board feet calculator helps you spec a lumber order. One board foot equals 144 cubic inches (a board 1 inch thick × 12 inches wide × 1 foot long). Use nominal sizes for the thickness and width inputs (a 2x4 is 1.5 × 3.5 actual, but 2 × 4 nominal — always use nominal for board feet). Length is in feet.',
-    note: 'T and W in inches, L in feet. One board foot = 144 cubic inches of lumber.',
+    desc: 'Studs · joists · rafters',
+    formula: 'count = ⌈run·12 ÷ o.c.⌉ + 1',
+    title: 'FRAMING LUMBER COUNT',
+    metaTitle: 'Framing Calculator — Studs, Joists, Rafters | ProjectCalc',
+    metaDesc: 'Free framing calculator. Pick wall studs, floor joists, ceiling joists, or rafters — enter dimensions and on-center spacing for piece count and linear feet.',
+    seoIntro: 'This framing lumber calculator handles four of the most common rough-framing counts: wall studs, floor joists, ceiling joists, and roof rafters. Pick the framing type, enter the room or wall dimensions, choose your on-center spacing, and the calculator returns the piece count plus the supporting numbers a framer or estimator actually wants — pre-cut stud length for walls, total linear feet for joists, rafter pairs and per-rafter horizontal span for roofs. Standard residential spacing is 16" o.c.; engineered floors and advanced framing often run 19.2" or 24" o.c.; 12" o.c. is used in heavy-load or short-span situations.',
+    note: 'Counts run-spacing pieces only. Add 2–3 studs per corner/T-intersection and 4 per opening for a full wall.',
     inputs: [
-      { id: 'T', label: 'Thickness (nominal)', unit: 'in', default: 2, step: 0.25, tooltip: 'Use the size as labeled at the lumber yard. A "2x4" is 2 nominal even though it measures 1.5".' },
-      { id: 'W', label: 'Width (nominal)', unit: 'in', default: 4, step: 0.25 },
-      { id: 'L', label: 'Length per piece', unit: 'ft', default: 8, step: 1 },
-      { id: 'qty', label: 'Quantity', unit: 'pcs', default: 10, step: 1 }
+      { id: 'type', label: 'Framing type', unit: '', type: 'select', default: 'wall-stud',
+        options: [['wall-stud','Wall studs'],['floor-joist','Floor joists'],['ceiling-joist','Ceiling joists'],['rafter','Rafters']] },
+      { id: 'L', unit: 'ft', default: 12, step: 0.5,
+        label: (d) => d.type === 'wall-stud' ? 'Wall length' : 'Room length (run)' },
+      { id: 'W', unit: 'ft', default: 8, step: 0.5,
+        label: (d) => d.type === 'wall-stud' ? 'Ceiling height' : 'Room width (span per piece)',
+        tooltip: (d) => d.type === 'rafter'
+          ? 'Room width — each rafter spans about half of this (plus pitch and overhang). Use the building width across the ridge.'
+          : d.type === 'wall-stud'
+            ? 'Ceiling height drives the pre-cut stud length, not the count. Standard 8 ft, 9 ft, or 10 ft walls use pre-cut studs.'
+            : 'The dimension each joist spans — typically the shorter room dimension.' },
+      { id: 'oc', label: 'On-center spacing', unit: '', type: 'select', default: '16',
+        tooltip: 'On-center is the distance between the center of one piece and the center of the next. 16" is standard residential, 24" is common for ceiling joists and engineered floors, 19.2" appears in advanced framing layouts.',
+        options: [['12','12" o.c. (heavy load)'],['16','16" o.c. (standard)'],['19.2','19.2" o.c. (advanced framing)'],['24','24" o.c.']] }
     ],
     calc: (data) => {
-      const T=+data.T, W=+data.W, L=+data.L, qty=+data.qty;
-      const perPiece = (T * W * L) / 12;
-      const total = perPiece * qty;
+      const type = data.type as string;
+      const L = +data.L, W = +data.W, oc = +data.oc;
+      const count = Math.ceil((L * 12) / oc) + 1;
+
+      if (type === 'wall-stud') {
+        const plateLF = L * 3;
+        const preCutMap: Record<string, string> = { '8': '92-5/8"', '9': '104-5/8"', '10': '116-5/8"' };
+        const preCut = preCutMap[String(W)] || (W * 12 - 4.5).toFixed(2) + '" (custom)';
+        return {
+          main: count, unit: 'WALL STUDS',
+          detail: [
+            ['Spacing', oc + '" o.c.'],
+            ['Wall length', L + ' ft'],
+            ['Pre-cut stud length', preCut],
+            ['Plate stock (LF)', plateLF + ' ft (single bottom + double top)'],
+            ['Heads-up', 'Add 2–3 studs per corner, 4 per opening']
+          ]
+        };
+      }
+
+      if (type === 'floor-joist' || type === 'ceiling-joist') {
+        const totalLF = count * W;
+        return {
+          main: count, unit: type === 'floor-joist' ? 'FLOOR JOISTS' : 'CEILING JOISTS',
+          detail: [
+            ['Each piece length', W + ' ft (room span)'],
+            ['Spacing', oc + '" o.c.'],
+            ['Total linear feet', totalLF.toFixed(0) + ' ft'],
+            ['Run length', L + ' ft'],
+            ['Stock to order', count + ' × ' + W + ' ft']
+          ]
+        };
+      }
+
+      // rafter
+      const pairs = count;
+      const totalRafters = pairs * 2;
+      const horizSpan = W / 2;
       return {
-        main: total.toFixed(2), unit: 'BOARD FEET TOTAL',
+        main: totalRafters, unit: 'RAFTERS',
         detail: [
-          ['Per piece', perPiece.toFixed(2) + ' BF'],
-          ['Pieces', qty],
-          ['Linear feet', (L * qty).toFixed(0) + ' ft'],
-          ['Nominal size', T + '×' + W]
+          ['Rafter pairs', pairs],
+          ['Horiz span / rafter', horizSpan.toFixed(2) + ' ft (½ width)'],
+          ['Spacing', oc + '" o.c.'],
+          ['Roof length', L + ' ft'],
+          ['Pitch note', 'Multiply horiz span by pitch factor for actual length']
         ]
       };
     }

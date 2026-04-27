@@ -1,23 +1,26 @@
 export type InputType = 'number' | 'select';
 
+type InputData = Record<string, string | number>;
+type DynamicString = string | ((data: InputData) => string);
+
 export interface NumberInput {
   id: string;
-  label: string;
+  label: DynamicString;
   unit: string;
   default: number;
   step?: number;
   type?: 'number';
-  tooltip?: string;
+  tooltip?: DynamicString;
 }
 
 export interface SelectInput {
   id: string;
-  label: string;
+  label: DynamicString;
   unit: string;
   default: string;
   type: 'select';
   options: [string, string][];
-  tooltip?: string;
+  tooltip?: DynamicString;
 }
 
 export type CalcInput = NumberInput | SelectInput;
