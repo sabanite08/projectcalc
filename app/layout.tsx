@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <meta name='impact-site-verification' value='6a131191-97bc-49dd-9971-f1b6f9a85c14' /
+        <meta name='impact-site-verification' value='6a131191-97bc-49dd-9971-f1b6f9a85c14' />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
