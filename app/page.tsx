@@ -8,8 +8,46 @@ const categoryLabels: Record<string, string> = {
   utility: 'UTILITY',
 };
 
+const categoryBlurbs: Record<string, string> = {
+  construction:
+    'Pro-grade calculators for the trades — voltage drop to NEC spec, board feet for lumber orders, BTU sizing for HVAC, brick counts with mortar bag estimates, and pipe water capacity. Built for contractors, electricians, framers, and anyone bidding a job.',
+  home:
+    'Material calculators for any project around the house — concrete bags or yards for slabs, drywall sheets for a remodel, paint gallons by room, mulch and gravel by the yard, sod pallets, deck stain, fence posts, tile, and roofing shingles. Get the right amount the first time so you\'re not making a second trip to Home Depot.',
+  finance:
+    'Quick money math — mortgage monthly payment with full amortization summary, restaurant tips with bill split. More finance calculators coming.',
+};
+
 export default function Home() {
   const categories = getCategories();
+
+  // ItemList schema — tells Google this site is a directory of N calculators
+  const ldJson = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        name: 'ProjectCalc',
+        url: 'https://projectcalc.app',
+        description: 'Free, fast calculators for construction, home improvement, and DIY projects.',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: 'https://projectcalc.app/?q={search_term_string}',
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      {
+        '@type': 'ItemList',
+        name: 'ProjectCalc Calculators',
+        numberOfItems: calculators.length,
+        itemListElement: calculators.map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: c.metaTitle.split(' | ')[0],
+          url: `https://projectcalc.app/${c.slug}`,
+        })),
+      },
+    ],
+  };
 
   return (
     <main>
@@ -44,6 +82,7 @@ export default function Home() {
                 <span>{categoryLabels[catKey]}</span>
                 <span className="count">{calcs.length} ACTIVE</span>
               </div>
+              <p className="cat-blurb">{categoryBlurbs[catKey]}</p>
               <div className="cat-grid">
                 {calcs.map((c, i) => (
                   <Link key={c.slug} href={`/${c.slug}`} className="cat-card">
@@ -73,10 +112,30 @@ export default function Home() {
             so you can double-check.
           </p>
           <p>
-            No signup, no popups, no email capture. Just calculators that work.
+            No signup, no popups, no email capture, no AI chatbot interrupting you.
+            Just calculators that work, on any phone, on any connection. The
+            calculators run entirely in your browser — your inputs never leave the page.
+          </p>
+          <h2 style={{ marginTop: 32 }}>Built for both pros and homeowners</h2>
+          <p>
+            Every calculator gives you the headline answer (sheets, bundles, gallons,
+            yards, BTUs) plus the supporting math so you can sanity-check the result.
+            Technical inputs include plain-English tooltips for things like roof pitch,
+            wire gauge (AWG), and R-value — useful if it&apos;s your first time
+            spec&apos;ing the job, ignored if you already know.
+          </p>
+          <p>
+            Common questions per calculator answer the things people actually search
+            for: how much things cost, how to measure correctly, what to buy at
+            Home Depot vs the lumber yard, and the rules of thumb pros use.
           </p>
         </div>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+      />
     </main>
   );
 }

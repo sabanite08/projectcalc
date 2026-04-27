@@ -202,6 +202,14 @@ header.site-header {
   color: var(--hi-vis);
 }
 
+.cat-blurb {
+  max-width: 720px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
 .cat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
