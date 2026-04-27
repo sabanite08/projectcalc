@@ -253,6 +253,48 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Type L copper ½" pipe (ID 0.545") holds about 1.21 gallons per 100 ft. PEX-A ½" (ID 0.475") holds 0.92 gallons. Schedule 40 PVC ½" (ID 0.602") holds 1.48 gallons. Always check actual ID — it varies by material.',
     },
   ],
+  'conduit-fill-calculator': [
+    {
+      q: 'What is the NEC fill limit for EMT?',
+      a: 'NEC Chapter 9, Note 4: 53% maximum fill for one conductor, 31% for two, and 40% for three or more. The lower limit on two-wire pulls is intentional — two stiff conductors jam in a way that one or three+ don\'t. Going over these numbers is an inspection failure.',
+    },
+    {
+      q: 'Does this calculator account for conductor derating?',
+      a: 'No — this is a physical fill check only. NEC 310.15(C)(1) requires ampacity adjustment when more than 3 current-carrying conductors share a raceway: 4–6 conductors derate to 80%, 7–9 to 70%, 10–20 to 50%. Plan ampacity separately if you\'re bundling many circuits.',
+    },
+    {
+      q: 'Why use THHN/THWN-2 wire areas?',
+      a: 'THHN/THWN-2 is the most common building wire in commercial and residential conduit runs. Other insulation types (XHHW, RHW, USE) have slightly different cross-sections — check NEC Chapter 9 Table 5 for exact areas. For mixed conductor sizes, sum each wire\'s area individually.',
+    },
+  ],
+  'pipe-slope-calculator': [
+    {
+      q: 'What is the minimum slope for a 2-inch drain?',
+      a: '1/4" per foot (about a 2% grade) per IPC and UPC. That\'s the standard for any horizontal drain 2.5 inches and smaller — kitchen, lavatory, shower, washing machine. Sloping less risks solids settling out and clogging the line.',
+    },
+    {
+      q: 'Can a drain pipe have too much slope?',
+      a: 'Yes. Above about 1/2" per foot, water flows faster than the solids it\'s carrying, leaving them behind to build up on the pipe walls. The clog pattern looks identical to too-little slope. The sweet spot is 1/4"/ft for small pipe, 1/8"/ft for 3"+ mains.',
+    },
+    {
+      q: 'Does this apply to vent pipes?',
+      a: 'Vent pipes only need to slope back toward the drain so condensation drains out — exact pitch isn\'t code-critical. The drain-side rules are what matters for waste flow. For sewer mains, also confirm your local jurisdiction\'s amendments — some cities tighten the IPC defaults.',
+    },
+  ],
+  'duct-cfm-calculator': [
+    {
+      q: 'What is the typical CFM per ton of cooling?',
+      a: '400 CFM per ton is the residential rule of thumb, which lines up with a 20°F supply-vs-return ΔT. High-humidity climates sometimes target 350 CFM/ton for better dehumidification; dry climates may run 450 CFM/ton for sensible-only cooling.',
+    },
+    {
+      q: 'How do I figure CFM for a single room?',
+      a: 'Two ways. (1) Run a Manual J load on that room, then apply CFM = BTU ÷ (1.08 × ΔT). (2) Proportional: room CFM = (room load ÷ total load) × system CFM. Method 2 is what most installers do once Manual J gives them the per-room loads.',
+    },
+    {
+      q: 'Why does correct duct sizing matter?',
+      a: 'Undersized ducts starve airflow — coils freeze in cooling mode, heat exchangers crack in heating mode, and equipment lifespan drops. Oversized ducts waste fan energy, leak more, and can produce uncomfortable air velocity. Manual D sizing pays back in efficiency and longevity.',
+    },
+  ],
   'mortgage-calculator': [
     {
       q: 'What does PITI mean?',

@@ -10,28 +10,34 @@ export const calculators: Calculator[] = [
     title: 'DRYWALL SHEETS',
     metaTitle: 'Drywall Calculator — How Many Sheets Do You Need? | ProjectCalc',
     metaDesc: 'Free drywall calculator. Enter your room size and get the exact number of 4x8 sheets to buy, including 10% waste. Works for walls only or walls + ceiling.',
-    seoIntro: 'Use this drywall calculator to estimate how many sheets of 4x8 drywall (sheetrock) you need to finish a room. Enter the room dimensions and ceiling height, choose whether you are covering the ceiling, and the calculator returns the exact sheet count rounded up with a 10% waste factor built in. Standard 4x8 sheets cover 32 square feet each. For 4x12 sheets divide the result by 1.5.',
-    note: 'Based on 4×8 (32 ft²) sheets with 10% waste. For 4×12 sheets, divide result by 1.5.',
+    seoIntro: 'Use this drywall calculator to estimate how many sheets of drywall (sheetrock) you need to finish a room. Enter the room dimensions and ceiling height, pick a sheet size, choose whether you are covering the ceiling, and the calculator returns the exact sheet count rounded up with a 10% waste factor built in. Standard 4×8 sheets cover 32 ft² each; 4×12 sheets cover 48 ft² and reduce seams on long walls but require two people and a truck to handle.',
+    note: '10% waste built in. 4×8 sheets cover 32 ft²; 4×12 sheets cover 48 ft² (50% heavier — plan for 2 people).',
     inputs: [
       { id: 'L', label: 'Room length', unit: 'ft', default: 12, step: 0.5 },
       { id: 'W', label: 'Room width', unit: 'ft', default: 10, step: 0.5 },
       { id: 'H', label: 'Ceiling height', unit: 'ft', default: 8, step: 0.5 },
       { id: 'ceil', label: 'Include ceiling?', unit: '', type: 'select', default: 'yes',
-        options: [['yes','Yes'],['no','No (walls only)']] }
+        options: [['yes','Yes'],['no','No (walls only)']] },
+      { id: 'sheet', label: 'Sheet size', unit: '', type: 'select', default: '4x8',
+        tooltip: '4×8 covers 32 ft² and is easy to handle solo. 4×12 covers 48 ft², cuts seams on long walls, but is heavy and needs two people.',
+        options: [['4x8','4×8 (32 ft²)'],['4x12','4×12 (48 ft²)']] }
     ],
     calc: (data) => {
-      const L = +data.L, W = +data.W, H = +data.H, ceil = data.ceil as string;
+      const L = +data.L, W = +data.W, H = +data.H, ceil = data.ceil as string, sheet = data.sheet as string;
       const wallArea = 2 * (L + W) * H;
       const ceilArea = ceil === 'yes' ? L * W : 0;
       const total = wallArea + ceilArea;
-      const sheets = Math.ceil((total / 32) * 1.10);
+      const sheetArea = sheet === '4x12' ? 48 : 32;
+      const sheetLabel = sheet === '4x12' ? '4×12 SHEETS' : '4×8 SHEETS';
+      const sheets = Math.ceil((total / sheetArea) * 1.10);
       return {
-        main: sheets, unit: '4×8 SHEETS',
+        main: sheets, unit: sheetLabel,
         detail: [
           ['Wall area', wallArea.toFixed(0) + ' ft²'],
           ['Ceiling area', ceilArea.toFixed(0) + ' ft²'],
           ['Total area', total.toFixed(0) + ' ft²'],
-          ['With 10% waste', (total * 1.10).toFixed(0) + ' ft²']
+          ['With 10% waste', (total * 1.10).toFixed(0) + ' ft²'],
+          ['Sheet coverage', sheetArea + ' ft²']
         ]
       };
     }
@@ -609,6 +615,112 @@ export const calculators: Calculator[] = [
           ['Liters', liters.toFixed(2)],
           ['Pipe ID', d + '"'],
           ['Length', L + ' ft']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'conduit-fill-calculator',
+    name: 'Conduit Fill',
+    category: 'construction',
+    desc: 'NEC % fill check',
+    formula: 'fill% = (n · A_wire) ÷ A_conduit',
+    title: 'CONDUIT FILL',
+    metaTitle: 'Conduit Fill Calculator — NEC Chapter 9 EMT | ProjectCalc',
+    metaDesc: 'Free conduit fill calculator. Enter EMT size, wire AWG, and conductor count — get NEC fill percent and pass/fail status.',
+    seoIntro: 'This conduit fill calculator checks whether the wires you plan to pull fit inside an EMT (Electrical Metallic Tubing) run within NEC limits. NEC Chapter 9 caps fill at 53% for one conductor, 31% for two, and 40% for three or more. Wire areas are taken from NEC Chapter 9 Table 5 (THHN/THWN-2) and conduit internal areas from Table 4. Use it on rough-in or feeder runs to confirm the conduit size you spec\'d will pass inspection.',
+    note: 'NEC fill limits: 53% (1 wire), 31% (2 wires), 40% (3+). EMT + THHN/THWN-2 only.',
+    inputs: [
+      { id: 'conduit', label: 'EMT size', unit: '', type: 'select', default: '0.75',
+        options: [['0.5','½" (0.304 in²)'],['0.75','¾" (0.533 in²)'],['1','1" (0.864 in²)'],['1.25','1¼" (1.496 in²)'],['1.5','1½" (2.036 in²)'],['2','2" (3.356 in²)']] },
+      { id: 'awg', label: 'Wire AWG (THHN/THWN-2)', unit: '', type: 'select', default: '12',
+        tooltip: 'AWG = American Wire Gauge. Lower numbers = thicker wire. 14 AWG for 15A circuits, 12 AWG for 20A, 10 AWG for 30A.',
+        options: [['14','14 AWG (0.0097 in²)'],['12','12 AWG (0.0133 in²)'],['10','10 AWG (0.0211 in²)'],['8','8 AWG (0.0366 in²)'],['6','6 AWG (0.0507 in²)'],['4','4 AWG (0.0824 in²)'],['2','2 AWG (0.1158 in²)'],['1/0','1/0 AWG (0.1855 in²)']] },
+      { id: 'n', label: 'Number of conductors', unit: '', default: 3, step: 1 }
+    ],
+    calc: (data) => {
+      const conduit = data.conduit as string, awg = data.awg as string, n = +data.n;
+      const conduitArea: Record<string, number> = {'0.5':0.304,'0.75':0.533,'1':0.864,'1.25':1.496,'1.5':2.036,'2':3.356};
+      const wireArea: Record<string, number> = {'14':0.0097,'12':0.0133,'10':0.0211,'8':0.0366,'6':0.0507,'4':0.0824,'2':0.1158,'1/0':0.1855};
+      const Acon = conduitArea[conduit];
+      const Awire = wireArea[awg];
+      const totalWireArea = n * Awire;
+      const pct = (totalWireArea / Acon) * 100;
+      const limit = n === 1 ? 53 : n === 2 ? 31 : 40;
+      const status = pct <= limit ? 'OK — within NEC' : 'TOO HIGH — upsize conduit';
+      return {
+        main: pct.toFixed(1), unit: '% FILL',
+        detail: [
+          ['NEC limit', limit + '%'],
+          ['Status', status],
+          ['Conductor area', totalWireArea.toFixed(4) + ' in²'],
+          ['Conduit area', Acon + ' in²'],
+          ['Headroom', (limit - pct).toFixed(1) + '%']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'pipe-slope-calculator',
+    name: 'Pipe Slope',
+    category: 'construction',
+    desc: 'Drain drop & grade',
+    formula: 'drop = run × slope/ft',
+    title: 'PIPE SLOPE',
+    metaTitle: 'Pipe Slope Calculator — Drain Drop & Grade | ProjectCalc',
+    metaDesc: 'Drain pipe slope calculator. Enter run length and pitch — get total drop in inches, grade percent, and IPC/UPC reference.',
+    seoIntro: 'This pipe slope calculator gives the total drop and grade percent for a drain or sewer line. The IPC and UPC plumbing codes require a minimum 1/4" per foot fall on horizontal drains 2.5" and smaller, and 1/8" per foot on 3" and larger pipe (some jurisdictions allow 1/16" per foot on 8"+ pipe with engineering approval). Too little slope and solids settle out of the flow; too much (above 1/2" per ft) and water outruns the solids — both end the same way, with a clog.',
+    note: 'IPC/UPC: 1/4"/ft for ≤2.5" pipe, 1/8"/ft for 3"+. Don\'t exceed 1/2"/ft.',
+    inputs: [
+      { id: 'L', label: 'Pipe run length', unit: 'ft', default: 20, step: 1 },
+      { id: 'slope', label: 'Slope per foot', unit: '', type: 'select', default: '0.25',
+        tooltip: 'Slope is the vertical drop per linear foot of run. Code minimum depends on pipe diameter.',
+        options: [['0.0625','1/16" per ft (8"+ pipe, where allowed)'],['0.125','1/8" per ft (3"+ pipe)'],['0.25','1/4" per ft (≤2.5" pipe — most common)'],['0.5','1/2" per ft (max — steeper risks scouring)']] }
+    ],
+    calc: (data) => {
+      const L = +data.L, slope = +data.slope;
+      const dropIn = L * slope;
+      const dropFt = dropIn / 12;
+      const gradePct = (dropFt / L) * 100;
+      const slopeLabel = slope === 0.0625 ? '1/16"' : slope === 0.125 ? '1/8"' : slope === 0.25 ? '1/4"' : '1/2"';
+      return {
+        main: dropIn.toFixed(2), unit: 'INCHES OF DROP',
+        detail: [
+          ['Drop in feet', dropFt.toFixed(3) + ' ft'],
+          ['Grade', gradePct.toFixed(2) + '%'],
+          ['Slope', slopeLabel + ' per ft'],
+          ['Run length', L + ' ft']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'duct-cfm-calculator',
+    name: 'Duct CFM',
+    category: 'construction',
+    desc: 'HVAC airflow',
+    formula: 'CFM = BTU ÷ (1.08 × ΔT)',
+    title: 'DUCT CFM',
+    metaTitle: 'Duct CFM Calculator — HVAC Airflow Sizing | ProjectCalc',
+    metaDesc: 'Calculate duct CFM for HVAC sizing. Enter BTU load and supply temp differential — get airflow in cubic feet per minute.',
+    seoIntro: 'This duct CFM calculator gives the airflow needed (in cubic feet per minute) to deliver a given heating or cooling load. The sensible heat formula CFM = BTU/hr ÷ (1.08 × ΔT) is what HVAC contractors use for room-by-room duct sizing in a Manual D layout. ΔT is the difference between the supply air temperature and the return air temperature — typically 20°F for cooling and 50–70°F for forced-air heating. The industry rule of thumb is 400 CFM per ton of cooling (1 ton = 12,000 BTU/hr), which lines up with a 20°F cooling ΔT.',
+    note: 'CFM = BTU ÷ (1.08 × ΔT). Cooling ΔT ≈ 20°F. Forced-air heating ΔT ≈ 60°F.',
+    inputs: [
+      { id: 'btu', label: 'Heat load', unit: 'BTU/hr', default: 24000, step: 500 },
+      { id: 'dt', label: 'Supply temp differential', unit: '°F', default: 20, step: 1,
+        tooltip: 'ΔT = the temperature difference between supply air and return air. Use ~20°F for cooling and ~60°F for furnace heating.' }
+    ],
+    calc: (data) => {
+      const btu = +data.btu, dt = +data.dt;
+      const cfm = btu / (1.08 * dt);
+      const tons = btu / 12000;
+      return {
+        main: Math.round(cfm).toLocaleString(), unit: 'CFM',
+        detail: [
+          ['Cooling tons', tons.toFixed(2)],
+          ['Rule-of-thumb (400 CFM/ton)', Math.round(tons * 400).toLocaleString() + ' CFM'],
+          ['Heat load', btu.toLocaleString() + ' BTU/hr'],
+          ['ΔT', dt + '°F']
         ]
       };
     }
