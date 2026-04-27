@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const calc = getCalculator(slug);
   if (!calc) return { title: 'Calculator not found' };
   return {
-    title: calc.metaTitle,
+    title: { absolute: calc.metaTitle },
     description: calc.metaDesc,
     alternates: { canonical: `https://projectcalc.app/${calc.slug}` },
     openGraph: {
