@@ -688,6 +688,11 @@ footer.site-footer {
 
 footer.site-footer a:hover { color: var(--hi-vis); }
 
+.footer-links {
+  display: flex;
+  gap: 18px;
+}
+
 /* ─── PRINT ─── */
 @media print {
   header.site-header, footer.site-footer, .ticker, .ad-slot, .seo-block, .related, .actions, .scroll-cue, .breadcrumb { display: none !important; }

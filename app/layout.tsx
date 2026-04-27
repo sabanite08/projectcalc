@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://projectcalc.app'),
@@ -51,8 +52,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <footer className="site-footer">
           <div>© PROJECTCALC — BUILT FOR ANY PROJECT</div>
-          <div>NO ACCOUNT · NO TRACKING · NO BS</div>
+          <div className="footer-links">
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="https://github.com/sabanite08/projectcalc">GitHub</Link>
+          </div>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
