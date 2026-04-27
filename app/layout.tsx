@@ -31,8 +31,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      return (
-      <html lang="en">
       <head>
         <meta name='impact-site-verification' value='6a131191-97bc-49dd-9971-f1b6f9a85c14'>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
