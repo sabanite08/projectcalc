@@ -502,12 +502,12 @@ export const calculators: Calculator[] = [
       { id: 'L', unit: 'ft', default: 12, step: 0.5,
         label: (d) => d.type === 'wall-stud' ? 'Wall length' : 'Room length (run)' },
       { id: 'W', unit: 'ft', default: 8, step: 0.5,
-        label: (d) => d.type === 'wall-stud' ? 'Ceiling height' : 'Room width (span per piece)',
+        label: (d) => d.type === 'wall-stud' ? 'Ceiling height (ft)' : 'Room width (span per piece, ft)',
         tooltip: (d) => d.type === 'rafter'
-          ? 'Room width — each rafter spans about half of this (plus pitch and overhang). Use the building width across the ridge.'
+          ? 'Room width in feet — each rafter spans about half of this (plus pitch and overhang). Use the building width across the ridge.'
           : d.type === 'wall-stud'
-            ? 'Ceiling height drives the pre-cut stud length, not the count. Standard 8 ft, 9 ft, or 10 ft walls use pre-cut studs.'
-            : 'The dimension each joist spans — typically the shorter room dimension.' },
+            ? 'Ceiling height in FEET — typical range 7–12 ft. Drives the pre-cut stud length, not the count. Standard 8, 9, or 10 ft walls map to pre-cut studs (92-5/8", 104-5/8", 116-5/8").'
+            : 'The dimension each joist spans, in feet — typically the shorter room dimension.' },
       { id: 'oc', label: 'On-center spacing', unit: '', type: 'select', default: '16',
         tooltip: 'On-center is the distance between the center of one piece and the center of the next. 16" is standard residential, 24" is common for ceiling joists and engineered floors, 19.2" appears in advanced framing layouts.',
         options: [['12','12" o.c. (heavy load)'],['16','16" o.c. (standard)'],['19.2','19.2" o.c. (advanced framing)'],['24','24" o.c.']] }
@@ -520,7 +520,14 @@ export const calculators: Calculator[] = [
       if (type === 'wall-stud') {
         const plateLF = L * 3;
         const preCutMap: Record<string, string> = { '8': '92-5/8"', '9': '104-5/8"', '10': '116-5/8"' };
-        const preCut = preCutMap[String(W)] || (W * 12 - 4.5).toFixed(2) + '" (custom)';
+        let preCut: string;
+        if (W < 6.5 || W > 14) {
+          preCut = 'Check ceiling height — input is in FEET (typical 7–12)';
+        } else if (preCutMap[String(W)]) {
+          preCut = preCutMap[String(W)];
+        } else {
+          preCut = (W * 12 - 4.5).toFixed(2) + '" (custom: height − 4½")';
+        }
         return {
           main: count, unit: 'WALL STUDS',
           detail: [
