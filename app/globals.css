@@ -861,6 +861,22 @@ footer.site-footer a:hover { color: var(--hi-vis); }
   gap: 18px;
 }
 
+.footer-sister {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+
+.footer-sister a {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-sister a:hover {
+  color: var(--hi-vis);
+}
+
 /* ─── PRINT ─── */
 @media print {
   header.site-header, footer.site-footer, .ticker, .ad-slot, .seo-block, .related, .actions, .scroll-cue, .breadcrumb { display: none !important; }

@@ -59,6 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <footer className="site-footer">
           <div>© PROJECTCALC — BUILT FOR ANY PROJECT</div>
+          <div className="footer-sister">
+            Sister project: <a href="https://operaite.net">Operaite</a> — AI tools for small business owners
+          </div>
           <div className="footer-links">
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
