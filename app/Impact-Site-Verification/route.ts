@@ -1,5 +1,5 @@
 export async function GET() {
-  return new Response('Impact-Site-Verification: 1f643f35-cd2c-4732-b944-dd0d73bca159', {
+  return new Response('Impact-Site-Verification: e1cdc443-992b-4317-9ff5-5fb602ce62e3', {
     headers: { 'Content-Type': 'text/plain' },
   });
 }
