@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { calculators, getCalculator } from '@/lib/calculators';
+import { getFAQ } from '@/lib/faqs';
 import CalculatorView from '@/components/CalculatorView';
 
 const categoryLabels: Record<string, string> = {
@@ -42,17 +43,31 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
     .filter(c => c.category === calc.category && c.slug !== calc.slug)
     .slice(0, 6);
 
-  // JSON-LD structured data for Google
-  const ldJson = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: calc.metaTitle.split(' | ')[0],
-    description: calc.metaDesc,
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Web',
-    url: `https://projectcalc.app/${calc.slug}`,
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  };
+  const faq = getFAQ(calc.slug);
+
+  // JSON-LD structured data for Google — combine WebApplication + FAQPage in @graph
+  const ldGraph: object[] = [
+    {
+      '@type': 'WebApplication',
+      name: calc.metaTitle.split(' | ')[0],
+      description: calc.metaDesc,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Web',
+      url: `https://projectcalc.app/${calc.slug}`,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    },
+  ];
+  if (faq.length > 0) {
+    ldGraph.push({
+      '@type': 'FAQPage',
+      mainEntity: faq.map(item => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a },
+      })),
+    });
+  }
+  const ldJson = { '@context': 'https://schema.org', '@graph': ldGraph };
 
   return (
     <main>
@@ -79,6 +94,18 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
           <h2>About this calculator</h2>
           <p>{calc.seoIntro}</p>
         </div>
+
+        {faq.length > 0 && (
+          <div className="faq-block">
+            <h2>Common questions</h2>
+            {faq.map((item, i) => (
+              <details key={i} className="faq-item">
+                <summary>{item.q}</summary>
+                <div className="faq-answer">{item.a}</div>
+              </details>
+            ))}
+          </div>
+        )}
 
         {related.length > 0 && (
           <div className="related">

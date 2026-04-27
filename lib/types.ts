@@ -28,6 +28,11 @@ export interface CalcResult {
   detail: [string, string | number][];
 }
 
+export interface FAQItem {
+  q: string;
+  a: string;
+}
+
 export interface Calculator {
   slug: string;
   name: string;
@@ -41,4 +46,5 @@ export interface Calculator {
   note: string;
   inputs: CalcInput[];
   calc: (data: Record<string, string | number>) => CalcResult;
+  faq?: FAQItem[];
 }
