@@ -30,6 +30,7 @@ export const metadata: Metadata = {
   verification: {
     other: {
       "impact-site-verification": 'cd12f816-0479-466f-aa66-054a098f84d1'
+    },
   },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
