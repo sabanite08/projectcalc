@@ -27,8 +27,6 @@ export const metadata: Metadata = {
       { url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230e0e0c'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23ffd400' transform='rotate(45 8 8)'/%3E%3C/svg%3E" },
     ],
   },
-    },
-  },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
