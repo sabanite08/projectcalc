@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { calculators, getCalculator } from '@/lib/calculators';
 import { getFAQ } from '@/lib/faqs';
+import { getPostsForCalc } from '@/lib/posts';
 import CalculatorView from '@/components/CalculatorView';
 
 const categoryLabels: Record<string, string> = {
@@ -44,6 +45,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
     .slice(0, 6);
 
   const faq = getFAQ(calc.slug);
+  const relatedPosts = getPostsForCalc(calc.slug);
 
   // JSON-LD structured data for Google — combine WebApplication + FAQPage in @graph
   const ldGraph: object[] = [
@@ -94,6 +96,22 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
           <h2>About this calculator</h2>
           <p>{calc.seoIntro}</p>
         </div>
+
+        {relatedPosts.length > 0 && (
+          <div className="related">
+            <div className="section-label">
+              <span>RELATED GUIDES</span>
+            </div>
+            <div className="related-list">
+              {relatedPosts.map(p => (
+                <Link key={p.slug} href={`/blog/${p.slug}`}>
+                  <div className="cat-name" style={{ fontSize: 14 }}>{p.title}</div>
+                  <div className="cat-desc">{p.readTime} MIN READ</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {faq.length > 0 && (
           <div className="faq-block">

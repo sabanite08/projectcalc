@@ -50,9 +50,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="site-header">
           <Link href="/" className="logo">PROJECTCALC</Link>
           <nav className="header-nav">
-            <Link href="/#construction">Trades</Link>
             <Link href="/#home">Home</Link>
+            <Link href="/#construction">Trades</Link>
             <Link href="/#finance">Finance</Link>
+            <Link href="/blog">Blog</Link>
           </nav>
         </header>
         {children}
