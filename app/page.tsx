@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { calculators, getCategories } from '@/lib/calculators';
+import type { Trade } from '@/lib/types';
 
 const categoryLabels: Record<string, string> = {
   construction: 'TRADES & CONSTRUCTION',
@@ -10,12 +11,14 @@ const categoryLabels: Record<string, string> = {
 
 const categoryBlurbs: Record<string, string> = {
   construction:
-    'Pro-grade calculators for the trades — voltage drop to NEC spec, board feet for lumber orders, BTU sizing for HVAC, brick counts with mortar bag estimates, siding squares for vinyl and fiber cement jobs, and pipe water capacity. Built for contractors, electricians, framers, and anyone bidding a job.',
+    'Pro-grade calculators grouped by trade — carpentry cut lists and board feet, masonry brick counts and siding squares, electrical voltage drop and conduit fill to NEC, plumbing pipe slope and water capacity, HVAC BTU sizing and duct CFM. Built for contractors, electricians, framers, plumbers, and anyone bidding a job.',
   home:
     'Material calculators for any project around the house — concrete bags or yards for slabs, drywall sheets for a remodel, paint gallons by room, mulch and gravel by the yard, sod pallets, deck stain, fence posts, tile, and roofing shingles. Get the right amount the first time so you\'re not making a second trip to Home Depot.',
   finance:
     'Quick money math — mortgage payments with full amortization, car loan payments factoring in down payment and trade-in, personal loan payoff math, and restaurant tips with bill split. Skip the bank\'s overcomplicated calculator — these give you the real number in three inputs.',
 };
+
+const tradeOrder: Trade[] = ['Carpentry', 'Masonry & Siding', 'Electrical', 'Plumbing', 'HVAC'];
 
 export default function Home() {
   const categories = getCategories();
@@ -76,6 +79,50 @@ export default function Home() {
         {(['home', 'construction', 'finance'] as const).map(catKey => {
           const calcs = categories.get(catKey);
           if (!calcs) return null;
+
+          if (catKey === 'construction') {
+            const byTrade = new Map<Trade, typeof calcs>();
+            for (const c of calcs) {
+              if (!c.trade) continue;
+              if (!byTrade.has(c.trade)) byTrade.set(c.trade, []);
+              byTrade.get(c.trade)!.push(c);
+            }
+            return (
+              <div key={catKey} id={catKey}>
+                <div className="section-label">
+                  <span>{categoryLabels[catKey]}</span>
+                  <span className="count">{calcs.length} ACTIVE</span>
+                </div>
+                <p className="cat-blurb">{categoryBlurbs[catKey]}</p>
+                {tradeOrder.map(trade => {
+                  const group = byTrade.get(trade);
+                  if (!group) return null;
+                  return (
+                    <div key={trade} className="trade-block">
+                      <div className="trade-label">
+                        <span>{trade}</span>
+                        <span className="count">{group.length}</span>
+                      </div>
+                      <div className="cat-grid">
+                        {group.map((c, i) => (
+                          <Link key={c.slug} href={`/${c.slug}`} className="cat-card">
+                            <div className="cat-num">
+                              {String(i + 1).padStart(2, '0')}/{String(group.length).padStart(2, '0')}
+                            </div>
+                            <div>
+                              <div className="cat-name">{c.name}</div>
+                              <div className="cat-desc">{c.desc}</div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }
+
           return (
             <div key={catKey} id={catKey}>
               <div className="section-label">

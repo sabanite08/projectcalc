@@ -33,10 +33,13 @@ export interface FAQItem {
   a: string;
 }
 
+export type Trade = 'Carpentry' | 'Masonry & Siding' | 'Electrical' | 'Plumbing' | 'HVAC';
+
 export interface Calculator {
   slug: string;
   name: string;
   category: 'construction' | 'home' | 'finance' | 'utility';
+  trade?: Trade;
   desc: string;
   formula: string;
   title: string;
