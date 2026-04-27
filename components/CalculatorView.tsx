@@ -9,33 +9,32 @@ export default function CalculatorView({ slug }: { slug: string }) {
 
   const [data, setData] = useState<Record<string, string | number>>(() => {
     const initial: Record<string, string | number> = {};
-    calc?.inputs.forEach(inp => { initial[inp.id] = inp.default; });
+    calc?.inputs.forEach(inp => {
+      initial[inp.id] = inp.type === 'select' ? inp.default : '';
+    });
     return initial;
   });
   const [result, setResult] = useState<CalcResult | null>(null);
 
   if (!calc) return null;
 
-  // Restore saved inputs from localStorage
+  // Recalculate when all number fields are filled with valid numbers.
+  // Selects always have a value; only number fields can be empty while
+  // the user is filling things in.
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('pc:' + calc.slug);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const valid: Record<string, string | number> = {};
-        calc.inputs.forEach(inp => {
-          valid[inp.id] = parsed[inp.id] !== undefined ? parsed[inp.id] : inp.default;
-        });
-        setData(valid);
-      }
-    } catch {}
-  }, [calc.slug, calc.inputs]);
-
-  // Recalculate on data change + persist
-  useEffect(() => {
+    const allFilled = calc.inputs.every(inp => {
+      if (inp.type === 'select') return true;
+      const v = data[inp.id];
+      if (v === '' || v === undefined || v === null) return false;
+      const n = typeof v === 'number' ? v : parseFloat(String(v));
+      return !isNaN(n);
+    });
+    if (!allFilled) {
+      setResult(null);
+      return;
+    }
     try {
       setResult(calc.calc(data));
-      localStorage.setItem('pc:' + calc.slug, JSON.stringify(data));
     } catch {
       setResult(null);
     }
@@ -46,6 +45,8 @@ export default function CalculatorView({ slug }: { slug: string }) {
     if (!inp) return;
     if (inp.type === 'select') {
       setData(prev => ({ ...prev, [id]: value }));
+    } else if (value === '') {
+      setData(prev => ({ ...prev, [id]: '' }));
     } else {
       const num = parseFloat(value);
       setData(prev => ({ ...prev, [id]: isNaN(num) ? value : num }));
@@ -55,7 +56,9 @@ export default function CalculatorView({ slug }: { slug: string }) {
   const handlePrint = () => window.print();
   const handleReset = () => {
     const initial: Record<string, string | number> = {};
-    calc.inputs.forEach(inp => { initial[inp.id] = inp.default; });
+    calc.inputs.forEach(inp => {
+      initial[inp.id] = inp.type === 'select' ? inp.default : '';
+    });
     setData(initial);
   };
 
@@ -90,6 +93,7 @@ export default function CalculatorView({ slug }: { slug: string }) {
                     inputMode="decimal"
                     value={String(data[inp.id])}
                     step={inp.step || 1}
+                    placeholder={`e.g. ${inp.default}`}
                     onChange={e => handleChange(inp.id, e.target.value)}
                   />
                   {inp.unit && <div className="unit">{inp.unit}</div>}
@@ -104,7 +108,7 @@ export default function CalculatorView({ slug }: { slug: string }) {
         <div className="result">
           <div className="result-label">RESULT</div>
           <div className="result-main">{result ? result.main : '—'}</div>
-          <div className="result-unit">{result ? result.unit : '—'}</div>
+          <div className="result-unit">{result ? result.unit : 'FILL IN ABOVE'}</div>
           <div className="result-detail">
             {result?.detail.map(([k, v], i) => (
               <div key={i} className="detail-row">
