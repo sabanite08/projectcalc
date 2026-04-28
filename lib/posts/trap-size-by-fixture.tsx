@@ -189,6 +189,14 @@ const Body = () => (
       gives minimum trap diameter, branch drain size, DFU, and required
       vent size for any common residential or commercial fixture.
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Trap and vent rules vary by
+      jurisdiction. Verify with a licensed plumber and your local
+      plumbing inspector before purchase or installation. ProjectCalc
+      is not responsible for code violations, permit failures, or
+      system failures resulting from use.
+    </p>
   </>
 );
 

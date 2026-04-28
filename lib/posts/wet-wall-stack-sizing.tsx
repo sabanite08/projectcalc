@@ -169,6 +169,15 @@ const Body = () => (
       <Link href="/vent-pipe-size-calculator" style={{ color: 'var(--hi-vis)' }}>vent pipe sizing calculator</Link>{' '}
       for the stack vent extension.
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Stack and vent sizing depends
+      on local code amendments, fixture mix, and stack configuration.
+      Verify with a licensed plumber and your local plumbing inspector
+      before purchase or installation. ProjectCalc is not responsible
+      for code violations, permit failures, or system failures
+      resulting from use.
+    </p>
   </>
 );
 

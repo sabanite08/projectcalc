@@ -184,6 +184,15 @@ const Body = () => (
       computes required PSI boost and recommends pump duty class and
       approximate motor HP.
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Pump sizing depends on local
+      water pressure conditions, fixture demand, fittings, and code
+      amendments. Verify with a licensed plumber and your local
+      plumbing inspector before purchase or installation. ProjectCalc
+      is not responsible for code violations or system failures
+      resulting from use.
+    </p>
   </>
 );
 

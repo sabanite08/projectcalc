@@ -206,6 +206,15 @@ const Body = () => (
       uses the standard ASME formula and rounds to common product sizes
       (Watts, Amtrol, Zilmet).
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Expansion tank sizing depends on
+      water heater specifics, supply pressure, and local code
+      amendments. Verify with a licensed plumber and your local
+      plumbing inspector before purchase or installation. ProjectCalc
+      is not responsible for code violations or system failures
+      resulting from use.
+    </p>
   </>
 );
 

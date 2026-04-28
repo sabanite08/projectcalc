@@ -181,6 +181,15 @@ const Body = () => (
       <Link href="/water-supply-pipe-size-calculator" style={{ color: 'var(--hi-vis)' }}>water supply pipe sizing calculator</Link>{' '}
       to confirm both are sized consistently.
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Your local water utility sets
+      the actual meter — sizing rules, tap fees, and registration
+      requirements vary. Verify with the utility and a licensed
+      plumber before purchase or installation. ProjectCalc is not
+      responsible for permit failures or service issues resulting
+      from use.
+    </p>
   </>
 );
 

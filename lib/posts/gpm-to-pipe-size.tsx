@@ -190,6 +190,15 @@ const Body = () => (
       returns minimum copper and PEX size for any flow rate, with cold/hot
       service toggle.
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Pipe sizing depends on local
+      code amendments, fixture mix, and friction-loss conditions.
+      Verify with a licensed plumber and your local plumbing inspector
+      before purchase or installation. ProjectCalc is not responsible
+      for code violations, permit failures, or system failures
+      resulting from use.
+    </p>
   </>
 );
 

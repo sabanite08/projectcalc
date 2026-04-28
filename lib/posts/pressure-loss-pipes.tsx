@@ -225,6 +225,14 @@ const Body = () => (
       runs Hazen-Williams across copper, PEX, CPVC, and galvanized steel
       with built-in velocity check.
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Friction loss depends on actual
+      pipe condition, fittings, and fixture demand. Verify with a
+      licensed plumber and your local plumbing inspector before
+      purchase or installation. ProjectCalc is not responsible for
+      code violations or system failures resulting from use.
+    </p>
   </>
 );
 

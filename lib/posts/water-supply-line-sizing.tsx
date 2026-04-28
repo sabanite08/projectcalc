@@ -195,6 +195,15 @@ const Body = () => (
       sums fixture counts and returns the minimum copper/CPVC size plus the
       PEX-equivalent size, with peak GPM estimate.
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Supply line sizing depends on
+      local pressure, fixture mix, and code amendments. Verify with a
+      licensed plumber and your local plumbing inspector before
+      purchase or installation. ProjectCalc is not responsible for
+      code violations, permit failures, or system failures resulting
+      from use.
+    </p>
   </>
 );
 

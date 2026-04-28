@@ -179,6 +179,15 @@ const Body = () => (
       <Link href="/drain-pipe-size-calculator" style={{ color: 'var(--hi-vis)' }}>drain pipe sizing calculator</Link>{' '}
       for branch sizing.
     </p>
+
+    <p style={{ marginTop: 24, padding: 14, background: 'rgba(255,212,0,0.06)', borderLeft: '2px solid var(--hi-vis)', fontSize: 13 }}>
+      <strong>Estimate only.</strong> Building-drain sizing depends on
+      local code amendments, fixture mix, and field conditions. Verify
+      with a licensed plumber and your local plumbing inspector before
+      purchase or installation. ProjectCalc is not responsible for
+      code violations, permit failures, or system failures resulting
+      from use.
+    </p>
   </>
 );
 

@@ -655,8 +655,8 @@ export const calculators: Calculator[] = [
     title: 'PIPE VOLUME',
     metaTitle: 'Pipe Volume Calculator — Gallons of Water | ProjectCalc',
     metaDesc: 'Pipe volume calculator. Enter inside diameter and length — get gallons of water capacity for any straight pipe run.',
-    seoIntro: 'This pipe volume calculator gives the water capacity of a single straight pipe run in gallons, cubic inches, and liters. Useful for sizing water heaters, calculating purge volumes for plumbing, or estimating fill time. Multiply the result by the number of identical runs for total system volume. Diameter is the inside diameter (ID), not the nominal size.',
-    note: 'Calculates a single straight pipe run. Multiply by number of runs as needed.',
+    seoIntro: 'This pipe volume calculator gives the water capacity of a single straight pipe run in gallons, cubic inches, and liters. Useful for sizing water heaters, calculating purge volumes for plumbing, or estimating fill time. Multiply the result by the number of identical runs for total system volume. Diameter is the inside diameter (ID), not the nominal size. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'Calculates a single straight pipe run. Multiply by number of runs as needed. Estimate only — verify with a licensed plumber and local plumbing code before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'd', label: 'Pipe inside diameter', unit: 'in', default: 0.75, step: 0.125 },
       { id: 'L', label: 'Pipe length', unit: 'ft', default: 50, step: 1 }
@@ -673,7 +673,8 @@ export const calculators: Calculator[] = [
           ['Cubic inches', cubicIn.toFixed(0)],
           ['Liters', liters.toFixed(2)],
           ['Pipe ID', d + '"'],
-          ['Length', L + ' ft']
+          ['Length', L + ' ft'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -783,8 +784,8 @@ export const calculators: Calculator[] = [
     title: 'PIPE SLOPE',
     metaTitle: 'Pipe Slope Calculator — Drain Drop & Grade | ProjectCalc',
     metaDesc: 'Drain pipe slope calculator. Enter run length and pitch — get total drop in inches, grade percent, and IPC/UPC reference.',
-    seoIntro: 'This pipe slope calculator gives the total drop and grade percent for a drain or sewer line. The IPC and UPC plumbing codes require a minimum 1/4" per foot fall on horizontal drains 2.5" and smaller, and 1/8" per foot on 3" and larger pipe (some jurisdictions allow 1/16" per foot on 8"+ pipe with engineering approval). Too little slope and solids settle out of the flow; too much (above 1/2" per ft) and water outruns the solids — both end the same way, with a clog.',
-    note: 'IPC/UPC: 1/4"/ft for ≤2.5" pipe, 1/8"/ft for 3"+. Don\'t exceed 1/2"/ft.',
+    seoIntro: 'This pipe slope calculator gives the total drop and grade percent for a drain or sewer line. The IPC and UPC plumbing codes require a minimum 1/4" per foot fall on horizontal drains 2.5" and smaller, and 1/8" per foot on 3" and larger pipe (some jurisdictions allow 1/16" per foot on 8"+ pipe with engineering approval). Too little slope and solids settle out of the flow; too much (above 1/2" per ft) and water outruns the solids — both end the same way, with a clog. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'IPC/UPC: 1/4"/ft for ≤2.5" pipe, 1/8"/ft for 3"+. Don\'t exceed 1/2"/ft. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'L', label: 'Pipe run length', unit: 'ft', default: 20, step: 1 },
       { id: 'slope', label: 'Slope per foot', unit: '', type: 'select', default: '0.25',
@@ -803,7 +804,8 @@ export const calculators: Calculator[] = [
           ['Drop in feet', dropFt.toFixed(3) + ' ft'],
           ['Grade', gradePct.toFixed(2) + '%'],
           ['Slope', slopeLabel + ' per ft'],
-          ['Run length', L + ' ft']
+          ['Run length', L + ' ft'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -818,8 +820,8 @@ export const calculators: Calculator[] = [
     title: 'WATER SUPPLY PIPE',
     metaTitle: 'Water Supply Pipe Sizing Calculator — WSFU to Pipe Diameter | ProjectCalc',
     metaDesc: 'Free water supply pipe sizing calculator. Enter your home\'s fixtures — get the minimum copper/CPVC and PEX supply pipe diameter per IPC.',
-    seoIntro: 'This water supply pipe sizing calculator gives the minimum supply pipe diameter for a residential service line, based on the fixtures it serves. Enter how many full baths, kitchens, washing machines, and hose bibs the line feeds; the calculator sums Water Supply Fixture Units (WSFU) per IPC Table E202.1, then picks the smallest pipe that can carry that demand at typical residential pressure (40–60 psi static). Copper Type L and CPVC use the nominal size returned. PEX has a smaller inside diameter for the same nominal size, so the PEX answer is bumped up one size for equivalent flow.',
-    note: 'Residential service entry, 40–60 psi static. PEX is bumped one nominal size vs copper because of thinner ID.',
+    seoIntro: 'This water supply pipe sizing calculator gives the minimum supply pipe diameter for a residential service line, based on the fixtures it serves. Enter how many full baths, kitchens, washing machines, and hose bibs the line feeds; the calculator sums Water Supply Fixture Units (WSFU) per IPC Table E202.1, then picks the smallest pipe that can carry that demand at typical residential pressure (40–60 psi static). Copper Type L and CPVC use the nominal size returned. PEX has a smaller inside diameter for the same nominal size, so the PEX answer is bumped up one size for equivalent flow. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'Residential service entry, 40–60 psi static. PEX is bumped one nominal size vs copper because of thinner ID. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'fullBath', label: 'Full bathrooms', unit: '', default: 2, step: 1,
         tooltip: 'A full bath = toilet + lavatory + tub/shower. Counts as 7 WSFU per IPC.' },
@@ -848,7 +850,8 @@ export const calculators: Calculator[] = [
           ['PEX equivalent', pex],
           ['Estimated peak demand', peakGpm.toFixed(1) + ' GPM'],
           ['Code reference', 'IPC Table E202.1 / 604.5'],
-          ['Pressure assumption', '40–60 psi static']
+          ['Pressure assumption', '40–60 psi static'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -863,8 +866,8 @@ export const calculators: Calculator[] = [
     title: 'DRAIN PIPE SIZE',
     metaTitle: 'Drain Pipe Sizing Calculator — DFU to Pipe Diameter | ProjectCalc',
     metaDesc: 'Free drain pipe size calculator. Enter the fixtures on the branch — get the minimum DWV pipe diameter per IPC Table 710.1.',
-    seoIntro: 'This drain pipe sizing calculator returns the minimum diameter for a horizontal drain branch carrying a given set of fixtures. Sum of Drainage Fixture Units (DFU) is computed from the fixture counts you enter, then matched against IPC Table 710.1 limits. The output is the smallest pipe size that handles the load — anything smaller risks slow flow or backups; anything larger is wasted material and grade. For a soil stack carrying multiple branches, sum the branch DFUs and oversize accordingly.',
-    note: 'Horizontal branch sizing per IPC Table 710.1. For full stacks or building drains, sum branch DFUs and consult code tables.',
+    seoIntro: 'This drain pipe sizing calculator returns the minimum diameter for a horizontal drain branch carrying a given set of fixtures. Sum of Drainage Fixture Units (DFU) is computed from the fixture counts you enter, then matched against IPC Table 710.1 limits. The output is the smallest pipe size that handles the load — anything smaller risks slow flow or backups; anything larger is wasted material and grade. For a soil stack carrying multiple branches, sum the branch DFUs and oversize accordingly. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'Horizontal branch sizing per IPC Table 710.1. For full stacks or building drains, sum branch DFUs and consult code tables. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'wc', label: 'Water closets (toilets)', unit: '', default: 2, step: 1,
         tooltip: 'Modern 1.28–1.6 GPF toilets count as 3 DFU each (IPC).' },
@@ -894,7 +897,8 @@ export const calculators: Calculator[] = [
           ['Min slope', minSlope],
           ['Toilet rule', wc > 0 ? '≥3" required (any branch carrying a WC)' : 'No WC on branch'],
           ['Code reference', 'IPC Table 710.1'],
-          ['Note', wcWarn || 'Sized for horizontal branch']
+          ['Note', wcWarn || 'Sized for horizontal branch'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -909,8 +913,8 @@ export const calculators: Calculator[] = [
     title: 'VENT PIPE SIZE',
     metaTitle: 'Vent Pipe Size Calculator — DWV Vent Sizing | ProjectCalc',
     metaDesc: 'Free vent pipe sizing calculator. Enter drain size, vented DFUs, and developed length — get the minimum vent diameter per IPC.',
-    seoIntro: 'This vent pipe sizing calculator returns the minimum vent diameter for a residential branch vent or stack vent. Per IPC Section 906, every vent must be at least half the diameter of the drain it serves, never less than 1¼", and never more than half the developed length its size allows in IPC Table 906.1. Enter the drain size, total DFUs being vented, and developed length of the vent run; the calculator picks the smallest size that satisfies all three rules. For commercial loads (hundreds of DFUs) or unusual vent configurations like circuit or relief venting, defer to the full code table.',
-    note: 'Residential branch / stack vents per IPC 906. Vent ≥ ½ drain diameter, ≥ 1¼", and within Table 906.1 length limits.',
+    seoIntro: 'This vent pipe sizing calculator returns the minimum vent diameter for a residential branch vent or stack vent. Per IPC Section 906, every vent must be at least half the diameter of the drain it serves, never less than 1¼", and never more than half the developed length its size allows in IPC Table 906.1. Enter the drain size, total DFUs being vented, and developed length of the vent run; the calculator picks the smallest size that satisfies all three rules. For commercial loads (hundreds of DFUs) or unusual vent configurations like circuit or relief venting, defer to the full code table. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'Residential branch / stack vents per IPC 906. Vent ≥ ½ drain diameter, ≥ 1¼", and within Table 906.1 length limits. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'drain', label: 'Drain pipe being vented', unit: '', type: 'select', default: '2',
         tooltip: 'Nominal diameter of the drain pipe the vent serves.',
@@ -950,7 +954,8 @@ export const calculators: Calculator[] = [
           ['Half-drain rule', '≥ ' + fmt(minByHalf)],
           ['DFU served', dfu + ' (limit at this size: ' + pickRow[1] + ')'],
           ['Developed length', len + ' ft (limit at this size: ' + pickRow[2] + ' ft)'],
-          ['Code reference', 'IPC 906 / Table 906.1']
+          ['Code reference', 'IPC 906 / Table 906.1'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -965,8 +970,8 @@ export const calculators: Calculator[] = [
     title: 'PRESSURE LOSS',
     metaTitle: 'Pressure Loss Calculator — Hazen-Williams Friction Loss | ProjectCalc',
     metaDesc: 'Free pressure loss calculator using the Hazen-Williams formula. Enter pipe size, flow, and length — get friction loss in PSI plus velocity check.',
-    seoIntro: 'This pressure loss calculator computes friction loss in a water supply line using the Hazen-Williams equation. Pick the pipe material (different roughness coefficients), nominal size (which determines inside diameter), flow rate, and run length. The output is total head loss in feet, pressure drop in PSI, and water velocity in feet per second — exceeding 8 fps cold or 5 fps hot causes erosion, noise, and water hammer regardless of how the friction math looks. Use this for long service runs, multi-story buildings, irrigation mains, and any branch where the fixture at the dead end is losing pressure.',
-    note: 'Hazen-Williams. Velocity should stay <8 fps cold, <5 fps hot. Old galvanized C-factor drops to 60–80 over decades.',
+    seoIntro: 'This pressure loss calculator computes friction loss in a water supply line using the Hazen-Williams equation. Pick the pipe material (different roughness coefficients), nominal size (which determines inside diameter), flow rate, and run length. The output is total head loss in feet, pressure drop in PSI, and water velocity in feet per second — exceeding 8 fps cold or 5 fps hot causes erosion, noise, and water hammer regardless of how the friction math looks. Use this for long service runs, multi-story buildings, irrigation mains, and any branch where the fixture at the dead end is losing pressure. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'Hazen-Williams. Velocity should stay <8 fps cold, <5 fps hot. Old galvanized C-factor drops to 60–80 over decades. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'material', label: 'Pipe material', unit: '', type: 'select', default: 'copper-l',
         tooltip: 'Hazen-Williams C-factor: copper Type L = 140, PEX = 150, CPVC = 150, new galvanized = 100 (drops to 60–80 with age).',
@@ -1003,7 +1008,8 @@ export const calculators: Calculator[] = [
           ['Velocity', velocity.toFixed(2) + ' fps (' + velOK + ')'],
           ['Inside diameter', D + '"'],
           ['C-factor', C],
-          ['Per 100 ft', (psi * 100 / len).toFixed(2) + ' PSI']
+          ['Per 100 ft', (psi * 100 / len).toFixed(2) + ' PSI'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -1018,8 +1024,8 @@ export const calculators: Calculator[] = [
     title: 'GPM TO PIPE SIZE',
     metaTitle: 'GPM to Pipe Size Calculator — Flow Rate Sizing | ProjectCalc',
     metaDesc: 'Free flow rate to pipe size calculator. Enter your required GPM and get the minimum pipe diameter for copper, PEX, CPVC, and steel.',
-    seoIntro: 'This GPM to pipe size calculator returns the smallest nominal pipe diameter that can carry a given flow rate while keeping water velocity below 8 feet per second on cold lines (5 fps on hot). Velocity above those thresholds causes pipe erosion, water hammer, and audible flow noise — issues that don\'t show up in friction-loss math but ruin a system. Use this for irrigation mains, hose bib supply, custom water features, mechanical room piping, and any application where you know the flow demand directly rather than summing fixture units.',
-    note: 'Velocity-based sizing per industry practice: ≤8 fps cold, ≤5 fps hot. Bump up one size for hot water service.',
+    seoIntro: 'This GPM to pipe size calculator returns the smallest nominal pipe diameter that can carry a given flow rate while keeping water velocity below 8 feet per second on cold lines (5 fps on hot). Velocity above those thresholds causes pipe erosion, water hammer, and audible flow noise — issues that don\'t show up in friction-loss math but ruin a system. Use this for irrigation mains, hose bib supply, custom water features, mechanical room piping, and any application where you know the flow demand directly rather than summing fixture units. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'Velocity-based sizing per industry practice: ≤8 fps cold, ≤5 fps hot. Bump up one size for hot water service. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'gpm', label: 'Required flow rate', unit: 'GPM', default: 12, step: 0.5 },
       { id: 'service', label: 'Service type', unit: '', type: 'select', default: 'cold',
@@ -1050,7 +1056,8 @@ export const calculators: Calculator[] = [
           ['Max velocity', maxV + ' fps'],
           ['PEX equivalent', pexSize],
           ['Service', service === 'hot' ? 'Hot water' : 'Cold water'],
-          ['Note', 'Verify friction loss separately for runs >100 ft']
+          ['Note', 'Verify friction loss separately for runs >100 ft'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -1065,8 +1072,8 @@ export const calculators: Calculator[] = [
     title: 'TRAP SIZE',
     metaTitle: 'Plumbing Trap Size Calculator — Diameter by Fixture | ProjectCalc',
     metaDesc: 'Free plumbing trap size calculator. Pick the fixture and get the minimum trap diameter, DFU, and required vent size per IPC Table 1002.1.',
-    seoIntro: 'Every plumbing fixture needs a trap — a U-shape that holds water as a barrier against sewer gas — and the IPC specifies a minimum trap size for each fixture type in Table 1002.1. Use this trap size calculator to confirm you\'re installing the right trap diameter when replacing a fixture, roughing in new construction, or troubleshooting a slow-draining or gurgling fixture (often a sign the trap is undersized or the trap arm too long). The output also includes DFU value and minimum vent size, so you can size the rest of the branch in one pass.',
-    note: 'IPC Table 1002.1. WCs have integral 3" traps cast into the porcelain — no separate trap needed.',
+    seoIntro: 'Every plumbing fixture needs a trap — a U-shape that holds water as a barrier against sewer gas — and the IPC specifies a minimum trap size for each fixture type in Table 1002.1. Use this trap size calculator to confirm you\'re installing the right trap diameter when replacing a fixture, roughing in new construction, or troubleshooting a slow-draining or gurgling fixture (often a sign the trap is undersized or the trap arm too long). The output also includes DFU value and minimum vent size, so you can size the rest of the branch in one pass. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'IPC Table 1002.1. WCs have integral 3" traps cast into the porcelain — no separate trap needed. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'fixture', label: 'Fixture type', unit: '', type: 'select', default: 'lavatory',
         options: [
@@ -1112,7 +1119,8 @@ export const calculators: Calculator[] = [
           ['DFU value', row[2]],
           ['Min vent size', row[3]],
           ['Trap arm max', isWC ? 'N/A — built into fixture' : '5 × trap diameter (per IPC 1002.4)'],
-          ['Code reference', 'IPC Table 1002.1 + 906']
+          ['Code reference', 'IPC Table 1002.1 + 906'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -1127,8 +1135,8 @@ export const calculators: Calculator[] = [
     title: 'WATER METER SIZE',
     metaTitle: 'Water Meter Size Calculator — AWWA Sizing Guide | ProjectCalc',
     metaDesc: 'Free water meter sizing calculator. Enter total fixture units — get the recommended meter size and peak demand for residential and small commercial service.',
-    seoIntro: 'This water meter size calculator returns the recommended residential or small commercial water meter based on total fixture units, using the AWWA M22 sizing approach. Meters that are too small choke peak flow and cause pressure complaints; meters that are too large under-register low flows and cost the utility (and you, on a per-meter charge). The output gives the displacement-meter size with safe margin, plus the peak GPM that meter is rated for so you can sanity-check against fixture demand.',
-    note: 'AWWA M22-based residential meter sizing. Always confirm with your local water utility — they set the actual service size.',
+    seoIntro: 'This water meter size calculator returns the recommended residential or small commercial water meter based on total fixture units, using the AWWA M22 sizing approach. Meters that are too small choke peak flow and cause pressure complaints; meters that are too large under-register low flows and cost the utility (and you, on a per-meter charge). The output gives the displacement-meter size with safe margin, plus the peak GPM that meter is rated for so you can sanity-check against fixture demand. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'AWWA M22-based residential meter sizing. Always confirm with your local water utility — they set the actual service size. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'wsfu', label: 'Total Water Supply Fixture Units', unit: 'WSFU', default: 30, step: 1,
         tooltip: 'Use the water supply pipe sizing calculator to compute WSFU from your fixture counts.' },
@@ -1165,7 +1173,8 @@ export const calculators: Calculator[] = [
           ['Estimated peak demand', peakGpm.toFixed(1) + ' GPM'],
           ['Meter max continuous', maxCont + ' GPM'],
           ['Meter max safe (intermittent)', maxSafe + ' GPM'],
-          ['Standard', 'AWWA M22 / displacement meter']
+          ['Standard', 'AWWA M22 / displacement meter'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -1180,8 +1189,8 @@ export const calculators: Calculator[] = [
     title: 'BUILDING DRAIN SIZE',
     metaTitle: 'Building Drain Size Calculator — IPC Table 710.1 | ProjectCalc',
     metaDesc: 'Free building drain sizing calculator. Enter total DFUs — get minimum building drain diameter at ⅛" and ¼" per foot slope per IPC Table 710.1.',
-    seoIntro: 'The building drain is the lowest horizontal pipe inside the building, where every branch eventually empties before the line transitions to the building sewer at 5 feet outside the foundation. Its size is set by IPC Table 710.1 using a different DFU column from horizontal branches — the building drain is allowed higher loads at the same diameter because it always runs at full slope. This calculator returns the minimum building drain size for the total DFU load at both ⅛"/ft and ¼"/ft slopes, since slope choice affects capacity.',
-    note: 'IPC Table 710.1, building drain column. Not the same as horizontal branch sizing.',
+    seoIntro: 'The building drain is the lowest horizontal pipe inside the building, where every branch eventually empties before the line transitions to the building sewer at 5 feet outside the foundation. Its size is set by IPC Table 710.1 using a different DFU column from horizontal branches — the building drain is allowed higher loads at the same diameter because it always runs at full slope. This calculator returns the minimum building drain size for the total DFU load at both ⅛"/ft and ¼"/ft slopes, since slope choice affects capacity. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'IPC Table 710.1, building drain column. Not the same as horizontal branch sizing. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'dfu', label: 'Total DFU served', unit: '', default: 30, step: 1,
         tooltip: 'Sum of drainage fixture units for every fixture in the building. Use the drain pipe sizing calculator to compute.' },
@@ -1222,7 +1231,8 @@ export const calculators: Calculator[] = [
           ['Slope chosen', slopeLabel],
           ['Drop per 10 ft of run', dropPer10.toFixed(2) + '"'],
           ['Min size if any WC', 'must be ≥ 3"'],
-          ['Code reference', 'IPC Table 710.1 (building drain column)']
+          ['Code reference', 'IPC Table 710.1 (building drain column)'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -1237,8 +1247,8 @@ export const calculators: Calculator[] = [
     title: 'WET WALL STACK',
     metaTitle: 'Wet Wall Stack Sizing Calculator — Soil Stack DFU | ProjectCalc',
     metaDesc: 'Free wet wall / soil stack sizing calculator. Enter total DFUs and branch intervals — get minimum vertical stack diameter per IPC.',
-    seoIntro: 'A wet wall is the framed cavity that carries the drain stack, vent, and hot/cold supply lines through a multi-story building, usually directly behind the bathroom. The soil stack inside that wall is sized for the total DFU load it carries (every fixture above and at its level) and limited per branch interval (the vertical span between fixture connections). This calculator returns the minimum vertical stack diameter from IPC Table 710.1, accounting for both total stack DFU and the per-branch-interval cap. Pair with vent sizing for the stack vent extending above the roof.',
-    note: 'IPC Table 710.1 (stack columns). Stacks ≤3 stories use the higher per-branch-interval column; taller stacks use the stricter total-stack column.',
+    seoIntro: 'A wet wall is the framed cavity that carries the drain stack, vent, and hot/cold supply lines through a multi-story building, usually directly behind the bathroom. The soil stack inside that wall is sized for the total DFU load it carries (every fixture above and at its level) and limited per branch interval (the vertical span between fixture connections). This calculator returns the minimum vertical stack diameter from IPC Table 710.1, accounting for both total stack DFU and the per-branch-interval cap. Pair with vent sizing for the stack vent extending above the roof. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'IPC Table 710.1 (stack columns). Stacks ≤3 stories use the higher per-branch-interval column; taller stacks use the stricter total-stack column. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'dfu', label: 'Total DFU on stack', unit: '', default: 24, step: 1,
         tooltip: 'Sum of DFU for every fixture connecting to this stack.' },
@@ -1278,7 +1288,8 @@ export const calculators: Calculator[] = [
           ['Branch intervals', intervals + (tallStack ? ' (tall stack — stricter limit)' : '')],
           ['Largest single branch DFU', branchDfu],
           ['Stack vent (through roof)', 'same as stack, min 3" in cold climates (frost closure)'],
-          ['Code reference', 'IPC Table 710.1 (stack columns)']
+          ['Code reference', 'IPC Table 710.1 (stack columns)'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -1293,8 +1304,8 @@ export const calculators: Calculator[] = [
     title: 'BOOSTER PUMP SIZE',
     metaTitle: 'Booster Pump Sizing Calculator — GPM and PSI | ProjectCalc',
     metaDesc: 'Free booster pump sizing calculator. Enter supply pressure, target pressure, and demand — get required pump PSI boost and GPM.',
-    seoIntro: 'A booster pump adds pressure to a water supply that doesn\'t arrive at adequate PSI for the building — common with low municipal pressure, well systems on long supply lines, or top-floor fixtures in tall buildings. This booster pump sizing calculator returns the required pump PSI boost and GPM rating based on incoming static pressure, target delivered pressure, and peak flow demand. Use the result to spec a constant-pressure or VFD pump from any major manufacturer.',
-    note: 'Sizes the boost stage. Variable-speed (VFD) pumps modulate to maintain target; constant-speed sizes for the peak design point.',
+    seoIntro: 'A booster pump adds pressure to a water supply that doesn\'t arrive at adequate PSI for the building — common with low municipal pressure, well systems on long supply lines, or top-floor fixtures in tall buildings. This booster pump sizing calculator returns the required pump PSI boost and GPM rating based on incoming static pressure, target delivered pressure, and peak flow demand. Use the result to spec a constant-pressure or VFD pump from any major manufacturer. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'Sizes the boost stage. Variable-speed (VFD) pumps modulate to maintain target; constant-speed sizes for the peak design point. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'supply', label: 'Incoming static pressure', unit: 'PSI', default: 35, step: 1,
         tooltip: 'Pressure at the meter or well tank during no-flow conditions. Test with a $10 hose-bib gauge.' },
@@ -1325,7 +1336,8 @@ export const calculators: Calculator[] = [
           ['Vertical lift loss', liftPsi.toFixed(1) + ' PSI'],
           ['Approx motor size', hpRound],
           ['Pump duty', status],
-          ['Note', 'Add 10–20% to GPM for VFD pump capacity headroom']
+          ['Note', 'Add 10–20% to GPM for VFD pump capacity headroom'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
@@ -1340,8 +1352,8 @@ export const calculators: Calculator[] = [
     title: 'EXPANSION TANK SIZE',
     metaTitle: 'Expansion Tank Sizing Calculator — Water Heater | ProjectCalc',
     metaDesc: 'Free expansion tank sizing calculator for closed water heater systems. Enter tank volume and pressure — get the required expansion tank size.',
-    seoIntro: 'Closed plumbing systems (those with a check valve, pressure-reducing valve, or backflow preventer between the meter and the water heater) require a thermal expansion tank to absorb the volume increase as the heater warms cold water. Without it, every heating cycle pressurizes the system above safe limits, eventually rupturing the tank, blowing fittings, or triggering the T&P relief valve. This calculator sizes the expansion tank based on water heater capacity, supply pressure, and target heating range using the standard ASME formula.',
-    note: 'Required by code (UPC 608.3, IPC 607.3.1) on any closed system. Check for: backflow preventer, PRV, or check valve at the meter.',
+    seoIntro: 'Closed plumbing systems (those with a check valve, pressure-reducing valve, or backflow preventer between the meter and the water heater) require a thermal expansion tank to absorb the volume increase as the heater warms cold water. Without it, every heating cycle pressurizes the system above safe limits, eventually rupturing the tank, blowing fittings, or triggering the T&P relief valve. This calculator sizes the expansion tank based on water heater capacity, supply pressure, and target heating range using the standard ASME formula. ESTIMATE ONLY — verify with a licensed plumber and local plumbing code before installation.',
+    note: 'Required by code (UPC 608.3, IPC 607.3.1) on any closed system. Check for: backflow preventer, PRV, or check valve at the meter. Estimate only — verify with a licensed plumber and local plumbing code/inspector before purchase or installation. Not a substitute for engineered drawings.',
     inputs: [
       { id: 'wh', label: 'Water heater capacity', unit: 'gallons', default: 50, step: 5,
         tooltip: 'Tank water heater nominal capacity. Tankless systems usually don\'t need expansion tanks unless storage tank is added.' },
@@ -1378,7 +1390,8 @@ export const calculators: Calculator[] = [
           ['Water expansion volume', expansionGal.toFixed(3) + ' gal'],
           ['Pre-charge pressure', supplyPsi + ' PSI (match supply)'],
           ['Max system pressure', maxPsi + ' PSI'],
-          ['Common size match', 'Watts / Amtrol / Zilmet ' + pick + '-gal']
+          ['Common size match', 'Watts / Amtrol / Zilmet ' + pick + '-gal'],
+          ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
     }
