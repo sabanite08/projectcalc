@@ -4,8 +4,14 @@ import drywall from './drywall-estimating-guide';
 import roofing from './roofing-shingles-guide';
 import mulch from './mulch-yards-vs-bags';
 import mortgage from './mortgage-pi-vs-piti';
+import paint from './how-much-paint';
+import waterSupply from './water-supply-line-sizing';
+import tileBathroom from './how-much-tile-bathroom';
 
 export const posts: BlogPost[] = [
+  paint,
+  waterSupply,
+  tileBathroom,
   concrete,
   drywall,
   roofing,
