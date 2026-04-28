@@ -337,6 +337,118 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'AAVs (Studor vents) are allowed by IPC for individual, branch, or circuit vents serving fixtures inside the building, but every drainage system still needs at least one vent open to the outside air. AAVs are great for kitchen island sinks and remodel work where running a stack to the roof would mean ripping out finished walls. Check local amendments — a handful of jurisdictions still don\'t accept them.',
     },
   ],
+  'pressure-loss-calculator': [
+    {
+      q: 'What is the Hazen-Williams formula?',
+      a: 'Hazen-Williams calculates friction loss in a water pipe at typical municipal pressures (down to about 60 psi). The formula h = 4.52·L·Q^1.852 ÷ (C^1.852·D^4.87) gives head loss in feet, where L is run length in feet, Q is flow in GPM, C is the pipe roughness coefficient, and D is inside diameter in inches. It\'s simpler than Darcy-Weisbach (which is more accurate at extreme conditions) and is the industry standard for residential and light commercial water supply.',
+    },
+    {
+      q: 'What is a good C-factor for old galvanized pipe?',
+      a: 'New galvanized steel starts at C=120, but mineral buildup and corrosion drop it to 60–90 within 30 years. If you\'re sizing a retrofit on existing galvanized service, use C=80 for sound 30+ year-old pipe and C=60 if there\'s visible corrosion or pressure complaints. The math will tell you to upsize, which is usually correct anyway — old galvanized restricts flow even before friction losses are calculated.',
+    },
+    {
+      q: 'Why does velocity matter if my friction loss is acceptable?',
+      a: 'Two reasons. Erosion: water above 8 fps (5 fps hot) physically scours the inside of pipe and fittings, especially at elbows, eventually causing pinhole leaks. Water hammer: high velocity means high momentum, so any sudden valve closure produces a pressure spike that can crack joints. Both effects are independent of friction loss — a system can pencil out on PSI drop while still failing on velocity.',
+    },
+  ],
+  'gpm-to-pipe-size-calculator': [
+    {
+      q: 'When do I size by GPM instead of fixture units?',
+      a: 'Fixture units (WSFU) work great for residential supply — they\'re probabilistic and account for fixtures rarely all running at once. GPM-based sizing is better when you know the actual continuous flow demand: irrigation zones, equipment cooling lines, hose stations, restaurant dish stations, and any system where the flow rate is dictated by the load not the fixture count.',
+    },
+    {
+      q: 'Why is hot water sized for lower velocity than cold?',
+      a: 'Hot water erodes copper faster — the rule of thumb is 5 fps max on hot vs 8 fps on cold. The mechanism is dezincification (in brass) and progressive copper-oxide stripping. At 140°F service temperature, sustained 8 fps flow can pinhole copper at fittings within 5–10 years. Sizing one nominal step bigger keeps velocity below the erosion threshold.',
+    },
+    {
+      q: 'What size pipe for 10 GPM?',
+      a: '10 GPM cold-water service needs a minimum ¾" copper or 1" PEX line for ≤8 fps velocity. For hot at 5 fps, bump to 1" copper or 1¼" PEX. Add friction loss check separately if the run is over 100 feet — long runs may need an upsize even when velocity is fine.',
+    },
+  ],
+  'trap-size-calculator': [
+    {
+      q: 'Why does my fixture have a specific trap size?',
+      a: 'Trap size has to match the flow capacity of the fixture so it self-scours — water leaving the fixture has enough velocity to flush the trap clean of debris. Too-small traps clog. Too-large traps don\'t maintain flow velocity and let solids settle in the bottom of the U. IPC Table 1002.1 picks the size that self-scours for each fixture\'s typical discharge.',
+    },
+    {
+      q: 'How long can a trap arm be?',
+      a: 'IPC 1002.4 limits the trap arm (the horizontal pipe between the trap weir and the vent) to a length that depends on trap size: 1¼" trap → 5 ft max arm, 1½" → 6 ft, 2" → 8 ft, 3" → 12 ft. Going longer breaks the trap seal under flow. The arm must also slope ¼" per foot back toward the drain so it self-drains.',
+    },
+    {
+      q: 'Do toilets need a separate trap?',
+      a: 'No — every modern water closet has an integral 3-inch S-trap or P-trap molded into the porcelain. That\'s the curved water column you see in the bowl. The branch drain leaving the toilet is straight pipe to the stack. This is why toilets need a 3" minimum branch even if other fixtures sharing the line would allow smaller.',
+    },
+  ],
+  'water-meter-size-calculator': [
+    {
+      q: 'How does the utility decide my water meter size?',
+      a: 'Most utilities use the AWWA M22 method: estimate peak demand from fixture units (or a flat per-unit value for multi-family), then pick the smallest meter that handles the peak with 15–20% margin. They\'ll oversize cautiously because under-sized meters cause customer complaints they have to fix. The most common residential meter in the US is a ⅝" × ¾" displacement meter, which handles 10 GPM continuous and 20 GPM intermittent — enough for a typical 2-bath home.',
+    },
+    {
+      q: 'What size meter do I need for a tankless water heater?',
+      a: 'Most whole-home tankless heaters pull 7–11 GPM at full output. A ⅝" × ¾" meter (10 GPM continuous) is borderline; a ¾" meter (15 GPM) gives proper headroom. If your house already has a ⅝" meter and you install a tankless that pulls 9 GPM, expect noticeable pressure dip during simultaneous shower and dishwasher use. Coordinate with the utility about a meter upsize before committing to the install.',
+    },
+    {
+      q: 'Why not just install the biggest meter possible?',
+      a: 'Three reasons. (1) Cost: bigger meters carry higher monthly base fees in most utility tariffs. (2) Accuracy at low flow: a 2" meter has a minimum registration threshold around 1.5 GPM, which means a slow toilet leak doesn\'t register and you don\'t get billed for it (sounds great, but the utility tariff sets your fixed cost based on meter size to recover this). (3) Service line cost: bigger meters need bigger service lines, which means more excavation and more pipe.',
+    },
+  ],
+  'building-drain-size-calculator': [
+    {
+      q: 'How is building drain sizing different from horizontal branch sizing?',
+      a: 'Same DFU concept, different limits. The IPC Table 710.1 has separate columns for horizontal branches and building drains (and stacks). Building drains carry higher DFU loads at the same diameter because they always run at full slope and don\'t experience the start-stop flow patterns that branches see. A 3" horizontal branch is limited to 20 DFU; the same 3" building drain at ¼"/ft handles 50 DFU.',
+    },
+    {
+      q: 'What slope should I use for the building drain?',
+      a: 'Default to ¼"/ft for any pipe size. ⅛"/ft is allowed only for 3" and larger pipe and is used when ceiling space is tight (basement runs under floor joists). Going steeper than ½"/ft causes scour problems where water outruns solids, leaving them behind to build up on pipe walls. The sweet spot is ¼" for most residential.',
+    },
+    {
+      q: 'Where does the building drain end and the building sewer begin?',
+      a: 'Per IPC: 5 feet outside the building foundation. Inside that 5 ft = building drain (subject to building drain sizing tables). Outside = building sewer (different, more permissive sizing). The transition matters for permit and inspection scope; the building drain is part of the rough plumbing inspection, the sewer is its own permit.',
+    },
+  ],
+  'wet-wall-stack-calculator': [
+    {
+      q: 'What is a wet wall in plumbing?',
+      a: 'A wet wall is a framed cavity (typically 6" or wider studs instead of standard 4") that carries vertical plumbing — supply lines, drain stack, and vent — through a multi-story house. Bathrooms are usually backed up against a wet wall so a single chase serves both floors. Stacking bathrooms vertically over a single wet wall cuts plumbing labor and material by 30–50% compared to spreading them across the floor plan.',
+    },
+    {
+      q: 'What is a branch interval?',
+      a: 'A branch interval is the vertical distance between two horizontal branches connecting to a stack — typically one floor, about 8 ft. The IPC limits how much DFU can connect to a stack at a single branch interval, separately from the total stack DFU. A 3" stack can carry 48 DFU total but only 20 DFU per branch interval — meaning you can\'t hang all the load on one floor. Spreading fixtures across multiple intervals is what stacks are designed for.',
+    },
+    {
+      q: 'Does a stack vent need to be the same size as the stack?',
+      a: 'IPC 906 sizes vents independently from the drain they serve, but practical residential rule: stack vents extending through the roof are usually the same diameter as the stack to avoid a reduction. Cold-climate codes also require minimum 3" through the roof regardless of stack size to prevent frost closure (ice buildup choking off the vent in winter).',
+    },
+  ],
+  'booster-pump-sizing-calculator': [
+    {
+      q: 'When do I need a booster pump?',
+      a: 'Three common scenarios. (1) Low municipal pressure: incoming static under 30 PSI consistently delivers under 20 PSI at far fixtures, which is below code minimum. (2) Tall buildings: any structure where elevation lift to the top floor exceeds the available pressure margin (every story adds about 4 PSI of static loss). (3) Long well runs or rural service lines where friction loss eats most of the available pressure before it reaches the building. Test incoming pressure with a hose-bib gauge before assuming you need one.',
+    },
+    {
+      q: 'What\'s the difference between constant-speed and VFD booster pumps?',
+      a: 'Constant-speed pumps cycle on/off when pressure drops below the lower set point and run until pressure hits the upper set point. They\'re cheaper and simpler but cause noticeable pressure fluctuations and pump short-cycling. VFD (variable-frequency drive) pumps modulate motor speed continuously to hold pressure at exactly the set point — much smoother, much quieter, and usually quieter long-term running cost. VFD is the modern default for residential and small commercial.',
+    },
+    {
+      q: 'How do I prevent the pump from short-cycling?',
+      a: 'Two ways. Add a pressure tank downstream of the pump (typical 4–14 gal bladder tank) to give the pump time between starts — sized for at least one minute of run time at peak demand. Or use a VFD pump that ramps speed instead of cycling on/off. Short-cycling kills pump motors fast — the start current is 6–8× running current and the bearings/seals see the thermal shock at every start.',
+    },
+  ],
+  'expansion-tank-sizing-calculator': [
+    {
+      q: 'Do I need an expansion tank with my water heater?',
+      a: 'Yes if your system is closed. A closed system has a check valve, pressure-reducing valve (PRV), or backflow preventer between the water meter and the water heater — meaning expanding hot water has nowhere to go back to. Most modern homes have a PRV at the meter (incoming municipal pressure exceeds 80 PSI in many areas), which makes the system closed by code definition. UPC 608.3 and IPC 607.3.1 both require an expansion tank in this case.',
+    },
+    {
+      q: 'What size expansion tank for a 50-gallon water heater?',
+      a: 'For typical residential setup (60 PSI supply, 90°F temperature rise, 80 PSI max), a 50-gallon water heater needs about 1.85 gallons of expansion volume → standard 2-gallon expansion tank. Higher supply pressure or larger water heater pushes you to a 4.4-gallon tank. Always go up to the next standard size; under-sized tanks fill completely and stop accepting expansion, which is the same as having no tank.',
+    },
+    {
+      q: 'Where does the expansion tank install?',
+      a: 'On the cold water inlet side of the water heater, between the heater and the shut-off valve. Hanging vertically (tank below pipe) is preferred so debris drains out of the bladder area. Pre-charge the tank air pressure to match the supply pressure (typically 60 PSI) before installing — most tanks ship at 40 PSI from the factory and need to be adjusted. Use a Schrader-valve gauge with the tank disconnected from water pressure.',
+    },
+  ],
   'duct-cfm-calculator': [
     {
       q: 'What is the typical CFM per ton of cooling?',

@@ -7,8 +7,24 @@ import mortgage from './mortgage-pi-vs-piti';
 import paint from './how-much-paint';
 import waterSupply from './water-supply-line-sizing';
 import tileBathroom from './how-much-tile-bathroom';
+import pressureLoss from './pressure-loss-pipes';
+import gpmToSize from './gpm-to-pipe-size';
+import trapSize from './trap-size-by-fixture';
+import waterMeter from './water-meter-sizing';
+import buildingDrain from './building-drain-sizing';
+import wetWall from './wet-wall-stack-sizing';
+import boosterPump from './booster-pump-sizing';
+import expansionTank from './expansion-tank-sizing';
 
 export const posts: BlogPost[] = [
+  pressureLoss,
+  gpmToSize,
+  trapSize,
+  waterMeter,
+  buildingDrain,
+  wetWall,
+  boosterPump,
+  expansionTank,
   paint,
   waterSupply,
   tileBathroom,

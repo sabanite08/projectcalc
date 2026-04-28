@@ -956,6 +956,434 @@ export const calculators: Calculator[] = [
     }
   },
   {
+    slug: 'pressure-loss-calculator',
+    name: 'Pressure Loss',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Friction loss (Hazen-Williams)',
+    formula: 'h = 4.52·L·Q^1.852 ÷ (C^1.852·D^4.87)',
+    title: 'PRESSURE LOSS',
+    metaTitle: 'Pressure Loss Calculator — Hazen-Williams Friction Loss | ProjectCalc',
+    metaDesc: 'Free pressure loss calculator using the Hazen-Williams formula. Enter pipe size, flow, and length — get friction loss in PSI plus velocity check.',
+    seoIntro: 'This pressure loss calculator computes friction loss in a water supply line using the Hazen-Williams equation. Pick the pipe material (different roughness coefficients), nominal size (which determines inside diameter), flow rate, and run length. The output is total head loss in feet, pressure drop in PSI, and water velocity in feet per second — exceeding 8 fps cold or 5 fps hot causes erosion, noise, and water hammer regardless of how the friction math looks. Use this for long service runs, multi-story buildings, irrigation mains, and any branch where the fixture at the dead end is losing pressure.',
+    note: 'Hazen-Williams. Velocity should stay <8 fps cold, <5 fps hot. Old galvanized C-factor drops to 60–80 over decades.',
+    inputs: [
+      { id: 'material', label: 'Pipe material', unit: '', type: 'select', default: 'copper-l',
+        tooltip: 'Hazen-Williams C-factor: copper Type L = 140, PEX = 150, CPVC = 150, new galvanized = 100 (drops to 60–80 with age).',
+        options: [['copper-l','Copper Type L (C=140)'],['pex','PEX-A (C=150)'],['cpvc','CPVC (C=150)'],['galv','Galvanized steel (C=100)']] },
+      { id: 'size', label: 'Nominal pipe size', unit: '', type: 'select', default: '0.75',
+        options: [['0.5','½"'],['0.75','¾"'],['1','1"'],['1.25','1¼"'],['1.5','1½"'],['2','2"']] },
+      { id: 'gpm', label: 'Flow rate', unit: 'GPM', default: 8, step: 0.5 },
+      { id: 'length', label: 'Run length (developed)', unit: 'ft', default: 100, step: 5,
+        tooltip: 'Total straight-pipe length plus equivalent length for fittings (each elbow ≈ 2 ft, each tee ≈ 5 ft equivalent).' }
+    ],
+    calc: (data) => {
+      const material = data.material as string, size = data.size as string;
+      const gpm = +data.gpm, len = +data.length;
+      const cFactors: Record<string, number> = { 'copper-l': 140, 'pex': 150, 'cpvc': 150, 'galv': 100 };
+      // Inside diameters by material + nominal size (inches)
+      const ids: Record<string, Record<string, number>> = {
+        'copper-l': { '0.5': 0.545, '0.75': 0.785, '1': 1.025, '1.25': 1.265, '1.5': 1.505, '2': 1.985 },
+        'pex':      { '0.5': 0.475, '0.75': 0.671, '1': 0.862, '1.25': 1.053, '1.5': 1.243, '2': 1.718 },
+        'cpvc':     { '0.5': 0.469, '0.75': 0.695, '1': 0.874, '1.25': 1.101, '1.5': 1.394, '2': 1.836 },
+        'galv':     { '0.5': 0.622, '0.75': 0.824, '1': 1.049, '1.25': 1.380, '1.5': 1.610, '2': 2.067 },
+      };
+      const C = cFactors[material];
+      const D = ids[material][size];
+      // Hazen-Williams head loss in feet per 100 ft, then scale to length
+      const headLoss = 4.52 * Math.pow(gpm, 1.852) / (Math.pow(C, 1.852) * Math.pow(D, 4.87)) * len;
+      const psi = headLoss * 0.433;
+      // Velocity in fps: V = Q × 0.4085 / D²  (Q in GPM, D in inches)
+      const velocity = (gpm * 0.4085) / (D * D);
+      const velOK = velocity < 8 ? 'OK' : velocity < 10 ? 'HIGH — noise risk' : 'TOO HIGH — erosion risk';
+      return {
+        main: psi.toFixed(2), unit: 'PSI LOSS',
+        detail: [
+          ['Head loss', headLoss.toFixed(2) + ' ft'],
+          ['Velocity', velocity.toFixed(2) + ' fps (' + velOK + ')'],
+          ['Inside diameter', D + '"'],
+          ['C-factor', C],
+          ['Per 100 ft', (psi * 100 / len).toFixed(2) + ' PSI']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'gpm-to-pipe-size-calculator',
+    name: 'GPM to Pipe Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Flow rate sizing',
+    formula: 'D ≥ √(Q ÷ 19.6) for V ≤ 8 fps',
+    title: 'GPM TO PIPE SIZE',
+    metaTitle: 'GPM to Pipe Size Calculator — Flow Rate Sizing | ProjectCalc',
+    metaDesc: 'Free flow rate to pipe size calculator. Enter your required GPM and get the minimum pipe diameter for copper, PEX, CPVC, and steel.',
+    seoIntro: 'This GPM to pipe size calculator returns the smallest nominal pipe diameter that can carry a given flow rate while keeping water velocity below 8 feet per second on cold lines (5 fps on hot). Velocity above those thresholds causes pipe erosion, water hammer, and audible flow noise — issues that don\'t show up in friction-loss math but ruin a system. Use this for irrigation mains, hose bib supply, custom water features, mechanical room piping, and any application where you know the flow demand directly rather than summing fixture units.',
+    note: 'Velocity-based sizing per industry practice: ≤8 fps cold, ≤5 fps hot. Bump up one size for hot water service.',
+    inputs: [
+      { id: 'gpm', label: 'Required flow rate', unit: 'GPM', default: 12, step: 0.5 },
+      { id: 'service', label: 'Service type', unit: '', type: 'select', default: 'cold',
+        tooltip: 'Hot water uses lower max velocity (5 fps vs 8 fps) because temperature accelerates erosion at the same flow rate.',
+        options: [['cold','Cold water (max 8 fps)'],['hot','Hot water (max 5 fps)']] }
+    ],
+    calc: (data) => {
+      const gpm = +data.gpm;
+      const service = data.service as string;
+      const maxV = service === 'hot' ? 5 : 8;
+      // D_min = sqrt(Q × 0.4085 / V_max), inches
+      const dMinIn = Math.sqrt((gpm * 0.4085) / maxV);
+      // Nominal sizes with inside diameters (use copper Type L as reference)
+      const sizes: [string, number][] = [
+        ['½"', 0.545], ['¾"', 0.785], ['1"', 1.025], ['1¼"', 1.265],
+        ['1½"', 1.505], ['2"', 1.985], ['2½"', 2.465], ['3"', 2.945]
+      ];
+      let copperSize = '3"+';
+      for (const [label, id] of sizes) {
+        if (id >= dMinIn) { copperSize = label; break; }
+      }
+      const pexBump: Record<string, string> = { '½"':'¾"', '¾"':'1"', '1"':'1¼"', '1¼"':'1½"', '1½"':'2"', '2"':'2½"', '2½"':'3"', '3"':'3"' };
+      const pexSize = pexBump[copperSize] ?? copperSize;
+      return {
+        main: copperSize, unit: 'COPPER / CPVC SIZE',
+        detail: [
+          ['Min ID needed', dMinIn.toFixed(3) + '"'],
+          ['Max velocity', maxV + ' fps'],
+          ['PEX equivalent', pexSize],
+          ['Service', service === 'hot' ? 'Hot water' : 'Cold water'],
+          ['Note', 'Verify friction loss separately for runs >100 ft']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'trap-size-calculator',
+    name: 'Trap Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Trap diameter by fixture',
+    formula: 'IPC Table 1002.1',
+    title: 'TRAP SIZE',
+    metaTitle: 'Plumbing Trap Size Calculator — Diameter by Fixture | ProjectCalc',
+    metaDesc: 'Free plumbing trap size calculator. Pick the fixture and get the minimum trap diameter, DFU, and required vent size per IPC Table 1002.1.',
+    seoIntro: 'Every plumbing fixture needs a trap — a U-shape that holds water as a barrier against sewer gas — and the IPC specifies a minimum trap size for each fixture type in Table 1002.1. Use this trap size calculator to confirm you\'re installing the right trap diameter when replacing a fixture, roughing in new construction, or troubleshooting a slow-draining or gurgling fixture (often a sign the trap is undersized or the trap arm too long). The output also includes DFU value and minimum vent size, so you can size the rest of the branch in one pass.',
+    note: 'IPC Table 1002.1. WCs have integral 3" traps cast into the porcelain — no separate trap needed.',
+    inputs: [
+      { id: 'fixture', label: 'Fixture type', unit: '', type: 'select', default: 'lavatory',
+        options: [
+          ['lavatory','Lavatory (bathroom sink)'],
+          ['bidet','Bidet'],
+          ['drinking-fountain','Drinking fountain'],
+          ['kitchen-sink','Kitchen sink (single or double bowl)'],
+          ['bar-sink','Bar / prep sink'],
+          ['laundry-tub','Laundry tub'],
+          ['bathtub','Bathtub'],
+          ['shower','Shower stall'],
+          ['floor-drain','Floor drain'],
+          ['washer','Clothes washer standpipe'],
+          ['urinal','Urinal'],
+          ['dishwasher','Dishwasher (separate trap)'],
+          ['wc','Water closet (toilet)'],
+        ] }
+    ],
+    calc: (data) => {
+      const f = data.fixture as string;
+      // [trap size, branch min, DFU, vent min]
+      const table: Record<string, [string, string, number, string]> = {
+        'lavatory':         ['1¼"', '1¼"', 1, '1¼"'],
+        'bidet':            ['1¼"', '1¼"', 1, '1¼"'],
+        'drinking-fountain':['1¼"', '1¼"', 0.5, '1¼"'],
+        'kitchen-sink':     ['1½"', '1½"', 2, '1¼"'],
+        'bar-sink':         ['1½"', '1½"', 1, '1¼"'],
+        'laundry-tub':      ['1½"', '1½"', 2, '1¼"'],
+        'bathtub':          ['1½"', '1½"', 2, '1¼"'],
+        'shower':           ['2"',  '2"',  2, '1½"'],
+        'floor-drain':      ['2"',  '2"',  2, '1½"'],
+        'washer':           ['2"',  '2"',  3, '1½"'],
+        'urinal':           ['2"',  '2"',  4, '1½"'],
+        'dishwasher':       ['1½"', '1½"', 2, '1¼"'],
+        'wc':               ['Integral 3"', '3"', 3, '2"'],
+      };
+      const row = table[f];
+      const isWC = f === 'wc';
+      return {
+        main: row[0], unit: 'MIN TRAP SIZE',
+        detail: [
+          ['Min branch drain', row[1]],
+          ['DFU value', row[2]],
+          ['Min vent size', row[3]],
+          ['Trap arm max', isWC ? 'N/A — built into fixture' : '5 × trap diameter (per IPC 1002.4)'],
+          ['Code reference', 'IPC Table 1002.1 + 906']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'water-meter-size-calculator',
+    name: 'Water Meter Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Meter sizing by demand',
+    formula: 'meter ≥ peak GPM at acceptable Δp',
+    title: 'WATER METER SIZE',
+    metaTitle: 'Water Meter Size Calculator — AWWA Sizing Guide | ProjectCalc',
+    metaDesc: 'Free water meter sizing calculator. Enter total fixture units — get the recommended meter size and peak demand for residential and small commercial service.',
+    seoIntro: 'This water meter size calculator returns the recommended residential or small commercial water meter based on total fixture units, using the AWWA M22 sizing approach. Meters that are too small choke peak flow and cause pressure complaints; meters that are too large under-register low flows and cost the utility (and you, on a per-meter charge). The output gives the displacement-meter size with safe margin, plus the peak GPM that meter is rated for so you can sanity-check against fixture demand.',
+    note: 'AWWA M22-based residential meter sizing. Always confirm with your local water utility — they set the actual service size.',
+    inputs: [
+      { id: 'wsfu', label: 'Total Water Supply Fixture Units', unit: 'WSFU', default: 30, step: 1,
+        tooltip: 'Use the water supply pipe sizing calculator to compute WSFU from your fixture counts.' },
+      { id: 'service', label: 'Service type', unit: '', type: 'select', default: 'residential',
+        options: [['residential','Single-family residential'],['multi','Multi-family / small commercial']] }
+    ],
+    calc: (data) => {
+      const wsfu = +data.wsfu;
+      const service = data.service as string;
+      // Peak GPM via Hunter (simplified): for residential
+      const peakGpm = wsfu < 6 ? wsfu * 1.5 : 5 + Math.sqrt(wsfu) * 1.8;
+      // Meter sizing: displacement (PD) meters typical residential
+      // Size, max continuous GPM, max safe flow GPM
+      const meters: [string, number, number][] = [
+        ['⅝" × ¾"', 10, 20],
+        ['¾"',       15, 30],
+        ['1"',       25, 50],
+        ['1½"',      50, 100],
+        ['2"',       80, 160],
+        ['3"',       180, 320],
+      ];
+      let pick = '3"+';
+      let maxCont = 180, maxSafe = 320;
+      // Pick smallest meter where peak < max continuous (provides margin)
+      for (const [size, cont, safe] of meters) {
+        if (peakGpm <= cont * (service === 'multi' ? 0.85 : 1.0)) {
+          pick = size; maxCont = cont; maxSafe = safe; break;
+        }
+      }
+      return {
+        main: pick, unit: 'METER SIZE',
+        detail: [
+          ['Total WSFU', wsfu],
+          ['Estimated peak demand', peakGpm.toFixed(1) + ' GPM'],
+          ['Meter max continuous', maxCont + ' GPM'],
+          ['Meter max safe (intermittent)', maxSafe + ' GPM'],
+          ['Standard', 'AWWA M22 / displacement meter']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'building-drain-size-calculator',
+    name: 'Building Drain Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Main drain + slope',
+    formula: 'building drain DFU + slope',
+    title: 'BUILDING DRAIN SIZE',
+    metaTitle: 'Building Drain Size Calculator — IPC Table 710.1 | ProjectCalc',
+    metaDesc: 'Free building drain sizing calculator. Enter total DFUs — get minimum building drain diameter at ⅛" and ¼" per foot slope per IPC Table 710.1.',
+    seoIntro: 'The building drain is the lowest horizontal pipe inside the building, where every branch eventually empties before the line transitions to the building sewer at 5 feet outside the foundation. Its size is set by IPC Table 710.1 using a different DFU column from horizontal branches — the building drain is allowed higher loads at the same diameter because it always runs at full slope. This calculator returns the minimum building drain size for the total DFU load at both ⅛"/ft and ¼"/ft slopes, since slope choice affects capacity.',
+    note: 'IPC Table 710.1, building drain column. Not the same as horizontal branch sizing.',
+    inputs: [
+      { id: 'dfu', label: 'Total DFU served', unit: '', default: 30, step: 1,
+        tooltip: 'Sum of drainage fixture units for every fixture in the building. Use the drain pipe sizing calculator to compute.' },
+      { id: 'slope', label: 'Drain slope', unit: '', type: 'select', default: '0.25',
+        tooltip: '⅛"/ft is allowed for 3"+ pipe and saves vertical space; ¼"/ft is required for ≤2.5" pipe and increases capacity at every size.',
+        options: [['0.125','⅛" per ft (3" pipe and larger only)'],['0.25','¼" per ft (any size)'],['0.5','½" per ft (max — beyond this, scour issues)']] }
+    ],
+    calc: (data) => {
+      const dfu = +data.dfu;
+      const slope = +data.slope;
+      // IPC 710.1 building drain column
+      // [size, max DFU @ ⅛, max DFU @ ¼, max DFU @ ½]
+      const table: [string, number, number, number][] = [
+        ['2"',  21, 26, 31],
+        ['2½"', 24, 31, 36],
+        ['3"',  42, 50, 57],
+        ['4"',  180, 216, 250],
+        ['5"',  390, 480, 575],
+        ['6"',  700, 840, 1000],
+        ['8"',  1600, 1920, 2300],
+      ];
+      const slopeIdx = slope === 0.125 ? 1 : slope === 0.25 ? 2 : 3;
+      let pick = '8"+';
+      for (const row of table) {
+        if (dfu <= row[slopeIdx]) {
+          // Building drain must be ≥3" if any WCs (assume yes for any meaningful DFU count)
+          // and ⅛" slope only allowed for ≥3"
+          if (slope === 0.125 && (row[0] === '2"' || row[0] === '2½"')) continue;
+          pick = row[0]; break;
+        }
+      }
+      const slopeLabel = slope === 0.125 ? '⅛"/ft' : slope === 0.25 ? '¼"/ft' : '½"/ft';
+      const dropPer10 = slope * 10;
+      return {
+        main: pick, unit: 'BUILDING DRAIN SIZE',
+        detail: [
+          ['Total DFU', dfu],
+          ['Slope chosen', slopeLabel],
+          ['Drop per 10 ft of run', dropPer10.toFixed(2) + '"'],
+          ['Min size if any WC', 'must be ≥ 3"'],
+          ['Code reference', 'IPC Table 710.1 (building drain column)']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'wet-wall-stack-calculator',
+    name: 'Wet Wall Stack',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Combined drain + vent stack',
+    formula: 'stack DFU + branch interval limit',
+    title: 'WET WALL STACK',
+    metaTitle: 'Wet Wall Stack Sizing Calculator — Soil Stack DFU | ProjectCalc',
+    metaDesc: 'Free wet wall / soil stack sizing calculator. Enter total DFUs and branch intervals — get minimum vertical stack diameter per IPC.',
+    seoIntro: 'A wet wall is the framed cavity that carries the drain stack, vent, and hot/cold supply lines through a multi-story building, usually directly behind the bathroom. The soil stack inside that wall is sized for the total DFU load it carries (every fixture above and at its level) and limited per branch interval (the vertical span between fixture connections). This calculator returns the minimum vertical stack diameter from IPC Table 710.1, accounting for both total stack DFU and the per-branch-interval cap. Pair with vent sizing for the stack vent extending above the roof.',
+    note: 'IPC Table 710.1 (stack columns). Stacks ≤3 stories use the higher per-branch-interval column; taller stacks use the stricter total-stack column.',
+    inputs: [
+      { id: 'dfu', label: 'Total DFU on stack', unit: '', default: 24, step: 1,
+        tooltip: 'Sum of DFU for every fixture connecting to this stack.' },
+      { id: 'intervals', label: 'Number of branch intervals', unit: '', default: 2, step: 1,
+        tooltip: 'A branch interval = one floor\'s worth of fixture connections (typically 8 ft of vertical stack). Most residential = 1–3 intervals.' },
+      { id: 'maxBranchDfu', label: 'Largest single branch DFU', unit: '', default: 12, step: 1,
+        tooltip: 'DFU of the most heavily-loaded branch entering the stack at one level (typically a full bath = 7 DFU, two baths = 14).' }
+    ],
+    calc: (data) => {
+      const dfu = +data.dfu;
+      const intervals = +data.intervals;
+      const branchDfu = +data.maxBranchDfu;
+      // IPC 710.1 simplified soil stack column:
+      // [size, max DFU per branch interval, max DFU on stack ≤3 stories, max DFU on stack >3 stories]
+      const table: [string, number, number, number][] = [
+        ['1½"', 1, 2, 1],
+        ['2"',  6, 10, 8],
+        ['2½"', 9, 20, 15],
+        ['3"',  20, 48, 30],
+        ['4"',  90, 240, 180],
+        ['5"',  200, 540, 390],
+        ['6"',  350, 960, 700],
+      ];
+      const tallStack = intervals > 3;
+      const stackCol = tallStack ? 3 : 2;
+      let pick = '6"+';
+      for (const row of table) {
+        if (dfu <= row[stackCol] && branchDfu <= row[1]) {
+          pick = row[0]; break;
+        }
+      }
+      // Stack vent (extension through roof) is at least same size or per IPC 906; min 3" through roof in cold climates
+      return {
+        main: pick, unit: 'STACK SIZE',
+        detail: [
+          ['Total DFU on stack', dfu],
+          ['Branch intervals', intervals + (tallStack ? ' (tall stack — stricter limit)' : '')],
+          ['Largest single branch DFU', branchDfu],
+          ['Stack vent (through roof)', 'same as stack, min 3" in cold climates (frost closure)'],
+          ['Code reference', 'IPC Table 710.1 (stack columns)']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'booster-pump-sizing-calculator',
+    name: 'Booster Pump Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Pump GPM and PSI',
+    formula: 'pump = peak GPM @ (target − supply) PSI',
+    title: 'BOOSTER PUMP SIZE',
+    metaTitle: 'Booster Pump Sizing Calculator — GPM and PSI | ProjectCalc',
+    metaDesc: 'Free booster pump sizing calculator. Enter supply pressure, target pressure, and demand — get required pump PSI boost and GPM.',
+    seoIntro: 'A booster pump adds pressure to a water supply that doesn\'t arrive at adequate PSI for the building — common with low municipal pressure, well systems on long supply lines, or top-floor fixtures in tall buildings. This booster pump sizing calculator returns the required pump PSI boost and GPM rating based on incoming static pressure, target delivered pressure, and peak flow demand. Use the result to spec a constant-pressure or VFD pump from any major manufacturer.',
+    note: 'Sizes the boost stage. Variable-speed (VFD) pumps modulate to maintain target; constant-speed sizes for the peak design point.',
+    inputs: [
+      { id: 'supply', label: 'Incoming static pressure', unit: 'PSI', default: 35, step: 1,
+        tooltip: 'Pressure at the meter or well tank during no-flow conditions. Test with a $10 hose-bib gauge.' },
+      { id: 'target', label: 'Target delivered pressure', unit: 'PSI', default: 60, step: 1,
+        tooltip: 'Code minimum is 20 PSI at the most remote fixture; 40–60 PSI is comfortable. Above 80 requires a pressure-reducing valve.' },
+      { id: 'gpm', label: 'Peak demand', unit: 'GPM', default: 15, step: 1,
+        tooltip: 'Use the water supply pipe sizing calculator to estimate peak GPM from fixture units.' },
+      { id: 'lift', label: 'Vertical lift to highest fixture', unit: 'ft', default: 25, step: 1,
+        tooltip: 'Vertical distance from pump to the highest fixture. Each foot of lift adds 0.433 PSI to required boost.' }
+    ],
+    calc: (data) => {
+      const supply = +data.supply, target = +data.target, gpm = +data.gpm, lift = +data.lift;
+      const liftPsi = lift * 0.433;
+      const boost = Math.max(0, (target - supply) + liftPsi);
+      const status = boost <= 0 ? 'No booster needed — supply already meets target' :
+                     boost <= 20 ? 'Single-stage booster (light duty)' :
+                     boost <= 50 ? 'Multi-stage booster (medium duty)' :
+                     'Multi-stage / high-pressure booster';
+      // Approximate motor HP: HP = (GPM × Boost × SG) / (3960 × pump_efficiency)
+      // Assume 65% pump efficiency, water SG = 1
+      const hp = (gpm * boost) / (3960 * 0.65);
+      const hpRound = hp <= 0.5 ? '½ HP' : hp <= 0.75 ? '¾ HP' : hp <= 1 ? '1 HP' :
+                      hp <= 1.5 ? '1½ HP' : hp <= 2 ? '2 HP' : hp <= 3 ? '3 HP' : `${Math.ceil(hp)} HP`;
+      return {
+        main: boost.toFixed(1), unit: 'PSI BOOST',
+        detail: [
+          ['Pump rated GPM', gpm + ' GPM'],
+          ['Vertical lift loss', liftPsi.toFixed(1) + ' PSI'],
+          ['Approx motor size', hpRound],
+          ['Pump duty', status],
+          ['Note', 'Add 10–20% to GPM for VFD pump capacity headroom']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'expansion-tank-sizing-calculator',
+    name: 'Expansion Tank Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Closed-loop tank size',
+    formula: 'V_tank = V_water × (Vexp ÷ Pa) × (Pa − Pp) ÷ (Ph − Pp)',
+    title: 'EXPANSION TANK SIZE',
+    metaTitle: 'Expansion Tank Sizing Calculator — Water Heater | ProjectCalc',
+    metaDesc: 'Free expansion tank sizing calculator for closed water heater systems. Enter tank volume and pressure — get the required expansion tank size.',
+    seoIntro: 'Closed plumbing systems (those with a check valve, pressure-reducing valve, or backflow preventer between the meter and the water heater) require a thermal expansion tank to absorb the volume increase as the heater warms cold water. Without it, every heating cycle pressurizes the system above safe limits, eventually rupturing the tank, blowing fittings, or triggering the T&P relief valve. This calculator sizes the expansion tank based on water heater capacity, supply pressure, and target heating range using the standard ASME formula.',
+    note: 'Required by code (UPC 608.3, IPC 607.3.1) on any closed system. Check for: backflow preventer, PRV, or check valve at the meter.',
+    inputs: [
+      { id: 'wh', label: 'Water heater capacity', unit: 'gallons', default: 50, step: 5,
+        tooltip: 'Tank water heater nominal capacity. Tankless systems usually don\'t need expansion tanks unless storage tank is added.' },
+      { id: 'supply', label: 'Supply pressure (set on PRV)', unit: 'PSI', default: 60, step: 1 },
+      { id: 'maxPressure', label: 'Maximum allowable pressure', unit: 'PSI', default: 80, step: 1,
+        tooltip: 'Set just below the T&P relief valve pop pressure (typically 150 PSI) — code targets 80 PSI max for plumbing fittings.' },
+      { id: 'temp', label: 'Heating temperature rise', unit: '°F', default: 90, step: 5,
+        tooltip: 'Difference between cold inlet and stored hot water temp. 50°F → 140°F = 90°F rise.' }
+    ],
+    calc: (data) => {
+      const wh = +data.wh;
+      const supplyPsi = +data.supply;
+      const maxPsi = +data.maxPressure;
+      const tempRise = +data.temp;
+      // Expansion factor: water expands about 0.000022 per °F
+      // For 90°F rise on 50 gal water: ~50 × 0.000022 × 90 = 0.099 gal expansion (about 0.2%)
+      // Better approximation from ASHRAE: % expansion ≈ 0.00041 × (T_hot - T_cold) for 50°F to 140°F
+      const expansionFraction = 0.00041 * tempRise;
+      const expansionGal = wh * expansionFraction;
+      // Tank acceptance volume formula (simplified bladder tank):
+      // V_tank = V_exp / (1 − (P_supply / P_max))
+      const acceptanceFactor = 1 - (supplyPsi / maxPsi);
+      const tankGal = expansionGal / acceptanceFactor;
+      // Round to standard tank sizes: 2, 4.4, 6, 14, 20, 32 gal
+      const standard = [2, 4.4, 6, 14, 20, 32, 44];
+      let pick = 44;
+      for (const s of standard) {
+        if (s >= tankGal) { pick = s; break; }
+      }
+      return {
+        main: pick + '', unit: 'GALLON TANK',
+        detail: [
+          ['Computed minimum', tankGal.toFixed(2) + ' gal'],
+          ['Water expansion volume', expansionGal.toFixed(3) + ' gal'],
+          ['Pre-charge pressure', supplyPsi + ' PSI (match supply)'],
+          ['Max system pressure', maxPsi + ' PSI'],
+          ['Common size match', 'Watts / Amtrol / Zilmet ' + pick + '-gal']
+        ]
+      };
+    }
+  },
+  {
     slug: 'duct-cfm-calculator',
     name: 'Duct CFM',
     category: 'construction',
