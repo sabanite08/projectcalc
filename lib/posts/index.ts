@@ -15,8 +15,18 @@ import buildingDrain from './building-drain-sizing';
 import wetWall from './wet-wall-stack-sizing';
 import boosterPump from './booster-pump-sizing';
 import expansionTank from './expansion-tank-sizing';
+import stairStringer from './stair-stringer-layout';
+import beamSpan from './beam-span-basics';
+import plywoodSheets from './plywood-sheet-coverage';
+import rafterLength from './rafter-length-pitch';
+import headerSize from './header-size-quickpick';
 
 export const posts: BlogPost[] = [
+  stairStringer,
+  beamSpan,
+  plywoodSheets,
+  rafterLength,
+  headerSize,
   pressureLoss,
   gpmToSize,
   trapSize,

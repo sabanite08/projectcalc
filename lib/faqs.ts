@@ -505,6 +505,76 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'For balances you can pay in 12 months: 0% APR balance-transfer credit card (if you qualify) is cheapest. For 24–60 month payoff: personal loan typically beats credit cards (which average 22% APR). HELOC is usually cheapest of all (8–10%) but requires home equity and has variable rates that can rise.',
     },
   ],
+  'stair-stringer-calculator': [
+    {
+      q: 'What is the IRC code for stair rise and run?',
+      a: 'Per IRC R311.7.5: maximum riser height is 7-3/4 inches and minimum tread depth is 10 inches measured nose to nose. The largest riser cannot vary more than 3/8 inch from the smallest within a flight. The "rule of comfort" target for a usable stair is 2R + T between 24 and 25 inches, where R is unit rise and T is unit run. This calculator flags violations on each side of those limits.',
+    },
+    {
+      q: 'How long of a 2x12 do I need for a stair stringer?',
+      a: 'Take the diagonal stringer length the calculator returns, round up to the nearest standard length, and add at least 12 inches for the seat cut at the bottom and the plumb cut at the top. A 9-foot rise with a 14-tread layout typically needs a 16-foot 2x12 even though the diagonal is only ~14 ft. Always lay out the cuts on paper before going to the lumberyard. This sizing is an estimate — confirm with your local building inspector before cutting.',
+    },
+    {
+      q: 'Should I use 2 or 3 stringers?',
+      a: 'For typical 36-inch-wide residential stairs, 3 stringers are recommended (one per edge plus a middle stringer). For wider stairs (over 36"), add an extra stringer per 16 inches of width. 2x12 is the standard size; 2x10 is allowed on shorter runs but leaves only ~3-1/2" of throat after the cuts, which gets fragile. Always verify spacing and stringer size with your inspector and engineered drawings.',
+    },
+  ],
+  'beam-span-calculator': [
+    {
+      q: 'Can I use this calculator to size a real load-bearing beam?',
+      a: 'No — this is a planning estimator, not an engineering calculation. Real beam sizing must consider bearing length, point loads, lumber grade and species variation, repetitive vs single-member factors, snow/seismic loads, and field conditions the calculator cannot see. Use this to sanity-check whether a 2-2x10 versus 3-2x12 is in the right ballpark, then have an engineer or your local inspector confirm before purchase. Span tables from AWC (American Wood Council) and Weyerhaeuser are the next step up.',
+    },
+    {
+      q: 'What does L/360 deflection mean?',
+      a: 'L/360 is the maximum live-load deflection allowed at midspan, where L is the span length. For a 12-foot beam, L/360 = 144"/360 = 0.4" of sag under full live load. It is the standard for floor framing under finished ceilings (drywall cracks if it sags more). Roofs and decks use L/240 (less strict). This calculator uses L/360 as the deflection limit because most residential beams support floors.',
+    },
+    {
+      q: 'What is tributary width for a beam?',
+      a: 'Tributary width is the half-distance to the next parallel support on each side. If a beam runs down the middle of a 24-foot-wide room with joists landing on it from both sides, each side feeds 12 feet of joist span, so the tributary width is 12 feet. If the beam is at one wall and joists hang from a ledger on the opposite wall, the beam carries the full 24-foot width. Tributary width times floor load (psf) gives the uniform load (plf) on the beam.',
+    },
+  ],
+  'plywood-sheets-calculator': [
+    {
+      q: 'How many sheets of plywood do I need for a 24x16 subfloor?',
+      a: 'A 24x16 floor is 384 ft². At 32 ft² per 4x8 sheet, that is exactly 12 sheets — but with 10% waste and at least one extra sheet for tongue-and-groove perimeter loss, plan for 14 sheets. The calculator handles the waste math automatically; just measure once and remember to count out an extra sheet when you load the truck. This is an estimate; verify against the engineered floor plan before ordering.',
+    },
+    {
+      q: 'What thickness of plywood for subfloor?',
+      a: '23/32" tongue-and-groove is the standard for residential floors over 16" o.c. joists. 19/32" works on 12" o.c. spacing or where a separate underlayment will be added. 1-1/8" T&G is used on 24" o.c. engineered I-joists. OSB rated as Sturd-I-Floor is acceptable in the same thicknesses. Always match the APA rated stamp on the sheet to the joist spacing called out in the framing plan.',
+    },
+    {
+      q: 'OSB or plywood for sheathing — which is better?',
+      a: 'OSB is cheaper, sheathing-rated equivalent, and dominates new construction. Plywood handles repeated wetting better and holds fasteners slightly stronger at the edges, so it is preferred where sheathing will be exposed (e.g., behind cement-board on showers, in unconditioned crawlspaces). For walls and roofs that get covered, OSB is fine. Both are sized identically in this calculator since coverage is the same per sheet.',
+    },
+  ],
+  'rafter-length-calculator': [
+    {
+      q: 'How do I figure rafter length from pitch and run?',
+      a: 'Multiply the run (half the building width) by the pitch factor √(pitch² + 144) ÷ 12. For a 24-ft-wide building with 6/12 pitch, run is 12 ft and the pitch factor is √(36+144)/12 ≈ 1.118, so the slope length from ridge to wall is 12 × 1.118 ≈ 13.4 ft. Add the eave overhang along the slope to get the total rafter length to cut. Always verify against the architect or engineer\'s roof plan.',
+    },
+    {
+      q: 'Do I subtract the ridge board thickness?',
+      a: 'Yes — at the upper end of the rafter, you cut a plumb cut that lands flush against the ridge board. The actual horizontal run of the rafter is half the building width minus half the ridge board thickness (typically 3/4" for a 1-1/2" ridge). For a 6/12 pitch that shaves about 0.84" off the slope length per rafter — small, but real. This calculator returns the un-corrected length; subtract the ridge offset before final cut.',
+    },
+    {
+      q: 'What size rafter do I need for a 24-foot-wide house?',
+      a: 'This calculator gives length only, not size. Rafter size depends on snow load, lumber species/grade, spacing, and whether the ceiling joists tie the rafters together. AWC and IRC R802.5 span tables are the right reference. For 24-ft buildings under 30 psf ground snow with 16" o.c. spacing, 2x8 #2 SPF rafters are typical, but 2x10 or 2x12 are needed in heavy-snow regions or with cathedral ceilings. Always verify with engineered plans.',
+    },
+  ],
+  'header-size-calculator': [
+    {
+      q: 'What size header for a 6-foot opening?',
+      a: 'For a non-bearing wall: a (2) 2x6 header is plenty. For an exterior bearing wall carrying roof and ceiling only: (2) 2x8. With one floor above plus the roof: (2) 2x10. With two floors above: (3) 2x10. These come from a simplified read of IRC R602.7 and assume average residential loading — your inspector or engineer is still the final word, especially in snow regions or with wider building widths.',
+    },
+    {
+      q: 'How many jack studs per side for a header?',
+      a: 'Up to 4 ft opening: 1 jack each side. 4–8 ft: 2 jacks each side. Over 8 ft: 3 jacks each side, or use engineered LVL with manufacturer-specified bearing. Always include 1 king stud (full-height) outside each jack. Wider doors (garage doors, sliding glass over 6 ft) often need a structural post or trimmer made of multiple jacks built up — confirm with the framing plan.',
+    },
+    {
+      q: 'When do I need an LVL or engineered header instead of dimensional lumber?',
+      a: 'Use an LVL (laminated veneer lumber) when opening width exceeds 12 feet, when point loads land on the header (girder bearing), in two-story bearing walls with wide openings, or whenever the architect or engineer specifies one. LVLs are stronger and stiffer than built-up dimensional lumber, span farther, and avoid the gap problems of crowned 2x stock. Anything outside the simplified table this calculator uses should be sized by an engineer.',
+    },
+  ],
   'tip-calculator': [
     {
       q: 'How much should I tip at a restaurant?',

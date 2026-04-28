@@ -1551,6 +1551,273 @@ export const calculators: Calculator[] = [
         ]
       };
     }
+  },
+  {
+    slug: 'stair-stringer-calculator',
+    name: 'Stair Stringer',
+    category: 'construction',
+    trade: 'Carpentry',
+    desc: 'Rise · run · stringer length',
+    formula: 'L = √(rise² + run²)',
+    title: 'STAIR STRINGER',
+    metaTitle: 'Stair Stringer Calculator — Rise, Run, Length | ProjectCalc',
+    metaDesc: 'Free stair stringer calculator. Enter total rise and number of risers — get unit rise, total run, stringer length, and IRC code checks for rise/run.',
+    seoIntro: 'This stair stringer calculator gives you the four numbers a framer or DIY builder needs before cutting a stringer: unit riser height, unit tread depth, total horizontal run, and the diagonal stringer length. Enter the total rise (finished floor to finished floor), the number of risers you want, and your tread depth, and the calculator returns each value plus an IRC R311.7 code check (max riser 7-3/4", min tread 10", target 2R + T = 24"–25" for comfortable stride). The stringer length is the Pythagorean diagonal — buy a 2x12 at least one foot longer to leave room for the seat cut at the bottom and the plumb cut at the top. ESTIMATE ONLY — verify with your local building department before cutting.',
+    note: 'IRC R311.7: max riser 7-3/4", min tread 10". This is an estimate — verify with a licensed structural engineer or local building inspector. Not a substitute for engineered drawings.',
+    inputs: [
+      { id: 'rise', label: 'Total rise (floor to floor)', unit: 'in', default: 108, step: 0.25,
+        tooltip: 'Vertical distance from the finished surface of the lower floor to the finished surface of the upper floor (or deck). 108" = 9 ft, typical for an 8-ft basement ceiling plus joist depth.' },
+      { id: 'risers', label: 'Number of risers', unit: '', default: 14, step: 1,
+        tooltip: 'Risers are the vertical faces between treads. Treads = risers - 1 (open at top). Aim for unit riser between 7" and 7-3/4".' },
+      { id: 'run', label: 'Tread depth (run)', unit: 'in', default: 10.5, step: 0.25,
+        tooltip: 'Horizontal depth of each tread, nose to nose. IRC minimum is 10". 10-1/2" or 11" gives a more comfortable step.' }
+    ],
+    calc: (data) => {
+      const rise = +data.rise, risers = +data.risers, run = +data.run;
+      const treads = Math.max(0, risers - 1);
+      const unitRise = rise / risers;
+      const totalRun = treads * run;
+      const stringerIn = Math.sqrt(rise * rise + totalRun * totalRun);
+      const stringerFt = stringerIn / 12;
+      const stride = 2 * unitRise + run;
+      let codeCheck = 'OK';
+      if (unitRise > 7.75) codeCheck = 'Riser TOO TALL — exceeds IRC max 7-3/4"';
+      else if (run < 10) codeCheck = 'Tread TOO SHALLOW — below IRC min 10"';
+      else if (stride < 24 || stride > 25) codeCheck = 'OK — stride feels off (2R+T target 24-25")';
+      return {
+        main: stringerFt.toFixed(2), unit: 'STRINGER FT',
+        detail: [
+          ['Unit riser height', unitRise.toFixed(3) + '"'],
+          ['Number of treads', treads],
+          ['Total horizontal run', totalRun.toFixed(2) + '" (' + (totalRun / 12).toFixed(2) + ' ft)'],
+          ['Stringer length', stringerIn.toFixed(2) + '"'],
+          ['Stride check (2R + T)', stride.toFixed(2) + '" (target 24-25")'],
+          ['Code check', codeCheck],
+          ['Stock to buy', 'One 2x12 ≥ ' + Math.ceil(stringerFt + 1) + ' ft long'],
+          ['Disclaimer', 'Estimate only — verify with local code/inspector']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'beam-span-calculator',
+    name: 'Beam Span',
+    category: 'construction',
+    trade: 'Carpentry',
+    desc: 'Max span by lumber size',
+    formula: 'L = √(8·Fb·Cf·N·S ÷ 12·w)',
+    title: 'BEAM SPAN (BUILT-UP)',
+    metaTitle: 'Beam Span Calculator — Max Span by Lumber Size | ProjectCalc',
+    metaDesc: 'Built-up beam span estimator for #2 SPF. Enter lumber size, plies, and tributary width — get max simple-span length plus bending and L/360 deflection limits.',
+    seoIntro: 'This beam span calculator estimates the maximum simple-span length of a built-up dimensional-lumber beam (one to three plies of 2x6, 2x8, 2x10, or 2x12) based on its bending capacity and an L/360 live-load deflection limit. The calculation assumes #2 Spruce-Pine-Fir (Fb = 875 psi, E = 1,400,000 psi) with a size factor Cf, repetitive-member factor not applied (single-beam case), normal load duration. Enter the lumber size, the number of plies nailed or bolted into a built-up beam, the tributary width the beam is carrying, and the floor live and dead loads. Output is the maximum span where the beam stays within both bending strength and deflection limits. ESTIMATE ONLY — built-up beams should be sized by an engineer or a code-stamped span table for any actual structure.',
+    note: '#2 SPF lumber, simple span, L/360 LL deflection. Not engineered. Verify with a structural engineer, AWC span tables, or your local building department before purchase or framing.',
+    inputs: [
+      { id: 'size', label: 'Lumber size', unit: '', type: 'select', default: '2x10',
+        options: [['2x6','2x6'],['2x8','2x8'],['2x10','2x10'],['2x12','2x12']] },
+      { id: 'plies', label: 'Number of plies', unit: '', type: 'select', default: '2',
+        tooltip: 'A built-up beam stacks 2 or 3 dimensional members nailed/bolted side by side. (1) is a single rafter/joist, (2) is a typical double header, (3) is a heavy header.',
+        options: [['1','1 (single)'],['2','2 (double)'],['3','3 (triple)']] },
+      { id: 'trib', label: 'Tributary width', unit: 'ft', default: 12, step: 0.5,
+        tooltip: 'Half the joist span on each side of the beam (or full span if beam is at one end). For a 24-ft-wide room with the beam down the middle, tributary width = 12 ft.' },
+      { id: 'LL', label: 'Live load', unit: 'psf', default: 40, step: 5,
+        tooltip: 'Residential floor LL is 40 psf per IRC. Bedrooms only is 30 psf. Decks 40 psf. Snow load varies by region.' },
+      { id: 'DL', label: 'Dead load', unit: 'psf', default: 10, step: 5,
+        tooltip: 'Self-weight of floor: subfloor + joists + finish + ceiling. Typical residential floor 10-15 psf. Heavy tile/stone floor 20+ psf.' }
+    ],
+    calc: (data) => {
+      const Fb = 875;
+      const E = 1400000;
+      const Cf: Record<string, number> = { '2x6': 1.3, '2x8': 1.2, '2x10': 1.1, '2x12': 1.0 };
+      const Sx: Record<string, number> = { '2x6': 7.56, '2x8': 13.14, '2x10': 21.39, '2x12': 31.64 };
+      const I: Record<string, number> = { '2x6': 20.80, '2x8': 47.63, '2x10': 98.93, '2x12': 178.0 };
+      const size = data.size as string;
+      const N = +data.plies;
+      const trib = +data.trib;
+      const LL = +data.LL, DL = +data.DL;
+      const w = (LL + DL) * trib;
+      const wLL = LL * trib;
+      const Sxx = N * Sx[size];
+      const Itot = N * I[size];
+      const Lb = Math.sqrt((8 * Fb * Cf[size] * Sxx) / (12 * w));
+      const Ld = Math.cbrt((384 * E * Itot * 12) / (1800 * wLL)) / 12;
+      const span = Math.min(Lb, Ld);
+      const govern = Lb < Ld ? 'Bending' : 'Deflection (L/360)';
+      const spanRound = Math.floor(span * 2) / 2;
+      return {
+        main: spanRound.toFixed(1), unit: 'MAX SPAN FT',
+        detail: [
+          ['Beam', N + ' × ' + size + ' (' + size + ' built-up)'],
+          ['Total uniform load', w.toFixed(0) + ' plf'],
+          ['Live-load only', wLL.toFixed(0) + ' plf'],
+          ['Bending limit', Lb.toFixed(2) + ' ft'],
+          ['Deflection L/360 limit', Ld.toFixed(2) + ' ft'],
+          ['Governs', govern],
+          ['Disclaimer', 'Estimate only — engineer must verify']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'plywood-sheets-calculator',
+    name: 'Plywood Sheets',
+    category: 'construction',
+    trade: 'Carpentry',
+    desc: 'Subfloor / sheathing',
+    formula: 'sheets = ⌈(area ÷ sheet) × waste⌉',
+    title: 'PLYWOOD / OSB SHEETS',
+    metaTitle: 'Plywood Calculator — Subfloor & Sheathing Sheets | ProjectCalc',
+    metaDesc: 'Free plywood and OSB calculator for floors, walls, and roofs. Enter dimensions and sheet size — get total sheets needed including waste.',
+    seoIntro: 'This plywood calculator estimates how many 4-foot-wide sheets of plywood or OSB you need for a subfloor, wall sheathing, or roof deck. Enter the length and width of the area to cover, choose the sheet length (4×8 = 32 ft², 4×9 = 36 ft², 4×10 = 40 ft²), and adjust the waste percentage. Subfloor jobs run 5–10% waste because joists land on a 16" or 24" pattern that aligns well with 4×8 sheets; complex hip roofs and walls with many openings push waste to 12–15%. The calculator rounds up to the nearest whole sheet. For T&G subfloor, allow at least one extra sheet to deal with the tongue lost on the perimeter sheet. ESTIMATE ONLY — measure the actual area and verify your fastening pattern with the engineered plans.',
+    note: 'Standard waste 10%. T&G subfloor loses 3" of width on perimeter sheets — buy at least 1 extra. This is an estimate; not a substitute for plans or shop drawings.',
+    inputs: [
+      { id: 'L', label: 'Length', unit: 'ft', default: 24, step: 0.5 },
+      { id: 'W', label: 'Width', unit: 'ft', default: 16, step: 0.5 },
+      { id: 'sheet', label: 'Sheet size', unit: '', type: 'select', default: '32',
+        options: [['32','4×8 (32 ft²)'],['36','4×9 (36 ft²)'],['40','4×10 (40 ft²)']] },
+      { id: 'waste', label: 'Waste factor', unit: '%', default: 10, step: 1,
+        tooltip: 'Subfloor 5-10%, walls 10-12%, hip roofs 12-15%. Increase for cut-up layouts or angled walls.' }
+    ],
+    calc: (data) => {
+      const L = +data.L, W = +data.W, sheet = +data.sheet, waste = +data.waste;
+      const area = L * W;
+      const exact = area / sheet;
+      const withWaste = exact * (1 + waste / 100);
+      const sheets = Math.ceil(withWaste);
+      const sheetLabel = sheet === 32 ? '4×8' : sheet === 36 ? '4×9' : '4×10';
+      return {
+        main: sheets, unit: sheetLabel.toUpperCase() + ' SHEETS',
+        detail: [
+          ['Total area', area.toFixed(0) + ' ft²'],
+          ['Sheet coverage', sheet + ' ft²'],
+          ['Exact need', exact.toFixed(2) + ' sheets'],
+          ['With ' + waste + '% waste', withWaste.toFixed(2) + ' sheets'],
+          ['Heads-up', 'Buy 1 extra for T&G perimeter loss'],
+          ['Disclaimer', 'Estimate only — verify with plans']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'rafter-length-calculator',
+    name: 'Rafter Length',
+    category: 'construction',
+    trade: 'Carpentry',
+    desc: 'Pitch · run · overhang',
+    formula: 'L = √(run² + rise²) + overhang·factor',
+    title: 'RAFTER LENGTH',
+    metaTitle: 'Rafter Length Calculator — Pitch and Run | ProjectCalc',
+    metaDesc: 'Rafter length calculator. Enter building width, roof pitch, and overhang — get rafter length, ridge rise, and pitch factor for cut planning.',
+    seoIntro: 'This rafter length calculator gives you the cut length for a common rafter on a gable roof based on building width, roof pitch, and eave overhang. Run is half the building width (rafter spans from outside the wall plate to the ridge). Rise is run × pitch/12. The diagonal length (ridge length minus 1/2 ridge board thickness, but uncorrected here) is the Pythagorean √(run² + rise²) — this calculator returns the total along-the-slope length including the eave overhang, which is the length to mark on the rafter stock. You still need to subtract half the ridge board thickness from the upper end for a precise plumb cut, and lay out the bird\'s-mouth seat cut at the wall. ESTIMATE ONLY — verify with a stamped roof plan; structural rafter sizing depends on snow load and ceiling joist tie capacity.',
+    note: 'Length is along-the-slope from ridge to overhang tip. Subtract half ridge-board thickness for actual cut. Verify rafter SIZE with engineered plans or AWC tables.',
+    inputs: [
+      { id: 'width', label: 'Building width', unit: 'ft', default: 24, step: 0.5,
+        tooltip: 'Outside-to-outside of the wall plates, perpendicular to the ridge. Each rafter runs half this distance.' },
+      { id: 'pitch', label: 'Roof pitch (rise / 12)', unit: '', type: 'select', default: '6',
+        tooltip: 'Pitch is rise (inches) per 12 inches of run. 4/12 is shallow ranch; 6/12 is conventional; 9/12 and steeper need toe-boards or scaffolding to walk.',
+        options: [['3','3/12 (low slope)'],['4','4/12'],['5','5/12'],['6','6/12 (standard)'],['7','7/12'],['8','8/12'],['9','9/12 (steep)'],['10','10/12'],['12','12/12 (45°)']] },
+      { id: 'overhang', label: 'Eave overhang', unit: 'in', default: 12, step: 1,
+        tooltip: 'Horizontal projection of the rafter past the wall plate. 12" is typical; 18-24" gives more weather protection but adds load.' }
+    ],
+    calc: (data) => {
+      const width = +data.width, pitch = +data.pitch, overhang = +data.overhang;
+      const runFt = width / 2;
+      const riseFt = runFt * (pitch / 12);
+      const factor = Math.sqrt(pitch * pitch + 144) / 12;
+      const slopeFt = runFt * factor;
+      const overhangSlopeIn = overhang * factor;
+      const totalIn = slopeFt * 12 + overhangSlopeIn;
+      const totalFt = totalIn / 12;
+      const angleDeg = Math.atan(pitch / 12) * 180 / Math.PI;
+      return {
+        main: totalFt.toFixed(2), unit: 'RAFTER FT',
+        detail: [
+          ['Run (1/2 building)', runFt.toFixed(2) + ' ft'],
+          ['Rise to ridge', riseFt.toFixed(2) + ' ft'],
+          ['Pitch factor', factor.toFixed(4)],
+          ['Slope length (no overhang)', slopeFt.toFixed(2) + ' ft'],
+          ['Overhang along slope', overhangSlopeIn.toFixed(2) + '"'],
+          ['Plumb-cut angle', angleDeg.toFixed(1) + '°'],
+          ['Stock to buy', 'Rafter ≥ ' + Math.ceil(totalFt + 1) + ' ft (allow waste)'],
+          ['Disclaimer', 'Estimate — subtract ½ ridge for cut; verify size']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'header-size-calculator',
+    name: 'Header Size',
+    category: 'construction',
+    trade: 'Carpentry',
+    desc: 'Door / window beam',
+    formula: 'IRC R602.7 quick-pick',
+    title: 'HEADER SIZE',
+    metaTitle: 'Header Size Calculator — Door & Window Beam | ProjectCalc',
+    metaDesc: 'Free header size calculator for doors and windows. Pick opening width, wall location, and floors above — get a quick IRC-style header recommendation.',
+    seoIntro: 'This header size calculator gives a quick IRC-style recommendation for the built-up header that spans a door or window opening in a wood-framed wall. Choose the wall location (non-bearing, exterior bearing, or interior bearing), the number of floors stacking on top of the wall, and the opening width — the calculator returns a built-up header size (e.g., "two 2x10s" or "three 2x12s") consistent with the simplified tables in IRC R602.7. Non-bearing partition walls take a minimum 2-2x4 header up to 8 ft. Bearing walls add depth as opening width and load increase: roof-only walls go up to 2-2x12 at 10 ft, while two-story bearing walls jump faster. ESTIMATE ONLY — IRC tables are based on specific assumptions (snow load, building width, lumber grade); your inspector or engineer is the final word.',
+    note: 'Quick-pick estimate based on simplified IRC R602.7 ranges. NOT engineered. Verify with a structural engineer, code-stamped tables, or local inspector before framing.',
+    inputs: [
+      { id: 'width', label: 'Opening width (rough opening)', unit: 'ft', default: 6, step: 0.5,
+        tooltip: 'Rough opening width — the framed hole for the door or window unit. Typical doors 3 ft, sliding glass 6 ft, garage doors 9-16 ft.' },
+      { id: 'loc', label: 'Wall location', unit: '', type: 'select', default: 'ext1',
+        options: [
+          ['nonbear','Non-bearing partition'],
+          ['ext0','Exterior bearing — roof + ceiling only'],
+          ['ext1','Exterior bearing — 1 floor + roof above'],
+          ['ext2','Exterior bearing — 2 floors + roof above'],
+          ['intbear','Interior bearing wall']
+        ],
+        tooltip: 'Non-bearing carries only its own weight. Bearing carries floor/roof loads. Interior bearing walls run perpendicular to the joists they support.' }
+    ],
+    calc: (data) => {
+      const w = +data.width;
+      const loc = data.loc as string;
+      let header = '';
+      let jacks = 1;
+      if (loc === 'nonbear') {
+        if (w <= 4) header = '(2) 2x4';
+        else if (w <= 8) header = '(2) 2x6';
+        else header = '(2) 2x8';
+        jacks = w <= 6 ? 1 : 2;
+      } else if (loc === 'ext0') {
+        if (w <= 3) header = '(2) 2x4';
+        else if (w <= 5) header = '(2) 2x6';
+        else if (w <= 7) header = '(2) 2x8';
+        else if (w <= 8) header = '(2) 2x10';
+        else if (w <= 10) header = '(3) 2x10';
+        else if (w <= 12) header = '(3) 2x12';
+        else header = '(4) 2x12 — verify with engineer';
+        jacks = w <= 4 ? 1 : w <= 8 ? 2 : 3;
+      } else if (loc === 'ext1' || loc === 'intbear') {
+        if (w <= 3) header = '(2) 2x6';
+        else if (w <= 5) header = '(2) 2x8';
+        else if (w <= 7) header = '(2) 2x10';
+        else if (w <= 8) header = '(3) 2x10';
+        else if (w <= 10) header = '(3) 2x12';
+        else if (w <= 12) header = '(4) 2x12 — engineer verify';
+        else header = 'Engineered LVL/PSL required';
+        jacks = w <= 4 ? 1 : w <= 8 ? 2 : 3;
+      } else {
+        if (w <= 3) header = '(2) 2x8';
+        else if (w <= 5) header = '(2) 2x10';
+        else if (w <= 7) header = '(3) 2x10';
+        else if (w <= 8) header = '(3) 2x12';
+        else if (w <= 10) header = '(4) 2x12 — engineer verify';
+        else header = 'Engineered LVL/PSL required';
+        jacks = w <= 4 ? 2 : w <= 8 ? 2 : 3;
+      }
+      const kingPerSide = 1;
+      return {
+        main: header, unit: 'HEADER',
+        detail: [
+          ['Opening width', w + ' ft'],
+          ['Jack studs (per side)', jacks],
+          ['King studs (per side)', kingPerSide],
+          ['Plywood spacer', '½" plywood between plies (built-up only)'],
+          ['Code reference', 'IRC R602.7 simplified'],
+          ['Disclaimer', 'Estimate only — engineer/inspector required']
+        ]
+      };
+    }
   }
 ];
 
