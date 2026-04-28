@@ -30,6 +30,11 @@ import fence from './fence-post-spacing';
 import deckStain from './deck-stain-coverage';
 import voltageDrop from './voltage-drop-nec';
 import conduitFill from './conduit-fill-nec';
+import wireGauge from './wire-gauge-awg-sizing';
+import breakerSizing from './circuit-breaker-sizing';
+import panelLoad from './panel-load-nec-220';
+import conduitBending from './conduit-bending-offset-saddle';
+import generatorSize from './generator-sizing-watts';
 import btuRoom from './btu-room-sizing';
 import ductCfm from './duct-cfm-sizing';
 
@@ -39,6 +44,11 @@ export const posts: BlogPost[] = [
   deckStain,
   voltageDrop,
   conduitFill,
+  wireGauge,
+  breakerSizing,
+  panelLoad,
+  conduitBending,
+  generatorSize,
   btuRoom,
   ductCfm,
   mortarGrout,

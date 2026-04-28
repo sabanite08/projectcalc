@@ -1060,6 +1060,299 @@ export const calculators: Calculator[] = [
     }
   },
   {
+    slug: 'wire-gauge-calculator',
+    name: 'Wire Gauge (AWG)',
+    category: 'construction',
+    trade: 'Electrical',
+    desc: 'Amps to wire size',
+    formula: 'AWG = f(amps, NEC 310.16 75°C)',
+    title: 'WIRE GAUGE (AWG)',
+    metaTitle: 'Wire Gauge Calculator — Amps to AWG (NEC 310.16) | ProjectCalc',
+    metaDesc: 'Free wire gauge calculator. Enter your circuit amps and run length — get the minimum copper or aluminum AWG per NEC 310.16 with voltage-drop bump.',
+    seoIntro: 'This wire gauge calculator returns the minimum AWG (American Wire Gauge) for a copper or aluminum conductor based on circuit amperage and run length. Sizing comes from NEC Table 310.16 at 75°C terminations (the standard for residential and commercial breakers, lugs, and panelboards). The calculator also runs a 3% voltage-drop check on the chosen size and bumps up if a long run pushes drop past code-recommended limits, since NEC 210.19(A) Informational Note 4 caps branch circuits at 3%. ESTIMATE ONLY — final wire size and install must be verified by a licensed electrician and the local AHJ before any work goes in.',
+    note: 'NEC 310.16 75°C ampacity + 3% voltage-drop bump. Continuous loads (≥3 hr) require 125% derate — apply manually before entering amps. Estimate only — verify with a licensed electrician and local code/inspector before purchase or installation. Not a substitute for engineered drawings.',
+    inputs: [
+      { id: 'amps', label: 'Circuit load', unit: 'A', default: 20, step: 1,
+        tooltip: 'Continuous loads (≥3 hr like EV chargers, dryers, electric heat) must be multiplied by 1.25 before entering. 12A continuous → enter 15.' },
+      { id: 'V', label: 'System voltage', unit: 'V', default: 240, step: 1,
+        tooltip: '120V for standard outlets/lights, 240V for dryers/AC/EV chargers, 208V for commercial 3-phase, 480V for industrial.' },
+      { id: 'L', label: 'One-way run length', unit: 'ft', default: 75, step: 5 },
+      { id: 'mat', label: 'Conductor material', unit: '', type: 'select', default: 'cu',
+        options: [['cu','Copper'],['al','Aluminum']] }
+    ],
+    calc: (data) => {
+      const amps = +data.amps, V = +data.V, L = +data.L, mat = data.mat as string;
+      const cuAmpacity: [number, string, number][] = [[15,'14',4110],[20,'12',6530],[30,'10',10380],[50,'8',16510],[65,'6',26240],[85,'4',41740],[115,'2',66360],[150,'1/0',105600],[175,'2/0',133100],[200,'3/0',167800]];
+      const alAmpacity: [number, string, number][] = [[15,'12',6530],[25,'10',10380],[40,'8',16510],[50,'6',26240],[65,'4',41740],[90,'2',66360],[120,'1/0',105600],[135,'2/0',133100],[155,'3/0',167800],[180,'4/0',211600]];
+      const table = mat === 'cu' ? cuAmpacity : alAmpacity;
+      const K = mat === 'cu' ? 12.9 : 21.2;
+      let pickedAwg = '4/0';
+      let pickedCm = 211600;
+      let ampacityHit = 0;
+      for (const [a, awg, cm] of table) {
+        if (amps <= a) { pickedAwg = awg; pickedCm = cm; ampacityHit = a; break; }
+      }
+      let vdPct = (2 * K * amps * L) / pickedCm / V * 100;
+      let bumped = false;
+      let bumpFrom = pickedAwg;
+      while (vdPct > 3) {
+        const idx = table.findIndex(t => t[1] === pickedAwg);
+        if (idx === -1 || idx === table.length - 1) break;
+        pickedAwg = table[idx + 1][1];
+        pickedCm = table[idx + 1][2];
+        ampacityHit = table[idx + 1][0];
+        vdPct = (2 * K * amps * L) / pickedCm / V * 100;
+        bumped = true;
+      }
+      const breakerHint = amps <= 15 ? '15 A' : amps <= 20 ? '20 A' : amps <= 30 ? '30 A' : amps <= 50 ? '50 A' : amps <= 60 ? '60 A' : amps <= 100 ? '100 A' : amps <= 200 ? '200 A' : 'engineered';
+      return {
+        main: pickedAwg + ' AWG', unit: mat === 'cu' ? 'COPPER' : 'ALUMINUM',
+        detail: [
+          ['Sized for amps', amps + ' A (table cap ' + ampacityHit + ' A)'],
+          ['Voltage drop', vdPct.toFixed(2) + '% on ' + L + ' ft'],
+          ['Drop bump?', bumped ? 'Yes — upsized from ' + bumpFrom + ' AWG' : 'No'],
+          ['Suggested breaker', breakerHint],
+          ['Code reference', 'NEC 310.16 75°C + 210.19(A) IN 4'],
+          ['Disclaimer', 'Estimate only — verify with licensed electrician + AHJ']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'circuit-breaker-size-calculator',
+    name: 'Breaker Size',
+    category: 'construction',
+    trade: 'Electrical',
+    desc: 'Load to breaker',
+    formula: 'breaker = next std ≥ load × (1.25 if continuous)',
+    title: 'CIRCUIT BREAKER SIZE',
+    metaTitle: 'Circuit Breaker Size Calculator — Load to Amps | ProjectCalc',
+    metaDesc: 'Free breaker size calculator. Enter watts or amps + load type — get the next-standard NEC 240.6 breaker with 125% continuous-load bump.',
+    seoIntro: 'This circuit breaker calculator picks the next standard breaker size (NEC 240.6) for a given load. Enter wattage or amperage and the calculator converts watts to amps using your system voltage, applies the NEC 210.20(A) 125% multiplier when the load is continuous (anything operating ≥3 hours — lighting, EV chargers, electric heat), and rounds up to the nearest standard breaker (15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200 A). Motor loads use NEC 430.52 sizing (250% inverse-time breaker for typical service factor 1.15 motors) and are flagged separately. ESTIMATE ONLY — final breaker selection must be verified by a licensed electrician and the local AHJ before any work goes in.',
+    note: 'NEC 240.6 standard sizes + 210.20(A) 125% continuous multiplier. Motor circuits flagged for 430.52 sizing. Estimate only — verify with a licensed electrician and local code/inspector before purchase or installation. Not a substitute for engineered drawings.',
+    inputs: [
+      { id: 'mode', label: 'Enter load as', unit: '', type: 'select', default: 'amps',
+        options: [['amps','Amps directly'],['watts','Watts (will convert)']] },
+      { id: 'value', label: (data) => data.mode === 'watts' ? 'Wattage' : 'Amperage', unit: '', default: 12, step: 1 },
+      { id: 'V', label: 'System voltage (only used for watts)', unit: 'V', default: 120, step: 1 },
+      { id: 'loadType', label: 'Load type', unit: '', type: 'select', default: 'continuous',
+        tooltip: 'Continuous = expected to run 3+ hours (lighting, EV charger, electric heat, server room). Non-continuous = motors, dryers, ovens, intermittent loads. Motor = sized to NEC 430.52, not the 125% rule.',
+        options: [['continuous','Continuous (≥3 hr — adds 25%)'],['noncont','Non-continuous'],['motor','Motor (NEC 430.52)']] }
+    ],
+    calc: (data) => {
+      const mode = data.mode as string, V = +data.V, loadType = data.loadType as string;
+      const value = +data.value;
+      const baseAmps = mode === 'watts' ? value / V : value;
+      let designAmps = baseAmps;
+      let multNote = '1.0× (non-continuous)';
+      if (loadType === 'continuous') {
+        designAmps = baseAmps * 1.25;
+        multNote = '1.25× (continuous, NEC 210.20(A))';
+      } else if (loadType === 'motor') {
+        designAmps = baseAmps * 2.5;
+        multNote = '2.5× (motor inverse-time, NEC 430.52)';
+      }
+      const stdSizes = [15,20,25,30,35,40,45,50,60,70,80,90,100,110,125,150,175,200,225,250];
+      let breaker: number | string = 'engineered';
+      for (const s of stdSizes) {
+        if (designAmps <= s) { breaker = s; break; }
+      }
+      const wireHint = breaker === 15 ? '14 AWG Cu' : breaker === 20 ? '12 AWG Cu' : breaker === 30 ? '10 AWG Cu' : breaker === 40 ? '8 AWG Cu' : breaker === 50 ? '8 AWG Cu' : breaker === 60 ? '6 AWG Cu' : breaker === 100 ? '3 AWG Cu / 1 AWG Al' : breaker === 200 ? '2/0 AWG Cu / 4/0 AWG Al' : 'see NEC 310.16';
+      return {
+        main: typeof breaker === 'number' ? breaker + ' A' : breaker, unit: 'BREAKER',
+        detail: [
+          ['Base load', baseAmps.toFixed(2) + ' A' + (mode === 'watts' ? ' (from ' + value + ' W ÷ ' + V + ' V)' : '')],
+          ['Multiplier', multNote],
+          ['Design amps', designAmps.toFixed(2) + ' A'],
+          ['Min wire (75°C)', wireHint],
+          ['Code reference', loadType === 'motor' ? 'NEC 430.52' : 'NEC 240.6 + 210.20(A)'],
+          ['Disclaimer', 'Estimate only — verify with licensed electrician + AHJ']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'panel-load-calculator',
+    name: 'Panel Load',
+    category: 'construction',
+    trade: 'Electrical',
+    desc: 'Service amperage',
+    formula: 'demand = NEC 220 standard method',
+    title: 'PANEL LOAD',
+    metaTitle: 'Panel Load Calculator — Service Amps (NEC 220) | ProjectCalc',
+    metaDesc: 'Residential service load calculator. Enter sq ft and major appliances — get total demand and recommended 100/150/200/400 A service per NEC 220.',
+    seoIntro: 'This panel load calculator estimates the total demand on a residential electrical service using the NEC 220 Part III "Standard Method." It applies 3 VA/ft² for general lighting and receptacles, 1500 VA per small-appliance and laundry circuit, then NEC 220.42 demand factors (100% of the first 3000 VA + 35% of the next 117,000 VA). Major appliances — range, dryer, water heater, HVAC, EV charger — are added at their nameplate or NEC-prescribed demand. The result is a service-size recommendation: 100 A, 150 A, 200 A, or 400 A. ESTIMATE ONLY — final service sizing must be done by a licensed electrician using the actual NEC 220 Part III or IV worksheet and verified by the local AHJ.',
+    note: 'NEC 220 Part III standard method, single-phase 240/120 V. Estimate only — actual service sizing requires a full Part III/IV worksheet by a licensed electrician and AHJ approval. Not a substitute for engineered drawings.',
+    inputs: [
+      { id: 'sqft', label: 'Conditioned floor area', unit: 'ft²', default: 2000, step: 50,
+        tooltip: 'NEC 220.41 unit load: 3 VA per ft² of habitable area (excludes open porches, garages, unused attics, unfinished basements).' },
+      { id: 'sa', label: 'Small-appliance circuits (kitchen, dining)', unit: '', default: 2, step: 1,
+        tooltip: 'NEC 210.11(C)(1) requires at least 2; each adds 1500 VA to the load. Most homes have exactly 2.' },
+      { id: 'laundry', label: 'Laundry circuits', unit: '', default: 1, step: 1 },
+      { id: 'range', label: 'Electric range (kW nameplate, 0 if gas)', unit: 'kW', default: 12, step: 0.5 },
+      { id: 'dryer', label: 'Electric dryer (kW, 0 if gas)', unit: 'kW', default: 5, step: 0.5 },
+      { id: 'wh', label: 'Electric water heater (kW, 0 if gas)', unit: 'kW', default: 4.5, step: 0.5 },
+      { id: 'ac', label: 'AC / heat pump (kW running, larger of cool/heat)', unit: 'kW', default: 5, step: 0.5,
+        tooltip: 'NEC 220.51 / 220.60: include the larger of heat or AC; do not double-count.' },
+      { id: 'ev', label: 'EV charger (kW continuous, 0 if none)', unit: 'kW', default: 0, step: 1,
+        tooltip: 'EV charging is continuous: enter actual draw (e.g. 7.7 kW for a 32A 240V Level 2). NEC 625.41 requires 125% sizing — already applied here.' }
+    ],
+    calc: (data) => {
+      const sqft = +data.sqft, sa = +data.sa, laundry = +data.laundry, range = +data.range, dryer = +data.dryer, wh = +data.wh, ac = +data.ac, ev = +data.ev;
+      const generalLighting = sqft * 3;
+      const saVa = sa * 1500;
+      const laundryVa = laundry * 1500;
+      const lightTotal = generalLighting + saVa + laundryVa;
+      const lightDemand = lightTotal <= 3000 ? lightTotal : 3000 + (lightTotal - 3000) * 0.35;
+      let rangeDemand = 0;
+      if (range > 0) {
+        if (range <= 12) rangeDemand = 8000;
+        else rangeDemand = 8000 + Math.ceil(range - 12) * 400;
+      }
+      const dryerDemand = dryer > 0 ? Math.max(dryer * 1000, 5000) : 0;
+      const whVa = wh * 1000;
+      const acVa = ac * 1000;
+      const evVa = ev * 1000 * 1.25;
+      const totalVa = lightDemand + rangeDemand + dryerDemand + whVa + acVa + evVa;
+      const amps = totalVa / 240;
+      const service = amps <= 90 ? '100 A' : amps <= 130 ? '150 A' : amps <= 180 ? '200 A' : amps <= 320 ? '400 A' : 'engineered (>400 A)';
+      return {
+        main: Math.ceil(amps) + ' A', unit: 'CALCULATED DEMAND',
+        detail: [
+          ['Lighting + SA + laundry', Math.round(lightTotal).toLocaleString() + ' VA → ' + Math.round(lightDemand).toLocaleString() + ' VA after demand'],
+          ['Range demand', Math.round(rangeDemand).toLocaleString() + ' VA'],
+          ['Dryer demand', Math.round(dryerDemand).toLocaleString() + ' VA'],
+          ['Water heater + HVAC + EV', Math.round(whVa + acVa + evVa).toLocaleString() + ' VA'],
+          ['Total VA', Math.round(totalVa).toLocaleString() + ' VA'],
+          ['Recommended service', service],
+          ['Code reference', 'NEC 220 Part III standard method'],
+          ['Disclaimer', 'Estimate only — verify with licensed electrician + AHJ']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'conduit-bending-calculator',
+    name: 'Conduit Bending',
+    category: 'construction',
+    trade: 'Electrical',
+    desc: 'Offset & saddle math',
+    formula: 'shrink = offset × (cosec − cot)',
+    title: 'CONDUIT BENDING',
+    metaTitle: 'Conduit Bending Calculator — Offset & Saddle Math | ProjectCalc',
+    metaDesc: 'Free conduit bending calculator. Compute offset shrink, distance between bends, and 3-bend saddle marks for any angle and rise.',
+    seoIntro: 'This conduit bending calculator handles the two bends every electrician runs daily: the offset (two opposite bends to step a run around an obstruction) and the 3-bend saddle (center bend at 2× the side bends to clear an obstacle in the middle of a run). Pick the bend angle and rise/obstacle height — the calculator returns the distance between marks, the shrink (how much the run loses to the bends), and where to start the first mark from a known reference. Multipliers come from the standard bender table: 22.5° → 2.6, 30° → 2.0, 45° → 1.4, 60° → 1.15. ESTIMATE ONLY — final layout must be verified against the actual bender deduct/take-up and AHJ requirements.',
+    note: 'Offset multipliers: 22.5°→2.6, 30°→2.0, 45°→1.4, 60°→1.15. Shrink per inch of rise: 22.5°→3/16", 30°→1/4", 45°→3/8", 60°→1/2". Estimate only — confirm against your bender\'s deduct and verify with a licensed electrician before installation.',
+    inputs: [
+      { id: 'mode', label: 'Bend type', unit: '', type: 'select', default: 'offset',
+        options: [['offset','Offset (2 bends)'],['saddle','3-bend saddle']] },
+      { id: 'rise', label: (data) => data.mode === 'saddle' ? 'Obstacle height' : 'Offset rise', unit: 'in', default: 4, step: 0.25,
+        tooltip: 'Vertical distance the conduit needs to step (offset) or clear (saddle). For a saddle, this is the height of the obstacle.' },
+      { id: 'angle', label: 'Bend angle', unit: '', type: 'select', default: '30',
+        tooltip: '22.5°/30° are the common low-angle offsets; 45° is steepest most benders go without binding the wire pull. Saddles are usually 45° center / 22.5° side or 60°/30°.',
+        options: [['22.5','22.5°'],['30','30°'],['45','45°'],['60','60°']] }
+    ],
+    calc: (data) => {
+      const mode = data.mode as string, rise = +data.rise, angle = +data.angle;
+      const multTable: Record<number, number> = { 22.5: 2.6, 30: 2.0, 45: 1.4, 60: 1.15 };
+      const shrinkPerIn: Record<number, number> = { 22.5: 0.1875, 30: 0.25, 45: 0.375, 60: 0.5 };
+      const mult = multTable[angle];
+      const shrink = shrinkPerIn[angle] * rise;
+      if (mode === 'offset') {
+        const distBetween = rise * mult;
+        return {
+          main: distBetween.toFixed(2) + '"', unit: 'BETWEEN BENDS',
+          detail: [
+            ['Bend angle', angle + '°'],
+            ['Multiplier', mult.toFixed(2)],
+            ['Offset rise', rise + '"'],
+            ['Shrink', shrink.toFixed(3) + '" — add this to your start mark'],
+            ['Code reference', 'Standard bender layout — verify with bender deduct'],
+            ['Disclaimer', 'Estimate only — verify with licensed electrician']
+          ]
+        };
+      } else {
+        const centerToSide = rise * mult;
+        const totalShrink = shrink * 2;
+        return {
+          main: centerToSide.toFixed(2) + '"', unit: 'CENTER → EACH SIDE BEND',
+          detail: [
+            ['Center bend angle', angle + '° (side bends at half angle)'],
+            ['Multiplier', mult.toFixed(2)],
+            ['Obstacle height', rise + '"'],
+            ['Shrink (total)', totalShrink.toFixed(3) + '"'],
+            ['Layout', 'Mark center → measure ' + centerToSide.toFixed(2) + '" each direction for side bends'],
+            ['Code reference', 'Standard bender layout — verify with bender deduct'],
+            ['Disclaimer', 'Estimate only — verify with licensed electrician']
+          ]
+        };
+      }
+    }
+  },
+  {
+    slug: 'generator-size-calculator',
+    name: 'Generator Size',
+    category: 'construction',
+    trade: 'Electrical',
+    desc: 'Watts for home/site',
+    formula: 'kW = Σ run watts + largest motor surge',
+    title: 'GENERATOR SIZE',
+    metaTitle: 'Generator Size Calculator — Watts for Home or Job Site | ProjectCalc',
+    metaDesc: 'Free generator sizing calculator. Add up your essential or whole-home loads — get running watts, surge watts, and recommended portable or standby generator size.',
+    seoIntro: 'This generator size calculator adds up running wattage for the loads you want to back up, applies a startup surge to the largest motor (refrigerator, well pump, AC compressor — typically 2.5× running), and recommends a portable or standby generator size. Inductive loads — anything with a motor — are the trap that undersized generators fall into: nameplate running watts is fine, but the locked-rotor inrush at startup is 2-4× higher and stalls the genset. The calculator picks a generator with at least 20% headroom on running watts and headroom for the surge. Use the "essentials" preset for a portable, or "whole home" for a standby. ESTIMATE ONLY — interlock kits, transfer switches, and fuel sizing must be verified by a licensed electrician.',
+    note: 'Running watts + 2.5× surge on largest motor + 20% headroom. Estimate only — verify with a licensed electrician and local code/inspector before purchase or installation. Not a substitute for engineered drawings.',
+    inputs: [
+      { id: 'fridge', label: 'Refrigerator (running W, 0 if not on backup)', unit: 'W', default: 700, step: 50,
+        tooltip: 'Running watts ~600-800 W for a typical residential fridge. Surge ~1800-2200 W at compressor start — calculator handles the surge automatically.' },
+      { id: 'freezer', label: 'Chest/upright freezer (W)', unit: 'W', default: 0, step: 50 },
+      { id: 'well', label: 'Well pump (½ HP = 1000 W, ¾ HP = 1500 W, 1 HP = 2000 W)', unit: 'W', default: 0, step: 100,
+        tooltip: 'Well pumps have the highest surge of any common home load — 3-4× running watts. The calculator adds 3× surge to well pumps specifically.' },
+      { id: 'sump', label: 'Sump pump (W)', unit: 'W', default: 0, step: 100 },
+      { id: 'furnace', label: 'Furnace blower / boiler (W)', unit: 'W', default: 600, step: 50 },
+      { id: 'lights', label: 'Lights + outlets (W)', unit: 'W', default: 600, step: 100,
+        tooltip: 'Estimate ~600 W for kitchen + a few rooms of LED lights, phone chargers, TV, router, modem.' },
+      { id: 'microwave', label: 'Microwave (W, 0 if not on backup)', unit: 'W', default: 1500, step: 100 },
+      { id: 'ac', label: 'Window AC or central AC (running W, 0 if not backed up)', unit: 'W', default: 0, step: 100,
+        tooltip: 'Window AC: 1000 W (8000 BTU) up to 2000 W (15000 BTU). Central 3-ton AC: 3500 W running, ~9000 W surge.' },
+      { id: 'extra', label: 'Other (W)', unit: 'W', default: 0, step: 100 }
+    ],
+    calc: (data) => {
+      const fridge = +data.fridge, freezer = +data.freezer, well = +data.well, sump = +data.sump, furnace = +data.furnace, lights = +data.lights, microwave = +data.microwave, ac = +data.ac, extra = +data.extra;
+      const running = fridge + freezer + well + sump + furnace + lights + microwave + ac + extra;
+      const motorSurge = (load: number, factor: number) => load > 0 ? load * (factor - 1) : 0;
+      const surgeAdds = [
+        motorSurge(fridge, 2.5),
+        motorSurge(freezer, 2.5),
+        motorSurge(well, 3.0),
+        motorSurge(sump, 3.0),
+        motorSurge(furnace, 2.0),
+        motorSurge(ac, 2.5)
+      ];
+      const largestSurge = Math.max(0, ...surgeAdds);
+      const surgeWatts = running + largestSurge;
+      const required = Math.max(running * 1.2, surgeWatts);
+      const sizes = [2000, 3000, 4000, 5000, 7500, 9000, 12000, 14000, 18000, 22000, 26000];
+      let pick: number | string = 'engineered (>26 kW)';
+      for (const s of sizes) {
+        if (required <= s) { pick = s; break; }
+      }
+      const portableLimit = 12000;
+      const class_ = typeof pick === 'number' && pick <= portableLimit ? 'Portable' : 'Standby (whole-home)';
+      return {
+        main: typeof pick === 'number' ? (pick / 1000).toFixed(1) + ' kW' : pick, unit: 'GENERATOR',
+        detail: [
+          ['Running watts', running.toLocaleString() + ' W'],
+          ['Largest startup surge', Math.round(largestSurge).toLocaleString() + ' W'],
+          ['Peak demand', Math.round(surgeWatts).toLocaleString() + ' W'],
+          ['Required (with 20% headroom)', Math.round(required).toLocaleString() + ' W'],
+          ['Class', class_],
+          ['Code note', 'Permanent install needs transfer switch / interlock kit (NEC 702)'],
+          ['Disclaimer', 'Estimate only — verify with licensed electrician + AHJ']
+        ]
+      };
+    }
+  },
+  {
     slug: 'pipe-slope-calculator',
     name: 'Pipe Slope',
     category: 'construction',

@@ -659,6 +659,76 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Many restaurants add an automatic 18% gratuity for parties of 6 or more — check the menu fine print or receipt. If auto-grat is added, you don\'t need to tip again unless service was exceptional.',
     },
   ],
+  'wire-gauge-calculator': [
+    {
+      q: 'What AWG is needed for 20 amps?',
+      a: '12 AWG copper handles 20 A at 75°C terminations per NEC 310.16. 14 AWG is rated 15 A and pairs with a 15 A breaker only. Aluminum runs one size larger — 10 AWG aluminum is the minimum for a 20 A circuit.',
+    },
+    {
+      q: 'When does run length force me to upsize?',
+      a: 'Voltage drop bumps wire size when the round-trip drop exceeds 3% (NEC 210.19(A) Informational Note 4). On 12 AWG copper at 20 A and 120 V, that hits at roughly 60 ft one-way; on 240 V circuits the limit roughly doubles. Detached buildings, well pumps, and EV chargers are the usual offenders.',
+    },
+    {
+      q: 'Do I need to derate for continuous loads?',
+      a: 'Yes. NEC 210.19(A)(1) and 215.2 require conductor and breaker to be sized at 125% of continuous load (anything operating 3 hours or longer — EV chargers, electric heat, sign lighting). Multiply the actual load by 1.25 before entering it in the calculator.',
+    },
+  ],
+  'circuit-breaker-size-calculator': [
+    {
+      q: 'How are standard breaker sizes set?',
+      a: 'NEC 240.6(A) lists the standard sizes: 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 225, 250 A and up. Anything else is non-standard and rarely stocked. The calculator always rounds up to the next standard size.',
+    },
+    {
+      q: 'What is the 80% / 125% rule?',
+      a: 'Two ways to say the same thing: a continuous load (≥3 hr operation) can be no more than 80% of breaker rating, OR breaker must be sized to 125% of the continuous load. NEC 210.20(A). A 16 A continuous EV charger needs a 20 A breaker; a 20 A non-continuous appliance also lands on a 20 A breaker.',
+    },
+    {
+      q: 'Why are motor breakers oversized?',
+      a: 'NEC 430.52 lets motor inverse-time breakers run up to 250% of full-load current to ride out the inrush at startup without nuisance tripping. The motor itself is protected by the overload relay, not the breaker. This is why a 12 A motor can be on a 30 A breaker and still be code-compliant.',
+    },
+  ],
+  'panel-load-calculator': [
+    {
+      q: 'Is 200-amp service enough for a typical home?',
+      a: '200 A handles most homes up to about 3,500 ft² with electric range, dryer, central AC, and a single Level-2 EV charger. Add a second EV, a hot tub, or whole-home electrification (heat pump + induction + heat-pump water heater) and 200 A starts feeling tight — plan for 320 A / 400 A class meter sockets up front.',
+    },
+    {
+      q: 'What is the difference between Standard and Optional method?',
+      a: 'NEC 220 Part III "Standard" method (used here) calculates each load with its own demand factor — accurate but conservative. Part IV "Optional" method uses a flat 100% on the first 10 kVA + 40% on the remainder for dwellings; for most all-electric homes it gives a smaller number than the Standard method. Either is code-legal.',
+    },
+    {
+      q: 'Do I need to count gas appliances?',
+      a: 'No. Only electric loads count toward the panel calculation. A gas range, gas dryer, or gas water heater contributes zero to the demand. The calculator is built so entering 0 kW for gas appliances drops them out cleanly.',
+    },
+  ],
+  'conduit-bending-calculator': [
+    {
+      q: 'What is shrink and why does it matter?',
+      a: 'When you bend an offset, the conduit gets shorter overall by a small amount per inch of rise — the "shrink." If you cut and thread before bending, you have to start your first mark farther from the box by exactly that amount or your conduit will land short. 30° offsets shrink ¼" per inch of rise; 45° offsets shrink 3⁄8" per inch.',
+    },
+    {
+      q: 'Why do offset multipliers exist?',
+      a: 'They convert the rise (vertical step you need) into the distance between the two bend marks on the pipe. 30° = 2.0 (mark-to-mark = 2× rise); 45° = 1.4; 22.5° = 2.6. Without the multiplier you would have to do trig on the job — benders that print these on the handle (Klein, Greenlee) save the math.',
+    },
+    {
+      q: 'How does a 3-bend saddle differ from an offset?',
+      a: 'An offset uses two opposite bends to step around an obstacle that is at the side of the run; a saddle uses three bends (center bend at 2× the side angles) to lift over an obstacle that crosses the middle of the run — typically another conduit or a beam. The center bend goes over the obstacle, the two outer bends bring the pipe back to its original line.',
+    },
+  ],
+  'generator-size-calculator': [
+    {
+      q: 'How many watts to back up the essentials?',
+      a: 'A typical "essentials" load — fridge, freezer, furnace blower, lights, phone chargers, modem/router, microwave — totals 3,000–4,500 running watts. Add a well pump and you are at 5,000–6,000 W running with 9,000+ W surge. A 7,500 W portable generator covers most of those scenarios.',
+    },
+    {
+      q: 'What is starting (surge) wattage?',
+      a: 'Motors draw 2-4× their running wattage for the half-second they are spinning up. A 700 W fridge surges to ~1,800 W; a ½ HP well pump runs at 1,000 W and surges to 3,000-4,000 W. The generator must have enough surge headroom (sometimes called "peak watts") to swallow the largest single motor without stalling.',
+    },
+    {
+      q: 'Do I need a transfer switch?',
+      a: 'Anything wired into the home panel needs a manual transfer switch or a UL-listed interlock kit per NEC 702. Backfeeding through a dryer outlet without an interlock is illegal and can kill a lineman working on the de-energized service. Portable generators powering extension cords directly to appliances are exempt.',
+    },
+  ],
 };
 
 export const getFAQ = (slug: string): FAQItem[] => faqs[slug] || [];
