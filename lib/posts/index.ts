@@ -20,8 +20,18 @@ import beamSpan from './beam-span-basics';
 import plywoodSheets from './plywood-sheet-coverage';
 import rafterLength from './rafter-length-pitch';
 import headerSize from './header-size-quickpick';
+import mortarGrout from './mortar-grout-bags';
+import cmuBlock from './cmu-block-count';
+import stoneVeneer from './stone-veneer-coverage';
+import stucco from './stucco-bag-count';
+import tuckpointing from './tuckpointing-mortar';
 
 export const posts: BlogPost[] = [
+  mortarGrout,
+  cmuBlock,
+  stoneVeneer,
+  stucco,
+  tuckpointing,
   stairStringer,
   beamSpan,
   plywoodSheets,

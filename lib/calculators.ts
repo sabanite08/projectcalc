@@ -485,6 +485,291 @@ export const calculators: Calculator[] = [
     }
   },
   {
+    slug: 'mortar-grout-calculator',
+    name: 'Mortar / Grout',
+    category: 'construction',
+    trade: 'Masonry & Siding',
+    desc: 'Bags for brick or tile',
+    formula: 'bags = volume ÷ yield',
+    title: 'MORTAR / GROUT BAGS',
+    metaTitle: 'Mortar & Grout Calculator — Bags for Brick or Tile | ProjectCalc',
+    metaDesc: 'Mortar and grout calculator. Pick brick mortar or tile grout, enter your area and joint size — get the bags to order with waste built in.',
+    seoIntro: 'This mortar and grout calculator handles two of the most common masonry quantities: brick mortar in 80-pound bags (Type N or S) and tile grout in 25-pound bags. Pick a mode, enter your wall area or tile area along with the joint size, and the calculator estimates the bags to order with waste factored in. Brick math assumes modular brick at 6.86 per square foot with a 3/8-inch mortar joint and 30 bricks per 80-lb bag. Tile math computes grout volume from joint cross-section using tile size, joint width, and tile thickness — the same approach manufacturers use to publish coverage charts. ESTIMATE ONLY — verify with your supplier and the manufacturer\'s coverage chart for the specific product.',
+    note: 'Brick mortar = 80 lb bags Type N/S, ~30 bricks/bag at 3/8" joint. Tile grout = 25 lb bags. Estimate only — verify with supplier.',
+    inputs: [
+      { id: 'mode', label: 'What are you grouting?', unit: '', type: 'select', default: 'brick',
+        options: [['brick','Brick mortar (Type N/S)'],['tile','Tile grout']] },
+      { id: 'area', unit: 'ft²', default: 200, step: 10,
+        label: (d) => d.mode === 'brick' ? 'Wall area (gross)' : 'Tile area to grout' },
+      { id: 'tileSize', label: 'Tile size', unit: '', type: 'select', default: '12x12',
+        tooltip: 'Used in tile grout mode only. Larger tiles need less grout per square foot because the joint length per area drops.',
+        options: [['4x4','4×4 in'],['6x6','6×6 in'],['8x8','8×8 in'],['12x12','12×12 in'],['18x18','18×18 in'],['24x24','24×24 in']] },
+      { id: 'joint', label: 'Joint width', unit: '', type: 'select', default: '1/8',
+        tooltip: 'Tile typically uses 1/16 to 1/4 in. Brick mortar joints are standard 3/8 in.',
+        options: [['1/16','1/16 in (rectified)'],['1/8','1/8 in'],['3/16','3/16 in'],['1/4','1/4 in'],['3/8','3/8 in (brick std)']] },
+      { id: 'tileThk', label: 'Tile thickness', unit: 'in', default: 0.375, step: 0.0625,
+        tooltip: 'Used in tile grout mode only. Standard ceramic and porcelain are about 3/8 in. Thin-set tiles run 1/4 in.' }
+    ],
+    calc: (data) => {
+      const mode = data.mode as string;
+      const area = +data.area;
+      const jointStr = data.joint as string;
+      const jointMap: Record<string, number> = { '1/16': 0.0625, '1/8': 0.125, '3/16': 0.1875, '1/4': 0.25, '3/8': 0.375 };
+      const jointW = jointMap[jointStr] ?? 0.125;
+
+      if (mode === 'brick') {
+        const bricks = area * 6.86;
+        const bags = Math.ceil((bricks / 30) * 1.10);
+        return {
+          main: bags, unit: '80 lb BAGS',
+          detail: [
+            ['Mode', 'Brick mortar (Type N/S)'],
+            ['Wall area', area.toLocaleString() + ' ft²'],
+            ['Bricks (modular, 6.86/ft²)', Math.ceil(bricks).toLocaleString()],
+            ['Bag yield', '~30 bricks per 80 lb bag at 3/8" joint'],
+            ['10% waste', '✓'],
+            ['Disclaimer', 'Estimate only — verify with supplier']
+          ]
+        };
+      }
+
+      const tileSize = data.tileSize as string;
+      const [tw, tl] = tileSize.split('x').map(Number);
+      const tileThk = +data.tileThk;
+      const groutCuInPerFt2 = ((tw + tl) / (tw * tl)) * 144 * jointW * tileThk;
+      const totalCuIn = groutCuInPerFt2 * area;
+      const bagYieldCuIn = 220;
+      const bags = Math.ceil((totalCuIn / bagYieldCuIn) * 1.10);
+      return {
+        main: bags, unit: '25 lb BAGS',
+        detail: [
+          ['Mode', 'Tile grout'],
+          ['Tile area', area.toLocaleString() + ' ft²'],
+          ['Tile size', tileSize + ' in'],
+          ['Joint width', jointStr + ' in'],
+          ['Joint depth (tile thickness)', tileThk + ' in'],
+          ['Grout volume', (totalCuIn / 1728).toFixed(2) + ' ft³'],
+          ['Bag yield (25 lb)', '~220 in³ usable'],
+          ['10% waste', '✓'],
+          ['Disclaimer', 'Estimate only — verify with supplier']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'cmu-block-calculator',
+    name: 'CMU Block',
+    category: 'construction',
+    trade: 'Masonry & Siding',
+    desc: 'Blocks per wall',
+    formula: 'blocks = ft² ÷ 0.889',
+    title: 'CMU BLOCK COUNT',
+    metaTitle: 'CMU Block Calculator — Blocks Per Wall | ProjectCalc',
+    metaDesc: 'CMU block calculator. Wall length × height minus openings → block count, mortar bags, and rebar runs. Standard 8×8×16 face math.',
+    seoIntro: 'This CMU calculator estimates the number of concrete masonry units (blocks) for a wall, plus the mortar bags and optional rebar runs. The math assumes standard nominal sizes — face dimension 16" × 8" with a 3/8-inch mortar joint, giving 1.125 blocks per square foot of wall (about 0.889 ft² per block face). Mortar adds three 80-lb bags of Type S per 100 blocks. Rebar follows the IRC and IBC pattern of #4 vertical at 4 ft on center plus #4 horizontal in every fourth course bond beam — typical for non-engineered residential and light commercial. ESTIMATE ONLY — for engineered or load-bearing CMU walls verify with a structural engineer.',
+    note: '1.125 blocks/ft² (8×8×16 face). 5% waste. Mortar = 3 × 80-lb bags per 100 blocks. Estimate only — verify structural designs with engineer.',
+    inputs: [
+      { id: 'L', label: 'Wall length', unit: 'ft', default: 30, step: 1 },
+      { id: 'H', label: 'Wall height', unit: 'ft', default: 8, step: 0.5 },
+      { id: 'opening', label: 'Openings (doors/windows)', unit: 'ft²', default: 0, step: 1 },
+      { id: 'block', label: 'Block size (W×H×L)', unit: '', type: 'select', default: '8x8x16',
+        tooltip: 'All standard CMU has the same 16×8 face — only the depth changes. 4 in for partitions, 6/8 in for typical structural walls, 12 in for heavy loads or basements.',
+        options: [['4x8x16','4×8×16 (partition)'],['6x8x16','6×8×16'],['8x8x16','8×8×16 (standard)'],['12x8x16','12×8×16 (heavy)']] },
+      { id: 'rebar', label: 'Include rebar?', unit: '', type: 'select', default: 'no',
+        tooltip: 'Adds #4 (½ in) vertical at 4 ft on center and #4 horizontal in every fourth course bond beam — typical non-engineered residential pattern.',
+        options: [['no','No'],['yes','Yes (#4 vert 4 ft o.c., #4 horiz every 4 courses)']] }
+    ],
+    calc: (data) => {
+      const L = +data.L, H = +data.H, opening = +data.opening;
+      const block = data.block as string;
+      const rebar = data.rebar as string;
+      const wallArea = Math.max(0, L * H - opening);
+      const blocks = Math.ceil((wallArea / 0.889) * 1.05);
+      const mortarBags = Math.ceil((blocks / 100) * 3);
+
+      const detail: [string, string | number][] = [
+        ['Block size', block],
+        ['Net wall area', wallArea.toFixed(0) + ' ft²'],
+        ['Blocks per ft²', '1.125 (face 16"×8")'],
+        ['Mortar bags (80 lb Type S)', mortarBags + ' (3 per 100 blocks)'],
+        ['5% waste', '✓']
+      ];
+
+      if (rebar === 'yes') {
+        const vBars = Math.ceil(L / 4) + 1;
+        const vRebarLF = vBars * Math.ceil(H);
+        const courses = Math.floor((H * 12) / 8);
+        const hRebarRows = Math.max(1, Math.floor(courses / 4));
+        const hRebarLF = hRebarRows * Math.ceil(L);
+        detail.push(['Vertical #4 rebar', vRebarLF + ' lin ft (' + vBars + ' bars × ' + Math.ceil(H) + ' ft)']);
+        detail.push(['Horizontal #4 rebar', hRebarLF + ' lin ft (' + hRebarRows + ' rows × ' + Math.ceil(L) + ' ft)']);
+      }
+
+      detail.push(['Disclaimer', 'Estimate only — engineer-verify load-bearing walls']);
+
+      return {
+        main: blocks.toLocaleString(),
+        unit: 'BLOCKS',
+        detail
+      };
+    }
+  },
+  {
+    slug: 'stone-veneer-calculator',
+    name: 'Stone Veneer',
+    category: 'construction',
+    trade: 'Masonry & Siding',
+    desc: 'Coverage square footage',
+    formula: 'flats = ft² − (corners × 0.75)',
+    title: 'STONE VENEER COVERAGE',
+    metaTitle: 'Stone Veneer Calculator — Flats, Corners, Mortar | ProjectCalc',
+    metaDesc: 'Stone veneer calculator. Get sq ft of flats, lin ft of corners, mortar bags, and lath sheets for a manufactured stone install.',
+    seoIntro: 'This stone veneer calculator estimates the materials for a manufactured stone install: flats sold by the square foot, corner pieces sold by the linear foot, mortar in 80-lb bags, and metal lath in standard 27"×96" sheets. Each linear foot of outside corner replaces about 0.75 ft² of flat coverage, so the calculator deducts that to keep you from double-buying. Mortar runs about three 80-lb bags per 100 ft² with full mortar joints; dry-stack styles drop closer to one bag per 100 ft². ESTIMATE ONLY — manufacturer coverage rates vary; verify against the spec sheet for the exact product.',
+    note: '1 lin ft outside corner ≈ 0.75 ft² of flat coverage. Full-joint mortar ≈ 3 bags / 100 ft². 10% waste built in. Estimate only — verify with veneer manufacturer.',
+    inputs: [
+      { id: 'L', label: 'Wall length', unit: 'ft', default: 20, step: 1 },
+      { id: 'H', label: 'Wall height', unit: 'ft', default: 8, step: 0.5 },
+      { id: 'opening', label: 'Openings (doors/windows)', unit: 'ft²', default: 0, step: 1 },
+      { id: 'corners', label: 'Outside corner', unit: 'lin ft', default: 0, step: 1,
+        tooltip: 'Total linear feet of outside corners on the wall. Each lin ft replaces about 0.75 ft² of flat veneer.' },
+      { id: 'jointType', label: 'Joint style', unit: '', type: 'select', default: 'mortar',
+        tooltip: 'Full mortar joint = traditional grouted look (more mortar). Dry stack = stones butted with minimal joint visible (less mortar).',
+        options: [['mortar','Full mortar joint'],['drystack','Dry stack']] }
+    ],
+    calc: (data) => {
+      const L = +data.L, H = +data.H, opening = +data.opening, corners = +data.corners;
+      const jointType = data.jointType as string;
+      const grossArea = Math.max(0, L * H - opening);
+      const cornerCoverage = corners * 0.75;
+      const flatsNeeded = Math.max(0, grossArea - cornerCoverage);
+      const flatsWithWaste = Math.ceil(flatsNeeded * 1.10);
+      const cornersWithWaste = Math.ceil(corners * 1.10);
+      const mortarRate = jointType === 'mortar' ? 3 : 1;
+      const mortarBags = Math.ceil((grossArea / 100) * mortarRate);
+      const lathSheets = Math.ceil(grossArea / 18);
+      return {
+        main: flatsWithWaste.toLocaleString(),
+        unit: 'FT² FLATS',
+        detail: [
+          ['Net wall area', grossArea.toFixed(0) + ' ft²'],
+          ['Outside corner', cornersWithWaste + ' lin ft (10% waste)'],
+          ['Mortar bags (80 lb Type S)', mortarBags + ' (' + mortarRate + ' per 100 ft²)'],
+          ['Metal lath sheets', lathSheets + ' (27"×96" = 18 ft²)'],
+          ['10% waste built in', '✓'],
+          ['Disclaimer', 'Estimate only — verify with veneer manufacturer']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'stucco-calculator',
+    name: 'Stucco',
+    category: 'construction',
+    trade: 'Masonry & Siding',
+    desc: 'Bags per ft²',
+    formula: '3-coat ≈ 1 bag / 4 ft²',
+    title: 'STUCCO BAGS',
+    metaTitle: 'Stucco Calculator — Bags Per Square Footage | ProjectCalc',
+    metaDesc: 'Stucco calculator for traditional 3-coat or 1-coat synthetic. Bags per coat, lath sheets, total — with 10% waste.',
+    seoIntro: 'This stucco calculator estimates 80-lb bag count for an exterior stucco job. Traditional 3-coat (scratch + brown + finish) burns roughly one 80-lb bag per 8 ft² for the scratch coat, another for the brown coat, and one per 12 ft² for the finish coat — about 38 bags per 100 ft² of wall. One-coat synthetic systems run closer to one bag per 12 ft² total. The calculator subtracts window and door area, applies a 10% waste factor, and returns bag counts by coat plus the metal lath sheets needed underneath. ESTIMATE ONLY — exact yields vary by mix design and lath substrate; verify with the manufacturer.',
+    note: '3-coat ≈ 38 bags / 100 ft² (scratch + brown + finish). 1-coat ≈ 8 bags / 100 ft². 10% waste built in. Estimate only — verify with manufacturer specs.',
+    inputs: [
+      { id: 'L', label: 'Wall length', unit: 'ft', default: 30, step: 1 },
+      { id: 'H', label: 'Wall height', unit: 'ft', default: 8, step: 0.5 },
+      { id: 'opening', label: 'Openings (doors/windows)', unit: 'ft²', default: 60, step: 5 },
+      { id: 'system', label: 'Stucco system', unit: '', type: 'select', default: '3coat',
+        tooltip: '3-coat traditional Portland cement stucco gives the longest service life. 1-coat synthetic systems install faster but cost more per bag and are thinner.',
+        options: [['3coat','3-coat traditional (scratch + brown + finish)'],['1coat','1-coat / synthetic']] }
+    ],
+    calc: (data) => {
+      const L = +data.L, H = +data.H, opening = +data.opening;
+      const system = data.system as string;
+      const wallArea = Math.max(0, L * H - opening);
+      const wallWithWaste = wallArea * 1.10;
+
+      if (system === '3coat') {
+        const scratchBags = Math.ceil(wallWithWaste / 8);
+        const brownBags = Math.ceil(wallWithWaste / 8);
+        const finishBags = Math.ceil(wallWithWaste / 12);
+        const total = scratchBags + brownBags + finishBags;
+        const lathSheets = Math.ceil(wallArea / 18);
+        return {
+          main: total, unit: '80 lb BAGS',
+          detail: [
+            ['System', '3-coat traditional'],
+            ['Net wall area', wallArea.toFixed(0) + ' ft²'],
+            ['Scratch coat (~1 bag / 8 ft²)', scratchBags + ' bags'],
+            ['Brown coat (~1 bag / 8 ft²)', brownBags + ' bags'],
+            ['Finish coat (~1 bag / 12 ft²)', finishBags + ' bags'],
+            ['Metal lath sheets', lathSheets + ' (27"×96")'],
+            ['10% waste built in', '✓'],
+            ['Disclaimer', 'Estimate only — verify with manufacturer specs']
+          ]
+        };
+      }
+
+      const bags = Math.ceil(wallWithWaste / 12);
+      return {
+        main: bags, unit: '80 lb BAGS',
+        detail: [
+          ['System', '1-coat / synthetic'],
+          ['Net wall area', wallArea.toFixed(0) + ' ft²'],
+          ['Coverage', '~12 ft² per 80 lb bag'],
+          ['10% waste built in', '✓'],
+          ['Disclaimer', 'Estimate only — verify with manufacturer specs']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'tuckpointing-calculator',
+    name: 'Tuckpointing',
+    category: 'construction',
+    trade: 'Masonry & Siding',
+    desc: 'Mortar for repointing',
+    formula: 'ft³ = LF · w · d ÷ 144',
+    title: 'TUCKPOINTING MORTAR',
+    metaTitle: 'Tuckpointing Calculator — Mortar for Repointing | ProjectCalc',
+    metaDesc: 'Tuckpointing calculator. Joint length × width × repoint depth → mortar volume and 80-lb bags. BIA depth rule built in.',
+    seoIntro: 'This tuckpointing calculator estimates the mortar volume and 80-lb bag count needed to repoint deteriorated joints in a brick or stone wall. Volume comes from joint linear feet × joint width × repoint depth; the Brick Industry Association recommends a minimum repoint depth of 2× joint width and never less than 5/8 in for soft mortar. A standard 80-lb bag of Type N or S yields about 0.6 ft³ once mixed. The calculator builds in 15% waste because tuckpointing involves a lot of small applications and partial-bag cure-offs. ESTIMATE ONLY — for historic buildings, mortar mix must match the original by composition and hardness; verify with a preservation mason before purchasing.',
+    note: 'BIA: minimum repoint depth = 2× joint width, no less than 5/8". 80 lb bag yield ≈ 0.6 ft³. 15% waste built in. Estimate only — match historic mortar carefully.',
+    inputs: [
+      { id: 'jointLF', label: 'Total joint linear feet', unit: 'lin ft', default: 200, step: 10,
+        tooltip: 'Sum every joint to repoint. For modular brick walls, allow ~7 lin ft of joint per ft² of wall (head + bed joints combined).' },
+      { id: 'jointW', label: 'Joint width', unit: '', type: 'select', default: '3/8',
+        tooltip: 'Modern brick walls are typically 3/8 in. Older buildings may run 1/4 to 5/8 in. Measure several joints — they vary.',
+        options: [['1/4','1/4 in'],['3/8','3/8 in (standard)'],['1/2','1/2 in'],['5/8','5/8 in']] },
+      { id: 'jointD', label: 'Repoint depth', unit: 'in', default: 0.75, step: 0.125,
+        tooltip: 'BIA recommends a minimum of 2× joint width and never less than 5/8 in. Standard repoint depth is 3/4 in.' }
+    ],
+    calc: (data) => {
+      const jointLF = +data.jointLF, jointD = +data.jointD;
+      const jointWStr = data.jointW as string;
+      const jointMap: Record<string, number> = { '1/4': 0.25, '3/8': 0.375, '1/2': 0.5, '5/8': 0.625 };
+      const jointW = jointMap[jointWStr] ?? 0.375;
+      const minDepth = Math.max(jointW * 2, 0.625);
+      const cuIn = jointLF * 12 * jointW * jointD;
+      const cuFt = cuIn / 1728;
+      const cuFtWithWaste = cuFt * 1.15;
+      const bags = Math.ceil(cuFtWithWaste / 0.6);
+      const depthOk = jointD >= minDepth;
+      return {
+        main: bags, unit: '80 lb BAGS',
+        detail: [
+          ['Joint length', jointLF.toLocaleString() + ' lin ft'],
+          ['Joint width', jointWStr + ' in'],
+          ['Repoint depth', jointD + ' in'],
+          ['BIA minimum depth', minDepth + ' in (2× joint, ≥5/8")'],
+          ['Depth check', depthOk ? '✓ meets BIA minimum' : '⚠ shallower than BIA minimum'],
+          ['Mortar volume', cuFt.toFixed(2) + ' ft³'],
+          ['Bag yield (Type N/S)', '~0.6 ft³ per 80 lb bag'],
+          ['15% waste built in', '✓'],
+          ['Disclaimer', 'Estimate only — match historic mortar with a preservation mason']
+        ]
+      };
+    }
+  },
+  {
     slug: 'lumber-calculator',
     name: 'Lumber',
     category: 'construction',

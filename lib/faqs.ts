@@ -575,6 +575,76 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Use an LVL (laminated veneer lumber) when opening width exceeds 12 feet, when point loads land on the header (girder bearing), in two-story bearing walls with wide openings, or whenever the architect or engineer specifies one. LVLs are stronger and stiffer than built-up dimensional lumber, span farther, and avoid the gap problems of crowned 2x stock. Anything outside the simplified table this calculator uses should be sized by an engineer.',
     },
   ],
+  'mortar-grout-calculator': [
+    {
+      q: 'How many bags of mortar do I need for 1,000 bricks?',
+      a: 'About 33 bags of 80-lb Type N or S — most masons round to 7 bags per 1,000 brick at a 3/8" joint, then add a 10-15% waste factor for partial bags and tooling loss. Type S has higher compressive strength than N (1,800 psi vs 750 psi) and is used below grade or for load-bearing walls; Type N is the all-purpose mix above grade. Joint thickness drives the math more than brick size: a 1/2" joint nearly doubles the mortar volume of a 3/8" joint.',
+    },
+    {
+      q: 'What\'s the difference between sanded and unsanded grout?',
+      a: 'Unsanded grout is rated for joints under 1/8 in (rectified porcelain, glass tile, polished marble) — sand particles would scratch the tile face. Sanded grout handles 1/8 in to 1/2 in joints and is the default for most floor tile and field tile. Above 1/2 in joint, switch to a wide-joint sanded mix or a polymer-modified mortar. Coverage drops fast as joints get wider — a 1/4 in joint on 4×4 tile burns 3-4× the grout of the same tile with a 1/16 in joint.',
+    },
+    {
+      q: 'How much grout for a 100 sq ft floor?',
+      a: 'For 12×12 tile with a 1/8" joint, one 25-lb bag of sanded grout typically covers 100-200 ft² depending on the manufacturer and how thick you bed the grout. For 4×4 tile with a 1/4" joint, that same bag drops to 50-75 ft² because joint length per area is roughly 3× higher. Always cross-check the manufacturer\'s coverage chart for the specific product before ordering.',
+    },
+  ],
+  'cmu-block-calculator': [
+    {
+      q: 'How many concrete blocks per square foot?',
+      a: '1.125 blocks per square foot of wall using standard 8×8×16 face dimensions with a 3/8" mortar joint — that\'s 0.889 ft² per block face. A 100 ft² wall needs 113 blocks; round up 5% for breakage and you order 119. Smaller faces (4×16 half-high block, for example) double the block count because the face is half the height.',
+    },
+    {
+      q: 'How many bags of mortar for 100 concrete blocks?',
+      a: 'Three 80-lb bags of Type S or N mortar per 100 blocks — about 0.5 ft³ of mortar per 100 blocks at a 3/8 in joint. Type S is the standard for load-bearing CMU walls (1,800 psi compressive strength). For below-grade foundations or seismic regions, the engineer may spec Type M (2,500 psi). Add 10% waste for spillage and partial bags.',
+    },
+    {
+      q: 'When does a CMU wall need rebar?',
+      a: 'Per IRC R606 and IBC Chapter 21, every CMU wall in seismic zones D1/D2 needs vertical reinforcement. Most jurisdictions also require rebar for any retaining wall, basement wall, or wall over 8 ft tall. Typical pattern is #4 vertical at 4 ft on center grouted into the cells plus #4 horizontal in every fourth course bond beam. For engineered designs (tall walls, heavy loads, seismic), a structural engineer specifies bar size and spacing — the calculator\'s rebar option assumes the standard non-engineered residential pattern.',
+    },
+  ],
+  'stone-veneer-calculator': [
+    {
+      q: 'How much stone veneer do I need?',
+      a: 'Measure wall height × length, subtract windows and doors, and add 10% for waste. The result is the square footage of "flats." Then measure outside corners separately by linear foot — corner pieces wrap the corner so they\'re sold by lin ft, and each lin ft replaces about 0.75 ft² of flat coverage. A 200 ft² wall with 30 lin ft of corners needs roughly 200 − (30 × 0.75) = 178 ft² of flats plus 33 lin ft of corners (with 10% waste).',
+    },
+    {
+      q: 'Do I need lath behind manufactured stone veneer?',
+      a: 'Yes — every code-compliant manufactured stone install over framing or sheathing needs metal lath stapled through to the studs (not just the sheathing) followed by a scratch coat before the stones go on. ASTM C1670 and most manufacturer specs call for 2.5-lb diamond mesh galvanized lath fastened at 6" o.c. on studs. Skip the lath and the veneer fails — usually within five years.',
+    },
+    {
+      q: 'How many bags of mortar per 100 sq ft of stone veneer?',
+      a: 'About three 80-lb bags of Type N or S mortar per 100 ft² for full mortar joints (the traditional grouted look). Dry-stack styles use ~one bag per 100 ft² for the back-buttering and a tight setting bed only — no joint filling. The polymer-modified bagged mortar (e.g., Type S Mason Mix or a dedicated stone-veneer mortar) is what manufacturers spec; standard Type N may not bond well to the back of cast veneer.',
+    },
+  ],
+  'stucco-calculator': [
+    {
+      q: 'How many bags of stucco per square foot?',
+      a: 'For 3-coat traditional Portland cement stucco, plan on roughly 38 bags of 80-lb stucco mix per 100 ft² of wall — about 1 bag per 8 ft² for the scratch and brown coats, plus 1 per 12 ft² for the finish coat. 1-coat synthetic systems run lighter at 8 bags per 100 ft². Substrate matters: rough block soaks up more than smooth sheathing, and lath profile (3.4 lb vs 2.5 lb) shifts the scratch coat thickness.',
+    },
+    {
+      q: 'How long does stucco take to install?',
+      a: 'A standard 3-coat job on a 1,500 ft² house takes 5-7 working days minimum: day 1 for lath, day 2 for scratch coat, days 3-4 to cure (the brown coat goes on after the scratch is moisture-cured for 48 hours), day 5 for brown coat, days 6-7 to cure, then 1 day for finish coat. Fast-tracking the cure between coats causes the cracking you see on rushed builds.',
+    },
+    {
+      q: 'Can I do stucco over plywood?',
+      a: 'Not directly. Stucco needs a weather-resistive barrier (two layers of grade D paper or a coded WRB) plus metal lath fastened through the sheathing into the framing. Skipping either layer voids the warranty and traps moisture against the plywood, which then rots within a few years. The CMU and concrete substrates allow direct application of a bonding coat — frame walls always need lath.',
+    },
+  ],
+  'tuckpointing-calculator': [
+    {
+      q: 'How deep should I cut out a joint for tuckpointing?',
+      a: 'BIA Technical Note 7F recommends a minimum repoint depth of 2× the joint width and never less than 5/8 in. For a typical 3/8 in joint, that\'s 3/4 in deep. Cutting shallower means the new mortar pops out within a few years because there isn\'t enough surface area for the bond. Cutting deeper is fine and often necessary on weathered walls — go until you reach sound, undamaged mortar.',
+    },
+    {
+      q: 'What mortar type for tuckpointing an old building?',
+      a: 'For 19th- and early 20th-century brick, the original mortar is usually a soft lime-based mix (Type O or weaker) — about 350 psi. Repointing it with modern Type S or M (1,800-2,500 psi) creates a hardness mismatch: the new mortar is stiffer than the brick, and freeze-thaw cycles spall the brick face instead of cracking the joints. For pre-1930 buildings, use a Type O or a custom lime-Portland blend matched to the original. Sample the existing mortar with a chemical analysis if the building is on a historic register.',
+    },
+    {
+      q: 'How many bags of mortar for 200 lin ft of tuckpointing?',
+      a: 'For 200 lin ft of 3/8" joint at 3/4" repoint depth, mortar volume is about 0.39 ft³ — call it one 80-lb bag with waste, since a single bag yields about 0.6 ft³. The math scales linearly: double the joint length doubles the bags, and a 1/2" joint at the same depth burns ~33% more than a 3/8" joint. For a full house repoint (often 2,000+ lin ft), expect 4-5 bags plus 15% waste.',
+    },
+  ],
   'tip-calculator': [
     {
       q: 'How much should I tip at a restaurant?',
