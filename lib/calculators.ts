@@ -809,6 +809,153 @@ export const calculators: Calculator[] = [
     }
   },
   {
+    slug: 'water-supply-pipe-size-calculator',
+    name: 'Water Supply Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Supply pipe diameter',
+    formula: 'size = f(Σ WSFU)',
+    title: 'WATER SUPPLY PIPE',
+    metaTitle: 'Water Supply Pipe Sizing Calculator — WSFU to Pipe Diameter | ProjectCalc',
+    metaDesc: 'Free water supply pipe sizing calculator. Enter your home\'s fixtures — get the minimum copper/CPVC and PEX supply pipe diameter per IPC.',
+    seoIntro: 'This water supply pipe sizing calculator gives the minimum supply pipe diameter for a residential service line, based on the fixtures it serves. Enter how many full baths, kitchens, washing machines, and hose bibs the line feeds; the calculator sums Water Supply Fixture Units (WSFU) per IPC Table E202.1, then picks the smallest pipe that can carry that demand at typical residential pressure (40–60 psi static). Copper Type L and CPVC use the nominal size returned. PEX has a smaller inside diameter for the same nominal size, so the PEX answer is bumped up one size for equivalent flow.',
+    note: 'Residential service entry, 40–60 psi static. PEX is bumped one nominal size vs copper because of thinner ID.',
+    inputs: [
+      { id: 'fullBath', label: 'Full bathrooms', unit: '', default: 2, step: 1,
+        tooltip: 'A full bath = toilet + lavatory + tub/shower. Counts as 7 WSFU per IPC.' },
+      { id: 'halfBath', label: 'Half baths (powder rooms)', unit: '', default: 0, step: 1,
+        tooltip: 'Toilet + lavatory only. Counts as 3.5 WSFU.' },
+      { id: 'kitchen', label: 'Kitchen sinks', unit: '', default: 1, step: 1 },
+      { id: 'dishwasher', label: 'Dishwashers', unit: '', default: 1, step: 1 },
+      { id: 'washer', label: 'Clothes washers', unit: '', default: 1, step: 1 },
+      { id: 'hose', label: 'Outdoor hose bibs', unit: '', default: 2, step: 1 }
+    ],
+    calc: (data) => {
+      const fb = +data.fullBath, hb = +data.halfBath, k = +data.kitchen, dw = +data.dishwasher, w = +data.washer, h = +data.hose;
+      const wsfu = fb * 7 + hb * 3.5 + k * 1.5 + dw * 1.4 + w * 4 + h * 2.5;
+      const sizes: [number, string][] = [[2, '½"'], [14, '¾"'], [32, '1"'], [50, '1¼"'], [90, '1½"'], [200, '2"']];
+      const pexBump: Record<string, string> = { '½"': '¾"', '¾"': '1"', '1"': '1¼"', '1¼"': '1½"', '1½"': '2"', '2"': '2"' };
+      let copper = '2"';
+      for (const [max, sz] of sizes) {
+        if (wsfu <= max) { copper = sz; break; }
+      }
+      const pex = pexBump[copper] ?? copper;
+      const peakGpm = (wsfu < 6) ? wsfu * 1.5 : 5 + Math.sqrt(wsfu) * 1.8;
+      return {
+        main: copper, unit: 'COPPER / CPVC SIZE',
+        detail: [
+          ['Total WSFU', wsfu.toFixed(1)],
+          ['PEX equivalent', pex],
+          ['Estimated peak demand', peakGpm.toFixed(1) + ' GPM'],
+          ['Code reference', 'IPC Table E202.1 / 604.5'],
+          ['Pressure assumption', '40–60 psi static']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'drain-pipe-size-calculator',
+    name: 'Drain Pipe Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'DWV drain diameter',
+    formula: 'size = f(Σ DFU)',
+    title: 'DRAIN PIPE SIZE',
+    metaTitle: 'Drain Pipe Sizing Calculator — DFU to Pipe Diameter | ProjectCalc',
+    metaDesc: 'Free drain pipe size calculator. Enter the fixtures on the branch — get the minimum DWV pipe diameter per IPC Table 710.1.',
+    seoIntro: 'This drain pipe sizing calculator returns the minimum diameter for a horizontal drain branch carrying a given set of fixtures. Sum of Drainage Fixture Units (DFU) is computed from the fixture counts you enter, then matched against IPC Table 710.1 limits. The output is the smallest pipe size that handles the load — anything smaller risks slow flow or backups; anything larger is wasted material and grade. For a soil stack carrying multiple branches, sum the branch DFUs and oversize accordingly.',
+    note: 'Horizontal branch sizing per IPC Table 710.1. For full stacks or building drains, sum branch DFUs and consult code tables.',
+    inputs: [
+      { id: 'wc', label: 'Water closets (toilets)', unit: '', default: 2, step: 1,
+        tooltip: 'Modern 1.28–1.6 GPF toilets count as 3 DFU each (IPC).' },
+      { id: 'lav', label: 'Lavatories (bathroom sinks)', unit: '', default: 2, step: 1 },
+      { id: 'shower', label: 'Showers', unit: '', default: 1, step: 1 },
+      { id: 'tub', label: 'Bathtubs', unit: '', default: 1, step: 1 },
+      { id: 'ks', label: 'Kitchen sinks', unit: '', default: 1, step: 1 },
+      { id: 'dw', label: 'Dishwashers', unit: '', default: 1, step: 1 },
+      { id: 'cw', label: 'Clothes washers (standpipe)', unit: '', default: 1, step: 1 },
+      { id: 'fd', label: 'Floor drains', unit: '', default: 0, step: 1 }
+    ],
+    calc: (data) => {
+      const wc=+data.wc, lav=+data.lav, sh=+data.shower, tub=+data.tub, ks=+data.ks, dw=+data.dw, cw=+data.cw, fd=+data.fd;
+      const dfu = wc * 3 + lav * 1 + sh * 2 + tub * 2 + ks * 2 + dw * 2 + cw * 3 + fd * 2;
+      const sizes: [number, string][] = [[1, '1¼"'], [3, '1½"'], [6, '2"'], [12, '2½"'], [20, '3"'], [160, '4"'], [620, '6"']];
+      let pipe = '6"';
+      for (const [max, sz] of sizes) {
+        if (dfu <= max) { pipe = sz; break; }
+      }
+      const minSlope = (pipe === '1¼"' || pipe === '1½"' || pipe === '2"' || pipe === '2½"') ? '¼" per ft' : '⅛" per ft';
+      const wcWarn = wc > 0 && (pipe === '1¼"' || pipe === '1½"' || pipe === '2"') ? 'Toilets require ≥3" branch — upsize to 3".' : '';
+      const finalPipe = wcWarn ? '3"' : pipe;
+      return {
+        main: finalPipe, unit: 'MIN DRAIN SIZE',
+        detail: [
+          ['Total DFU', dfu.toFixed(0)],
+          ['Min slope', minSlope],
+          ['Toilet rule', wc > 0 ? '≥3" required (any branch carrying a WC)' : 'No WC on branch'],
+          ['Code reference', 'IPC Table 710.1'],
+          ['Note', wcWarn || 'Sized for horizontal branch']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'vent-pipe-size-calculator',
+    name: 'Vent Pipe Size',
+    category: 'construction',
+    trade: 'Plumbing',
+    desc: 'Vent diameter',
+    formula: 'vent ≥ ½ drain, min 1¼"',
+    title: 'VENT PIPE SIZE',
+    metaTitle: 'Vent Pipe Size Calculator — DWV Vent Sizing | ProjectCalc',
+    metaDesc: 'Free vent pipe sizing calculator. Enter drain size, vented DFUs, and developed length — get the minimum vent diameter per IPC.',
+    seoIntro: 'This vent pipe sizing calculator returns the minimum vent diameter for a residential branch vent or stack vent. Per IPC Section 906, every vent must be at least half the diameter of the drain it serves, never less than 1¼", and never more than half the developed length its size allows in IPC Table 906.1. Enter the drain size, total DFUs being vented, and developed length of the vent run; the calculator picks the smallest size that satisfies all three rules. For commercial loads (hundreds of DFUs) or unusual vent configurations like circuit or relief venting, defer to the full code table.',
+    note: 'Residential branch / stack vents per IPC 906. Vent ≥ ½ drain diameter, ≥ 1¼", and within Table 906.1 length limits.',
+    inputs: [
+      { id: 'drain', label: 'Drain pipe being vented', unit: '', type: 'select', default: '2',
+        tooltip: 'Nominal diameter of the drain pipe the vent serves.',
+        options: [['1.25','1¼"'],['1.5','1½"'],['2','2"'],['3','3"'],['4','4"']] },
+      { id: 'dfu', label: 'Total DFU on vented branch', unit: '', default: 8, step: 1,
+        tooltip: 'Sum of drainage fixture units served by this vent. Use the drain pipe sizing calculator to compute.' },
+      { id: 'len', label: 'Developed vent length', unit: 'ft', default: 25, step: 1,
+        tooltip: 'Total length of vent pipe from the trap arm to the open air, including all fittings (each elbow ~1 ft equivalent).' }
+    ],
+    calc: (data) => {
+      const drain = +data.drain, dfu = +data.dfu, len = +data.len;
+      const halfDrain = drain / 2;
+      const minByHalf = Math.max(1.25, halfDrain);
+      const sizes = [1.25, 1.5, 2, 3, 4];
+      // IPC Table 906.1 simplified: max DFU and length per vent size
+      // [size, maxDFU, maxLengthFt]
+      const table: [number, number, number][] = [
+        [1.25, 1, 45],
+        [1.5, 8, 60],
+        [2, 24, 120],
+        [3, 84, 212],
+        [4, 256, 300],
+      ];
+      let pick = 4;
+      for (const sz of sizes) {
+        if (sz < minByHalf) continue;
+        const row = table.find(r => r[0] === sz);
+        if (!row) continue;
+        if (dfu <= row[1] && len <= row[2]) { pick = sz; break; }
+      }
+      const fmt = (n: number) => n === 1.25 ? '1¼"' : n === 1.5 ? '1½"' : n === 2 ? '2"' : n === 3 ? '3"' : '4"';
+      const pickRow = table.find(r => r[0] === pick)!;
+      return {
+        main: fmt(pick), unit: 'MIN VENT SIZE',
+        detail: [
+          ['Drain served', fmt(drain)],
+          ['Half-drain rule', '≥ ' + fmt(minByHalf)],
+          ['DFU served', dfu + ' (limit at this size: ' + pickRow[1] + ')'],
+          ['Developed length', len + ' ft (limit at this size: ' + pickRow[2] + ' ft)'],
+          ['Code reference', 'IPC 906 / Table 906.1']
+        ]
+      };
+    }
+  },
+  {
     slug: 'duct-cfm-calculator',
     name: 'Duct CFM',
     category: 'construction',

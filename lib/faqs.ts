@@ -295,6 +295,48 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Vent pipes only need to slope back toward the drain so condensation drains out — exact pitch isn\'t code-critical. The drain-side rules are what matters for waste flow. For sewer mains, also confirm your local jurisdiction\'s amendments — some cities tighten the IPC defaults.',
     },
   ],
+  'water-supply-pipe-size-calculator': [
+    {
+      q: 'What is a Water Supply Fixture Unit (WSFU)?',
+      a: 'A WSFU is a dimensionless number assigned to each fixture in IPC Table E202.1 that captures both its peak flow rate and its likely simultaneous use with other fixtures. A toilet is 2.5, a tub is 4, a kitchen sink is 1.5. Summing WSFUs lets you size a single supply line that serves many fixtures without assuming all of them open at once — Hunter\'s probabilistic curve does the rest.',
+    },
+    {
+      q: 'Why is the PEX size bigger than the copper size?',
+      a: 'PEX has a thicker wall than copper for the same nominal size, so the inside diameter is smaller and friction loss is higher per foot. To deliver the same flow rate, PEX usually needs to be one nominal size up. A ¾" copper line is roughly equivalent to a 1" PEX line at typical residential pressure.',
+    },
+    {
+      q: 'Does this work for well water systems?',
+      a: 'Use this for the line downstream of the pressure tank, which sees the same 40–60 psi residential range. The line from the pump to the pressure tank sizes differently — driven by pump GPM and lift, not WSFU. For long underground service runs (over 100 ft), bump up one size to offset friction loss regardless of what this calculator returns.',
+    },
+  ],
+  'drain-pipe-size-calculator': [
+    {
+      q: 'What is a Drainage Fixture Unit (DFU)?',
+      a: 'A DFU represents the discharge load a fixture puts on the drainage system. A toilet is 3 DFU, a lavatory is 1, a tub or shower is 2, a clothes washer is 3. DFU values come from IPC Table 709.1 and they\'re different from WSFU on the supply side — drainage is intermittent and gravity-driven, so the load calculation is separate.',
+    },
+    {
+      q: 'Why does any branch with a toilet need a 3-inch pipe?',
+      a: 'Solids. Toilet waste cannot be reliably carried in pipe smaller than 3 inches no matter how few DFUs the branch totals. IPC requires a minimum 3" branch for any line carrying a water closet, even if the DFU math would otherwise allow 2" — the calculator enforces this rule automatically.',
+    },
+    {
+      q: 'Is the building drain sized the same way?',
+      a: 'Same DFU table, different limits. The building drain (the horizontal main below the lowest fixtures) gets a separate column in IPC Table 710.1 with higher DFU caps — a 3" building drain handles 36 DFU at ¼"/ft slope, vs 20 for a horizontal branch. Sum every fixture in the building, look up the building drain row, and that\'s your main size.',
+    },
+  ],
+  'vent-pipe-size-calculator': [
+    {
+      q: 'Why does the drain need a vent at all?',
+      a: 'Two reasons. First, water flowing down a drain pulls air with it; without a vent, that suction siphons water out of the trap below the next fixture, breaking the seal and letting sewer gas into the room. Second, drains glug and run slow when air can\'t enter behind the flow. The vent pipe gives the system equal pressure on both sides of the moving water.',
+    },
+    {
+      q: 'Can a vent pipe be horizontal?',
+      a: 'Vent piping must rise vertically from the fixture for at least 6 inches above the flood-level rim before turning horizontal (IPC 905.4). After that, horizontal vent runs are allowed but must slope back toward the drain so condensation doesn\'t pool — a tiny grade like 1/8" per foot is enough.',
+    },
+    {
+      q: 'When can I use an air admittance valve (AAV) instead of running a vent through the roof?',
+      a: 'AAVs (Studor vents) are allowed by IPC for individual, branch, or circuit vents serving fixtures inside the building, but every drainage system still needs at least one vent open to the outside air. AAVs are great for kitchen island sinks and remodel work where running a stack to the roof would mean ripping out finished walls. Check local amendments — a handful of jurisdictions still don\'t accept them.',
+    },
+  ],
   'duct-cfm-calculator': [
     {
       q: 'What is the typical CFM per ton of cooling?',

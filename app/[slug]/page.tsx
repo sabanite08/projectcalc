@@ -5,6 +5,8 @@ import { calculators, getCalculator } from '@/lib/calculators';
 import { getFAQ } from '@/lib/faqs';
 import { getPostsForCalc } from '@/lib/posts';
 import CalculatorView from '@/components/CalculatorView';
+import ToolkitCTA from '@/components/ToolkitCTA';
+import { getToolkitForCalc } from '@/lib/toolkits';
 
 const categoryLabels: Record<string, string> = {
   construction: 'TRADES',
@@ -47,6 +49,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
   const faq = getFAQ(calc.slug);
   const relatedPosts = getPostsForCalc(calc.slug);
   const isFinanceAdvice = calc.category === 'finance' && calc.slug !== 'tip-calculator';
+  const toolkit = getToolkitForCalc(calc.slug);
 
   // JSON-LD structured data for Google — combine WebApplication + FAQPage in @graph
   const ldGraph: object[] = [
@@ -92,6 +95,8 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
         </div>
 
         <CalculatorView slug={calc.slug} />
+
+        {toolkit && <ToolkitCTA toolkit={toolkit} />}
 
         {isFinanceAdvice && (
           <div className="disclaimer">
