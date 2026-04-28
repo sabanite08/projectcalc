@@ -37,6 +37,11 @@ import conduitBending from './conduit-bending-offset-saddle';
 import generatorSize from './generator-sizing-watts';
 import btuRoom from './btu-room-sizing';
 import ductCfm from './duct-cfm-sizing';
+import manualJ from './manual-j-load-basics';
+import refrigerantCharge from './refrigerant-charge-basics';
+import staticPressure from './static-pressure-tesp';
+import ventilationCfm from './ventilation-cfm-ashrae';
+import heatLoss from './heat-loss-envelope';
 
 export const posts: BlogPost[] = [
   flooring,
@@ -51,6 +56,11 @@ export const posts: BlogPost[] = [
   generatorSize,
   btuRoom,
   ductCfm,
+  manualJ,
+  refrigerantCharge,
+  staticPressure,
+  ventilationCfm,
+  heatLoss,
   mortarGrout,
   cmuBlock,
   stoneVeneer,

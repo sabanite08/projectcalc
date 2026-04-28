@@ -729,6 +729,76 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Anything wired into the home panel needs a manual transfer switch or a UL-listed interlock kit per NEC 702. Backfeeding through a dryer outlet without an interlock is illegal and can kill a lineman working on the de-energized service. Portable generators powering extension cords directly to appliances are exempt.',
     },
   ],
+  'manual-j-heat-load-calculator': [
+    {
+      q: 'Why is oversized AC bad?',
+      a: 'An oversized AC short-cycles — runs for 5 minutes, hits the thermostat, shuts off, repeats. Short cycles never run long enough to wring humidity out of the air, so the house feels clammy at the right temperature. The compressor also wears out fast from constant restarts. Manual J prevents oversizing.',
+    },
+    {
+      q: 'Is this calculator a substitute for a real Manual J?',
+      a: 'No. A real Manual J is room-by-room: every wall orientation, window U-value, door, infiltration rate, internal gains, ducts inside vs outside conditioned space — all entered separately and run through Wrightsoft, Cool Calc, or Elite Software. Use this calculator for a sanity check or a rough budget; permits and equipment selection need the full ACCA package.',
+    },
+    {
+      q: 'What if my old AC has been working fine on a rule-of-thumb size?',
+      a: '"Working fine" usually means cooling but not dehumidifying — most older systems are oversized 30-50% and the homeowner has just accepted clammy summers. Replacement is the right time to size correctly: a heat pump (variable-speed) handles the design load and modulates down for partial loads, fixing the humidity problem.',
+    },
+  ],
+  'refrigerant-charge-calculator': [
+    {
+      q: 'How is final refrigerant charge actually verified?',
+      a: 'Subcooling for TXV / EEV systems (most modern equipment): measure liquid line temp at the condenser, compare to saturation temp at liquid pressure, target the manufacturer\'s subcooling spec (typically 8-12°F). Superheat for fixed-orifice systems: measure suction line temp at the condenser, compare to saturation at suction pressure, target the chart on the equipment.',
+    },
+    {
+      q: 'Do I need a Section 608 license to handle refrigerant?',
+      a: 'Yes. EPA Section 608 of the Clean Air Act requires technician certification to purchase, recover, recycle, or charge refrigerant. Type II covers high-pressure (most residential), universal covers everything. Selling or charging refrigerant without certification is a federal violation with up to $44,539 per day per violation.',
+    },
+    {
+      q: 'Why is R-410A being phased out?',
+      a: 'GWP (global warming potential). R-410A has a GWP of 2,088. Under the AIM Act, US residential systems must use refrigerants with GWP under 700 starting January 1, 2025 — R-454B (GWP 466) and R-32 (GWP 675) are the two main replacements. Existing R-410A systems can keep running, but new manufacture is being phased out.',
+    },
+  ],
+  'static-pressure-calculator': [
+    {
+      q: 'What is "0.5 inches w.c." and why does it matter?',
+      a: 'Inches of water column (in. w.c. or in. WC) is the unit the HVAC industry uses for low-pressure measurements. 0.5" w.c. is the static-pressure rating most residential PSC blowers are designed for. Run them at 0.7-0.8" and airflow drops 25-40%, the coil ices in summer, the heat exchanger overheats in winter, and the equipment dies in 5 years instead of 15.',
+    },
+    {
+      q: 'Why is a 1-inch MERV 13 filter such a problem?',
+      a: 'Surface area. A 1-inch pleated filter at MERV 13 has too little media to pass the airflow needed without a major pressure drop — typically 0.20-0.30" w.c. on a clean filter, and 0.40-0.50" once it loads up. A 4-inch or 5-inch media cabinet at MERV 13 has 4-5× the surface area and runs 0.10-0.15" — same filtration, half the cost in airflow.',
+    },
+    {
+      q: 'How do I actually measure TESP?',
+      a: 'Drill a 3/8" hole in the supply plenum after the coil and another in the return plenum before the filter. Insert a Magnehelic gauge probe (or a digital manometer) in each, set the gauge to read pressure differential, and read the result with the blower running on cooling speed. Plug the holes with grommets when finished. Total cost: $50 for a basic gauge, $300 for a digital manometer.',
+    },
+  ],
+  'ventilation-cfm-calculator': [
+    {
+      q: 'Does an old leaky house need mechanical ventilation?',
+      a: 'Per ASHRAE 62.2-2019, no — homes that test below 5 ACH50 on a blower-door test are required to have mechanical ventilation, but anything above can rely on infiltration. Practically: most pre-2000 homes are leaky enough to skip mechanical ventilation. Anything built or retrofitted to current code (3 ACH50 or tighter) needs it.',
+    },
+    {
+      q: 'What is the best mechanical-ventilation strategy?',
+      a: 'Three options. (1) Exhaust-only — just run a bath fan continuously at the calculated CFM. Cheap, depressurizes the house slightly. (2) Supply-only — duct outdoor air to the return side of the air handler. Pressurizes slightly, which keeps moisture out of walls in cold climates. (3) Balanced (HRV/ERV) — best, recovers 60-90% of heat or moisture from the exhaust stream.',
+    },
+    {
+      q: 'How is bath exhaust counted toward whole-house?',
+      a: 'A bath fan can pull double duty: provide the local 50 CFM exhaust during shower use, AND run continuously on a low setting to provide whole-house ventilation. Panasonic WhisperGreen and similar fans have dual-speed controls specifically for this. Cheaper and simpler than a separate whole-house exhaust fan.',
+    },
+  ],
+  'heat-loss-calculator': [
+    {
+      q: 'What is the 99% design temp?',
+      a: 'The outdoor temperature your area is colder than only 1% of the heating season hours. ACCA Manual J Table 1 lists it for every US city. Sizing equipment to the absolute lowest temperature on record means oversized equipment that short-cycles 99% of the year. Examples: Chicago -3°F, Boston 6°F, NYC 11°F, Atlanta 23°F, Phoenix 31°F.',
+    },
+    {
+      q: 'Are R-value and U-value the same thing?',
+      a: 'They are inverses. R-value is resistance to heat flow (insulation rating). U-value is the rate of heat flow (window rating). U = 1/R. A wall at R-19 has a U-value of 0.053. Windows are sold by U-value because their assemblies (glass + frame + spacer) have non-uniform heat flow — single R-value doesn\'t describe them well.',
+    },
+    {
+      q: 'Why does conductive loss not equal Manual J?',
+      a: 'Manual J adds three pieces this calculator doesn\'t: (1) infiltration loss — air leaking through the envelope, typically 0.35 ACH × volume × 0.018 BTU per CFH-°F, (2) duct losses — ducts in unconditioned attics or crawlspaces lose 15-25% of system output, (3) internal gains — bodies, lights, appliances offsetting load. Add 25-40% for full envelope; reduce by internal gains for net heating load.',
+    },
+  ],
 };
 
 export const getFAQ = (slug: string): FAQItem[] => faqs[slug] || [];

@@ -2007,6 +2007,255 @@ export const calculators: Calculator[] = [
     }
   },
   {
+    slug: 'manual-j-heat-load-calculator',
+    name: 'Manual J Heat Load',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'Whole-home BTU load',
+    formula: 'q = ft² × HTM (climate × construction)',
+    title: 'MANUAL J HEAT LOAD',
+    metaTitle: 'Manual J Heat Load Calculator — Cooling & Heating BTU | ProjectCalc',
+    metaDesc: 'Free Manual J style heat load calculator. Enter floor area, climate zone, insulation, and windows — get cooling and heating BTU plus tonnage.',
+    seoIntro: 'This Manual J heat load calculator gives a whole-home approximation of cooling and heating BTU/hr using the ACCA Manual J approach: floor area × Heat Transfer Multiplier (HTM), with HTMs adjusted by climate zone, insulation level, window quality, and air-tightness. It is a planning tool — equipment selection, zoning, and duct design require a full room-by-room Manual J / Manual D / Manual S package run by a credentialed HVAC contractor (ACCA RSDI, Wrightsoft, or similar). Oversizing is the #1 reason heat pumps short-cycle, dehumidify poorly, and die early. ESTIMATE ONLY — verify with a licensed HVAC contractor and a full Manual J before equipment purchase.',
+    note: 'Whole-home rule-of-thumb sized to ACCA Manual J HTMs. Doesn\'t replace a room-by-room Manual J for permit submittal. Estimate only — verify with a licensed HVAC contractor running full ACCA Manual J/D/S before purchase or installation. Not a substitute for engineered drawings.',
+    inputs: [
+      { id: 'sqft', label: 'Conditioned floor area', unit: 'ft²', default: 2000, step: 50 },
+      { id: 'ceil', label: 'Average ceiling height', unit: 'ft', default: 9, step: 0.5 },
+      { id: 'zone', label: 'Climate zone (IECC)', unit: '', type: 'select', default: '4',
+        tooltip: 'IECC zones: 1 = Miami/Honolulu, 2 = Houston/Phoenix, 3 = Atlanta/Dallas, 4 = NYC/St. Louis, 5 = Chicago/Boston, 6 = Minneapolis, 7 = Duluth, 8 = Fairbanks. Maps at energycodes.gov.',
+        options: [['1','Zone 1 (very hot)'],['2','Zone 2 (hot)'],['3','Zone 3 (warm)'],['4','Zone 4 (mixed)'],['5','Zone 5 (cool)'],['6','Zone 6 (cold)'],['7','Zone 7 (very cold)'],['8','Zone 8 (subarctic)']] },
+      { id: 'insul', label: 'Insulation + air sealing', unit: '', type: 'select', default: 'avg',
+        tooltip: 'Tight = post-2015 build, blower-door <3 ACH50, sprayfoam or dense-pack. Average = post-2000, code minimum. Loose = pre-1980, no upgrades, drafty.',
+        options: [['tight','Tight (new / retrofitted)'],['avg','Average (code minimum)'],['loose','Loose (drafty / pre-1980)']] },
+      { id: 'windows', label: 'Window quality + area', unit: '', type: 'select', default: 'avg',
+        tooltip: 'Low = double-pane low-E, ≤15% wall area. Average = double-pane, 15-20% wall area. High = single-pane or oversized glazing >20% wall area.',
+        options: [['low','Low (modern, ≤15% wall)'],['avg','Average (double-pane)'],['high','High (single-pane / 20%+ glass)']] }
+    ],
+    calc: (data) => {
+      const sqft = +data.sqft, ceil = +data.ceil, zone = data.zone as string, insul = data.insul as string, windows = data.windows as string;
+      const coolHTMByZone: Record<string, number> = { '1': 28, '2': 25, '3': 22, '4': 18, '5': 16, '6': 14, '7': 12, '8': 10 };
+      const heatHTMByZone: Record<string, number> = { '1': 12, '2': 18, '3': 25, '4': 35, '5': 45, '6': 55, '7': 65, '8': 80 };
+      const insulMult: Record<string, number> = { 'tight': 0.85, 'avg': 1.0, 'loose': 1.25 };
+      const windowMult: Record<string, number> = { 'low': 0.9, 'avg': 1.0, 'high': 1.2 };
+      const ceilFactor = ceil / 8;
+      const cool = sqft * coolHTMByZone[zone] * insulMult[insul] * windowMult[windows] * ceilFactor;
+      const heat = sqft * heatHTMByZone[zone] * insulMult[insul] * windowMult[windows] * ceilFactor;
+      const coolTons = cool / 12000;
+      const heatKbtu = heat / 1000;
+      const sized = coolTons < 1 ? '0.75 ton' : coolTons < 1.5 ? '1.5 ton' : coolTons < 2 ? '2 ton' : coolTons < 2.5 ? '2.5 ton' : coolTons < 3 ? '3 ton' : coolTons < 4 ? '4 ton' : coolTons < 5 ? '5 ton' : 'engineered (>5 ton)';
+      return {
+        main: Math.round(cool).toLocaleString(), unit: 'COOLING BTU/HR',
+        detail: [
+          ['Heating load', Math.round(heat).toLocaleString() + ' BTU/hr (' + heatKbtu.toFixed(1) + ' kBTU)'],
+          ['Cooling tons', coolTons.toFixed(2)],
+          ['Suggested AC size', sized],
+          ['Climate zone', 'IECC ' + zone],
+          ['Volume factor', ceilFactor.toFixed(2) + 'x for ' + ceil + ' ft ceilings'],
+          ['Code reference', 'ACCA Manual J HTM approximation'],
+          ['Disclaimer', 'Estimate only — full Manual J required before equipment purchase']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'refrigerant-charge-calculator',
+    name: 'Refrigerant Charge',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'Pounds by tonnage',
+    formula: 'lbs = factory + (line_oz/ft × extra ft)',
+    title: 'REFRIGERANT CHARGE',
+    metaTitle: 'Refrigerant Charge Calculator — Lbs by System Size | ProjectCalc',
+    metaDesc: 'Free refrigerant charge calculator. Enter system tonnage, refrigerant type, and line set length — get pre-charged factory amount plus extra-length adder.',
+    seoIntro: 'This refrigerant charge calculator estimates how many pounds of refrigerant a residential split-system AC or heat pump should carry. The factory pre-charge typically covers a 15-foot or 25-foot line set; anything beyond that adds refrigerant by weight per linear foot of liquid line, scaled to refrigerant type (R-410A, R-32, R-454B). Final charge is verified with subcooling (TXV / EEV systems) or superheat (fixed-orifice systems) — never just by weight alone. ESTIMATE ONLY: this is a planning figure for line-set ordering, not an install procedure. Adding or removing refrigerant must be done by an EPA Section 608-certified technician.',
+    note: 'Estimate only. EPA Section 608 certification required to handle refrigerant. Final charge verified by subcooling/superheat, not weight. Verify with a licensed HVAC contractor before purchase or installation.',
+    inputs: [
+      { id: 'tons', label: 'System size', unit: 'tons', default: 3, step: 0.5,
+        tooltip: '1 ton = 12,000 BTU/hr cooling. Most residential homes are 2-5 tons.' },
+      { id: 'refrig', label: 'Refrigerant type', unit: '', type: 'select', default: 'R410A',
+        tooltip: 'R-410A: standard since 2010, being phased out. R-32: lower GWP, common in mini-splits. R-454B: 2025+ replacement for R-410A in residential.',
+        options: [['R410A','R-410A (legacy split systems)'],['R32','R-32 (mini-splits, low-GWP)'],['R454B','R-454B (2025+ residential)']] },
+      { id: 'lineLen', label: 'Line set length', unit: 'ft', default: 25, step: 1,
+        tooltip: 'Distance from outdoor unit to indoor coil/air handler along the actual run, not straight-line. Pre-charge typically covers 15-25 ft.' },
+      { id: 'liquidSize', label: 'Liquid line size', unit: '', type: 'select', default: '0.375',
+        tooltip: 'Standard residential: 1/4" for 1.5-2 ton, 3/8" for 2.5-5 ton. Larger pipe holds more refrigerant per foot.',
+        options: [['0.25','1/4" liquid line'],['0.375','3/8" liquid line'],['0.5','1/2" liquid line']] }
+    ],
+    calc: (data) => {
+      const tons = +data.tons, refrig = data.refrig as string, lineLen = +data.lineLen, liquidSize = data.liquidSize as string;
+      const factoryByTon: Record<string, number> = { 'R410A': 2.6, 'R32': 1.8, 'R454B': 2.4 };
+      const ozPerFootByLine: Record<string, number> = { '0.25': 0.4, '0.375': 0.6, '0.5': 1.0 };
+      const factoryLbs = tons * factoryByTon[refrig];
+      const factoryCovers = 25;
+      const extraFt = Math.max(0, lineLen - factoryCovers);
+      const ozPerFt = ozPerFootByLine[liquidSize];
+      const extraOz = extraFt * ozPerFt;
+      const extraLbs = extraOz / 16;
+      const totalLbs = factoryLbs + extraLbs;
+      return {
+        main: totalLbs.toFixed(2) + ' lbs', unit: 'TOTAL CHARGE',
+        detail: [
+          ['Factory pre-charge', factoryLbs.toFixed(2) + ' lbs (covers first ' + factoryCovers + ' ft)'],
+          ['Extra line set', extraFt + ' ft × ' + ozPerFt + ' oz/ft = ' + extraOz.toFixed(1) + ' oz'],
+          ['Refrigerant', refrig],
+          ['Liquid line', liquidSize === '0.25' ? '1/4"' : liquidSize === '0.375' ? '3/8"' : '1/2"'],
+          ['Verify by', 'Subcooling (TXV) or Superheat (fixed orifice)'],
+          ['Code reference', 'EPA Section 608, AHRI 700'],
+          ['Disclaimer', 'Estimate only — Section 608 cert required to handle refrigerant']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'static-pressure-calculator',
+    name: 'Static Pressure',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'TESP across system',
+    formula: 'TESP = filter + coil + supply + return',
+    title: 'TOTAL EXTERNAL STATIC PRESSURE',
+    metaTitle: 'Static Pressure Calculator — TESP for Duct Systems | ProjectCalc',
+    metaDesc: 'Free TESP calculator for HVAC techs. Sum filter, coil, supply, and return drops — compare to blower rating and check fan ESP headroom.',
+    seoIntro: 'This static pressure calculator sums the four pressure drops a residential HVAC blower fights against: filter, evaporator coil, supply duct/registers, and return duct/grille. Total External Static Pressure (TESP) is what a Magnehelic gauge reads with probes drilled into the supply and return plenums. Most residential blowers are rated at 0.5" w.c. TESP — exceed that and airflow drops, the coil ices, the gas heat exchanger overheats, and the system dies young. Aim for 0.5" w.c. or lower; 0.7" is "in trouble." ESTIMATE ONLY — actual TESP must be measured with a Magnehelic gauge or manometer.',
+    note: 'Most residential blowers are rated 0.5" w.c. TESP. >0.7" = airflow problems. Estimate only — verify with manometer measurement and a licensed HVAC contractor before equipment changes.',
+    inputs: [
+      { id: 'filter', label: 'Filter type', unit: '', type: 'select', default: 'merv11',
+        tooltip: 'Higher MERV = denser media = higher pressure drop. Pleated 1-inch filters at MERV 11+ are the silent killer of residential systems.',
+        options: [['merv8','1" MERV 8 fiberglass (0.05" w.c.)'],['merv11','1" MERV 11 pleated (0.15" w.c.)'],['merv13','1" MERV 13 pleated (0.25" w.c.)'],['media4','4-5" media MERV 11-13 (0.10" w.c.)'],['hepa','HEPA / electronic (0.30" w.c.)']] },
+      { id: 'coil', label: 'Evaporator coil drop', unit: 'in w.c.', default: 0.20, step: 0.05,
+        tooltip: 'Most residential A-coils run 0.20-0.30" w.c. when clean. Wet coil under cooling adds ~0.05". Dirty coils can hit 0.50"+.' },
+      { id: 'supply', label: 'Supply duct + registers drop', unit: 'in w.c.', default: 0.15, step: 0.05,
+        tooltip: 'Well-designed supply trunk + branches: 0.10-0.15". Long runs, kinked flex, undersized registers: 0.20-0.30"+.' },
+      { id: 'return', label: 'Return duct + grille drop', unit: 'in w.c.', default: 0.10, step: 0.05,
+        tooltip: 'Well-designed return: 0.05-0.10". Single undersized return grille is the most common static-pressure offender — typical bad install: 0.20-0.30".' },
+      { id: 'rating', label: 'Blower TESP rating', unit: 'in w.c.', default: 0.5, step: 0.05,
+        tooltip: 'Most residential PSC blowers: 0.5" w.c. ECM blowers: 0.5-0.8". Check the cabinet label.' }
+    ],
+    calc: (data) => {
+      const filterMap: Record<string, number> = { 'merv8': 0.05, 'merv11': 0.15, 'merv13': 0.25, 'media4': 0.10, 'hepa': 0.30 };
+      const filter = filterMap[data.filter as string];
+      const coil = +data.coil, supply = +data.supply, ret = +data.return, rating = +data.rating;
+      const tesp = filter + coil + supply + ret;
+      const headroom = rating - tesp;
+      const status = tesp <= rating * 0.9 ? 'OK — within blower rating' : tesp <= rating ? 'Tight — at the redline' : tesp <= rating * 1.4 ? 'Over — airflow reduced ~15-25%' : 'CRITICAL — coil will ice / heat exchanger overheats';
+      return {
+        main: tesp.toFixed(2) + '"', unit: 'TESP (w.c.)',
+        detail: [
+          ['Filter', filter.toFixed(2) + '"'],
+          ['Coil', coil.toFixed(2) + '"'],
+          ['Supply', supply.toFixed(2) + '"'],
+          ['Return', ret.toFixed(2) + '"'],
+          ['Blower rated', rating.toFixed(2) + '"'],
+          ['Headroom', headroom.toFixed(2) + '"'],
+          ['Status', status],
+          ['Disclaimer', 'Estimate only — measure with manometer for accuracy']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'ventilation-cfm-calculator',
+    name: 'Ventilation CFM',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'ASHRAE 62.2 fresh air',
+    formula: 'CFM = 0.03 × ft² + 7.5 × (Nbr + 1)',
+    title: 'VENTILATION CFM',
+    metaTitle: 'Ventilation CFM Calculator — ASHRAE 62.2 Fresh Air | ProjectCalc',
+    metaDesc: 'Free ventilation CFM calculator. ASHRAE 62.2 whole-house fresh air requirement plus exhaust CFM for kitchens, baths, and laundry.',
+    seoIntro: 'This ventilation CFM calculator gives the required mechanical ventilation rate for a residence per ASHRAE 62.2 (and the IECC residential ventilation standard that references it). The whole-house base rate is 0.03 CFM per ft² of conditioned floor area + 7.5 CFM per occupant, with occupancy assumed at bedrooms + 1. The calculator also lists the local exhaust CFM required for kitchens (intermittent vs continuous), bathrooms, and laundry per the same standard. ESTIMATE ONLY — actual installed flow must be measured at the grille with a flow hood and verified by a licensed HVAC contractor.',
+    note: 'ASHRAE 62.2-2019. Tight homes (<3 ACH50) require mechanical ventilation. Estimate only — verify installed flow at the grille with a flow hood and confirm with a licensed HVAC contractor.',
+    inputs: [
+      { id: 'sqft', label: 'Conditioned floor area', unit: 'ft²', default: 2000, step: 50 },
+      { id: 'bedrooms', label: 'Number of bedrooms', unit: '', default: 3, step: 1,
+        tooltip: 'ASHRAE 62.2 assumes occupancy = bedrooms + 1.' },
+      { id: 'kitchenMode', label: 'Kitchen ventilation', unit: '', type: 'select', default: 'intermittent',
+        tooltip: 'Intermittent (range hood used during cooking) needs 100 CFM. Continuous (always-on) needs only 5 ACH at the kitchen volume — usually less than 25 CFM.',
+        options: [['intermittent','Intermittent (100 CFM range hood)'],['continuous','Continuous (5 ACH @ kitchen volume)']] },
+      { id: 'bathrooms', label: 'Bathroom exhaust fans', unit: '', default: 2, step: 1,
+        tooltip: 'ASHRAE 62.2: 50 CFM intermittent or 20 CFM continuous each. The calculator uses 50 CFM intermittent.' }
+    ],
+    calc: (data) => {
+      const sqft = +data.sqft, bedrooms = +data.bedrooms, kitchenMode = data.kitchenMode as string, bathrooms = +data.bathrooms;
+      const occupants = bedrooms + 1;
+      const wholeHouse = 0.03 * sqft + 7.5 * occupants;
+      const kitchen = kitchenMode === 'intermittent' ? 100 : 25;
+      const bathTotal = bathrooms * 50;
+      const laundry = 50;
+      const totalExhaust = kitchen + bathTotal + laundry;
+      return {
+        main: Math.round(wholeHouse).toLocaleString(), unit: 'WHOLE-HOUSE CFM',
+        detail: [
+          ['Calculation', '0.03 × ' + sqft + ' + 7.5 × ' + occupants + ' = ' + wholeHouse.toFixed(1) + ' CFM'],
+          ['Occupants assumed', occupants + ' (bedrooms + 1)'],
+          ['Kitchen exhaust', kitchen + ' CFM'],
+          ['Bath exhaust (each 50 CFM intermittent)', bathTotal + ' CFM'],
+          ['Laundry exhaust', laundry + ' CFM'],
+          ['Total local exhaust', totalExhaust + ' CFM'],
+          ['Code reference', 'ASHRAE 62.2-2019'],
+          ['Disclaimer', 'Estimate only — verify installed flow with a flow hood']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'heat-loss-calculator',
+    name: 'Heat Loss',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'BTU loss through envelope',
+    formula: 'Q = U × A × ΔT (per surface)',
+    title: 'HEAT LOSS',
+    metaTitle: 'Heat Loss Calculator — BTU Loss Through Walls, Windows, Roof | ProjectCalc',
+    metaDesc: 'Free heat loss calculator. Enter wall, window, ceiling, and floor areas with U-values — get conductive BTU loss for a heating-design temperature.',
+    seoIntro: 'This heat loss calculator computes the conductive heat loss through a building envelope using Q = U × A × ΔT per surface, where U-value is the inverse of R-value. Enter the area and U-value for walls, windows, ceiling/roof, and floor, then the indoor design temp and outdoor 99% design temperature for your location. Add infiltration losses (typical 0.35 ACH × volume × 0.018) for a full envelope figure. The result is BTU/hr at design conditions — multiply by hours of heating season for annual energy. ESTIMATE ONLY — full Manual J adds duct losses, internal gains, and solar to get installed equipment size.',
+    note: 'Conductive loss only. Add infiltration + duct losses for full Manual J. Estimate only — verify with a licensed HVAC contractor running full ACCA Manual J before equipment purchase.',
+    inputs: [
+      { id: 'wallArea', label: 'Wall area (above grade, minus windows/doors)', unit: 'ft²', default: 1600, step: 50 },
+      { id: 'wallR', label: 'Wall R-value', unit: '', default: 19, step: 1,
+        tooltip: '2x4 batt = R-13. 2x6 batt = R-19. R-21 high-density. Sprayfoam closed-cell = R-6.5/in. Modern cold-climate code = R-23 to R-30.' },
+      { id: 'winArea', label: 'Window + door glass area', unit: 'ft²', default: 240, step: 10 },
+      { id: 'winU', label: 'Window U-value', unit: '', default: 0.32, step: 0.02,
+        tooltip: 'Single pane = 1.0. Double low-E = 0.30. Triple pane = 0.18. ENERGY STAR threshold by climate zone, typically 0.27-0.32.' },
+      { id: 'ceilArea', label: 'Ceiling/roof area', unit: 'ft²', default: 1500, step: 50 },
+      { id: 'ceilR', label: 'Ceiling R-value', unit: '', default: 38, step: 1,
+        tooltip: 'Code minimum varies: R-30 (warm climate) to R-60 (cold climate). Loose-fill blown 12" = R-38.' },
+      { id: 'floorArea', label: 'Floor over unconditioned space', unit: 'ft²', default: 1500, step: 50,
+        tooltip: 'Slab-on-grade or basement on conditioned space = 0. Crawlspace or unheated garage above = full area.' },
+      { id: 'floorR', label: 'Floor R-value', unit: '', default: 19, step: 1 },
+      { id: 'tIn', label: 'Indoor design temp', unit: '°F', default: 70, step: 1 },
+      { id: 'tOut', label: '99% outdoor design temp', unit: '°F', default: 5, step: 1,
+        tooltip: 'The 99% design temp from ACCA Manual J Table 1 — the temperature your area is colder than only 1% of winter hours. Chicago: -3°F. NYC: 11°F. Atlanta: 23°F. Phoenix: 31°F.' }
+    ],
+    calc: (data) => {
+      const wallArea = +data.wallArea, wallR = +data.wallR;
+      const winArea = +data.winArea, winU = +data.winU;
+      const ceilArea = +data.ceilArea, ceilR = +data.ceilR;
+      const floorArea = +data.floorArea, floorR = +data.floorR;
+      const tIn = +data.tIn, tOut = +data.tOut;
+      const dT = tIn - tOut;
+      const wallLoss = (wallArea / wallR) * dT;
+      const winLoss = winArea * winU * dT;
+      const ceilLoss = (ceilArea / ceilR) * dT;
+      const floorLoss = floorR > 0 ? (floorArea / floorR) * dT : 0;
+      const total = wallLoss + winLoss + ceilLoss + floorLoss;
+      const tons = total / 12000;
+      return {
+        main: Math.round(total).toLocaleString(), unit: 'BTU/HR LOSS',
+        detail: [
+          ['Wall loss', Math.round(wallLoss).toLocaleString() + ' BTU/hr'],
+          ['Window/door loss', Math.round(winLoss).toLocaleString() + ' BTU/hr'],
+          ['Ceiling loss', Math.round(ceilLoss).toLocaleString() + ' BTU/hr'],
+          ['Floor loss', Math.round(floorLoss).toLocaleString() + ' BTU/hr'],
+          ['ΔT', dT + '°F (' + tIn + ' indoor − ' + tOut + ' outdoor)'],
+          ['Equivalent tons', tons.toFixed(2)],
+          ['Note', 'Conductive only — add infiltration + duct losses for full envelope'],
+          ['Disclaimer', 'Estimate only — verify with full Manual J']
+        ]
+      };
+    }
+  },
+  {
     slug: 'mortgage-calculator',
     name: 'Mortgage',
     category: 'finance',
