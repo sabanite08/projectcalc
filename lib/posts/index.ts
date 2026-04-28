@@ -25,8 +25,22 @@ import cmuBlock from './cmu-block-count';
 import stoneVeneer from './stone-veneer-coverage';
 import stucco from './stucco-bag-count';
 import tuckpointing from './tuckpointing-mortar';
+import flooring from './flooring-square-footage';
+import fence from './fence-post-spacing';
+import deckStain from './deck-stain-coverage';
+import voltageDrop from './voltage-drop-nec';
+import conduitFill from './conduit-fill-nec';
+import btuRoom from './btu-room-sizing';
+import ductCfm from './duct-cfm-sizing';
 
 export const posts: BlogPost[] = [
+  flooring,
+  fence,
+  deckStain,
+  voltageDrop,
+  conduitFill,
+  btuRoom,
+  ductCfm,
   mortarGrout,
   cmuBlock,
   stoneVeneer,
