@@ -1,7 +1,15 @@
 import './globals.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 import { Analytics } from '@vercel/analytics/next';
+import CalcSearch from '@/components/CalcSearch';
+import SwRegister from '@/components/SwRegister';
+
+export const viewport: Viewport = {
+  themeColor: '#0e0e0c',
+  width: 'device-width',
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://projectcalc.app'),
@@ -25,7 +33,14 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230e0e0c'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23ffd400' transform='rotate(45 8 8)'/%3E%3C/svg%3E" },
+      { url: '/icon.svg', type: 'image/svg+xml' },
     ],
+    apple: [{ url: '/apple-icon', sizes: '180x180', type: 'image/png' }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'ProjectCalc',
+    statusBarStyle: 'black-translucent',
   },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -50,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <header className="site-header">
           <Link href="/" className="logo">PROJECTCALC</Link>
+          <CalcSearch />
           <nav className="header-nav">
             <Link href="/#home">Home</Link>
             <Link href="/#construction">Trades</Link>
@@ -70,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </footer>
         <Analytics />
+        <SwRegister />
       </body>
     </html>
   );
