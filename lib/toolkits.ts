@@ -8,8 +8,6 @@ export interface Toolkit {
   calcSlugs: string[];
 }
 
-// Toolkit URLs come from env vars so listings can go live without a code push.
-// Set NEXT_PUBLIC_TOOLKIT_ROOFING_URL in Vercel after the shop listing exists.
 export const toolkits: Toolkit[] = [
   {
     id: 'roofing-pro',
@@ -22,7 +20,7 @@ export const toolkits: Toolkit[] = [
       'Pitch reference, ventilation NFA (1:150 rule)',
       'Print-ready quote with editable margin, tax, and labor rates',
     ],
-    url: process.env.NEXT_PUBLIC_TOOLKIT_ROOFING_URL || null,
+    url: 'https://www.etsy.com/listing/4495853489/roofing-estimate-spreadsheet-excel',
     calcSlugs: ['roofing-calculator'],
   },
 ];
