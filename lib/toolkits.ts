@@ -56,7 +56,7 @@ export const toolkits: Toolkit[] = [
       'Auto-pick service main, distribution, drain, vent, and trap-arm sizes',
       'Print-ready quote with editable PEX/copper/PVC pricing',
     ],
-    url: null,
+    url: 'https://www.etsy.com/listing/4496461014/plumbing-estimate-spreadsheet-excel-pipe',
     calcSlugs: [
       'water-supply-pipe-size-calculator',
       'drain-pipe-size-calculator',
