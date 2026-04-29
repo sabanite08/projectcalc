@@ -103,7 +103,7 @@ export const toolkits: Toolkit[] = [
       '20 branch circuits pre-mapped: AWG, breaker, AFCI/GFCI, conduit fill',
       'Voltage-drop check (K=12.9 copper) — auto-flags branches over 3%',
     ],
-    url: null,
+    url: 'https://www.etsy.com/listing/4496464733/electrical-estimate-spreadsheet-excel',
     calcSlugs: [
       'panel-load-calculator',
       'voltage-drop-calculator',
