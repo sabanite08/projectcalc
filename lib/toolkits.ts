@@ -34,7 +34,7 @@ export const toolkits: Toolkit[] = [
       'Per-room CFM allocation + round-duct lookup at 0.10" WC',
       'ASHRAE 62.2 whole-house + spot exhaust check',
     ],
-    url: null,
+    url: 'https://www.etsy.com/listing/4496461127/hvac-estimate-spreadsheet-excel-manual-j',
     calcSlugs: [
       'manual-j-heat-load-calculator',
       'btu-calculator',
