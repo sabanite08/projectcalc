@@ -81,7 +81,7 @@ export const toolkits: Toolkit[] = [
       'Cut list at standard 2× lengths + total board feet by section',
       'Pitch-adjusted plywood/OSB sheet count for sub-floor, walls, and roof',
     ],
-    url: null,
+    url: 'https://www.etsy.com/listing/4496470088/framing-estimate-spreadsheet-excel',
     calcSlugs: [
       'lumber-calculator',
       'lumber-cut-calculator',
