@@ -57,18 +57,58 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Use a level on the roof or a ladder against the gable. Hold the level horizontal, measure straight down 12 inches from the level, then measure up to the roof — that vertical number is your pitch. A roof rising 6 inches per 12-inch run is "6/12 pitch."',
     },
   ],
-  'flooring-calculator': [
+  'hardwood-calculator': [
     {
-      q: 'Why do I need to buy extra flooring?',
-      a: 'Cuts, mistakes, and matching for future repairs. Straight installs need 10% extra; offset plank patterns need 12%; diagonal/herringbone needs 15%. Always keep one full box unopened after the install for repairs — nothing matches old flooring exactly years later.',
+      q: 'How many planks are in a box of hardwood?',
+      a: 'It varies by plank size. A box of 5"×48" hardwood covers about 22 ft² with roughly 13 planks; 3.25" strip oak runs 20–22 planks per box at the same coverage. Box yield in ft² is the only number that matters for ordering — the calculator uses 22 ft²/box as a planning average.',
     },
     {
-      q: 'How many square feet are in a box of flooring?',
-      a: 'Most boxes cover 20–25 ft², but it varies wildly — laminate boxes are often 20 ft², luxury vinyl plank is 23–28 ft², engineered hardwood is 18–25 ft². Always check the specific box label before buying.',
+      q: 'Solid vs engineered hardwood — does the calculator change?',
+      a: 'Material count is identical — both are sold by the box and ship at similar coverages. What changes is install pattern: solid hardwood is nail-down only and needs a wood subfloor, while engineered can float, glue, or nail and works over concrete. Use the same waste factors either way.',
     },
     {
-      q: 'Can I install flooring over existing flooring?',
-      a: 'Click-lock laminate and LVP can usually go over existing vinyl, hardwood, or tile if the surface is flat (less than 3/16" variation per 10 ft). Carpet must come up. Hardwood nailed installs need a wood subfloor; floating floors don\'t.',
+      q: 'How much extra hardwood should I buy for repairs?',
+      a: 'One full unopened box on top of the calculator total. Same-lot replacement boards become impossible to find within a year, and repaired sections from a different lot are visible even with a stain match. Keep the box label — manufacturer, lot, and color code make warranty claims easier.',
+    },
+    {
+      q: 'Do wider planks waste more material?',
+      a: 'Yes. A 7" wide plank ripped down to fit the last row leaves 5–6" of waste; a 3.25" plank ripped to fit leaves 1–2". The calculator\'s 12% offset waste factor covers a typical 5" install — bump to 13–14% mentally if you\'re running 7"+ planks in a narrow room.',
+    },
+  ],
+  'carpet-calculator': [
+    {
+      q: 'Why is carpet sold by the square yard?',
+      a: 'Tradition from the textile industry — rugs and broadloom were always quoted in yards. Today most retail carpet is priced per yd² ($2–8 for residential builder grade, $8–25 for premium); warehouse and remnant outlets often quote per ft² instead. To convert: ft² ÷ 9 = yd². The calculator gives both numbers.',
+    },
+    {
+      q: 'Do I really need carpet pad?',
+      a: 'Yes, except for commercial-grade glue-down. Pad doubles carpet life by absorbing impact, improves R-value (insulation), and is required by most carpet warranties. Bedrooms and living rooms use 7/16" 6lb rebond as the residential standard; basements need a moisture-barrier pad over concrete.',
+    },
+    {
+      q: 'How wide is a roll of carpet?',
+      a: 'Standard residential carpet ships in 12-ft rolls — wide enough to cover most bedrooms seamlessly. 15-ft rolls exist for large living rooms but are rarer and cost more. Commercial broadloom is often 6 ft. If your shorter room dimension is over the roll width, you\'ll need at least one seam.',
+    },
+    {
+      q: 'Where do seams go in a carpeted room?',
+      a: 'Out of sight lines. Best practice: seam runs perpendicular to the main door so you walk along the seam, not across it; seams should fall under furniture or in low-traffic zones. Cut-pile carpet hides seams better than loop pile (Berber), where seams stand out for the life of the carpet.',
+    },
+  ],
+  'vinyl-calculator': [
+    {
+      q: 'LVP vs SPC vs WPC vinyl — what\'s the difference?',
+      a: 'All click-lock plank vinyl, but the cores differ. LVP has a flexible PVC core (cheapest, telegraphs subfloor flaws). WPC (wood-plastic composite) has a foam-like core that\'s warm underfoot but dents. SPC (stone-plastic composite) is the rigid core that handles uneven subfloors and heavy traffic — most common new installs are SPC.',
+    },
+    {
+      q: 'Why is vinyl waste lower than hardwood?',
+      a: 'Click-lock systems let you start the next row with the offcut from the previous row, as long as the offcut is over 8 inches. Nail-down hardwood can do this too in theory, but tongue-and-groove ends limit reuse, so installers waste more. Straight click-lock LVP runs 8% waste; nail-down hardwood needs 10%.',
+    },
+    {
+      q: 'Do I need underlayment under LVP?',
+      a: 'Depends on the product. Most rigid-core SPC has attached underlayment (IXPE foam or cork) — adding more voids the warranty. Bare-back LVP needs separate 1mm foam underlayment. Always add a 6-mil poly vapor barrier over concrete subfloors regardless.',
+    },
+    {
+      q: 'How much expansion gap does LVP need?',
+      a: '1/4" to 3/8" around all walls, vertical pipes, and immovable objects. Floating click-lock floors expand and contract with humidity; a tight install will buckle in summer. The expansion gap hides under baseboards or quarter-round trim, so it\'s invisible after the install.',
     },
   ],
   'tile-calculator': [

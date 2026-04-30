@@ -147,35 +147,126 @@ export const calculators: Calculator[] = [
     }
   },
   {
-    slug: 'flooring-calculator',
-    name: 'Flooring',
+    slug: 'hardwood-calculator',
+    name: 'Hardwood',
     category: 'home',
-    desc: 'Sq ft + waste',
-    formula: 'ft² × waste factor',
-    title: 'FLOORING',
-    metaTitle: 'Flooring Calculator — Square Feet and Boxes | ProjectCalc',
-    metaDesc: 'Flooring calculator with waste factor. Enter room dimensions and pattern type — get square feet to buy plus number of boxes.',
-    seoIntro: 'This flooring calculator gives you the square footage of flooring to buy for a room, including the waste factor that varies by install pattern. Straight installs need 10% waste, offset plank patterns need 12%, and diagonal or herringbone needs 15% because of the extra angled cuts. Most flooring boxes cover 20 ft²; the calculator estimates box count based on that average.',
-    note: 'Straight install: 10% waste. Diagonal/herringbone: 15%. Plank pattern with offsets: 12%.',
+    desc: 'Planks + sq ft',
+    formula: 'planks = ft² × waste ÷ plank ft²',
+    title: 'HARDWOOD FLOORING',
+    metaTitle: 'Hardwood Flooring Calculator — Planks and Square Feet | ProjectCalc',
+    metaDesc: 'Hardwood flooring calculator with plank width and length. Enter room size and plank dimensions — get square feet to buy, plank count, and box estimate.',
+    seoIntro: 'This hardwood flooring calculator gives you the square footage and number of planks needed for a solid or engineered hardwood install. Enter your room dimensions, pick a plank width (2.25"–7") and an average plank length (36"–72"), and the calculator returns the square feet to buy with the correct waste factor — 10% for straight, 12% for offset plank, 15% for diagonal or herringbone. Most hardwood boxes cover 18–25 ft²; the calculator estimates box count at 22 ft²/box. Wider planks lay faster but waste more material at room edges.',
+    note: 'Hardwood boxes average 18–25 ft²/box — confirm the label before buying. Keep one full box unopened for future repairs; same-lot replacements are nearly impossible to find later.',
     inputs: [
       { id: 'L', label: 'Room length', unit: 'ft', default: 14, step: 0.5 },
       { id: 'W', label: 'Room width', unit: 'ft', default: 12, step: 0.5 },
-      { id: 'pattern', label: 'Install pattern', unit: '', type: 'select', default: 'straight',
+      { id: 'pw', label: 'Plank width', unit: '', type: 'select', default: '5',
+        tooltip: '2.25"–3.25" is traditional strip oak; 4"–5" is the common modern plank; 6"–7" is wide plank.',
+        options: [['2.25','2.25 in (strip)'],['3.25','3.25 in (strip)'],['4','4 in'],['5','5 in (wide)'],['6','6 in (wide)'],['7','7 in (extra wide)']] },
+      { id: 'pl', label: 'Plank length (avg)', unit: '', type: 'select', default: '48',
+        tooltip: 'Hardwood is typically random length. Pick the average plank length spec on the box.',
+        options: [['36','36 in (random short)'],['48','48 in (standard)'],['60','60 in (long)'],['72','72 in (extra long)']] },
+      { id: 'pattern', label: 'Install pattern', unit: '', type: 'select', default: 'offset',
         options: [['straight','Straight (10%)'],['offset','Offset plank (12%)'],['diagonal','Diagonal / herringbone (15%)']] }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, pattern=data.pattern as string;
+      const L=+data.L, W=+data.W, pw=+data.pw, pl=+data.pl, pattern=data.pattern as string;
       const area = L * W;
       const wasteMap: Record<string, number> = {straight: 1.10, offset: 1.12, diagonal: 1.15};
       const buy = area * wasteMap[pattern];
-      const boxes = Math.ceil(buy / 20);
+      const plankSqFt = (pw * pl) / 144;
+      const planks = Math.ceil(buy / plankSqFt);
+      const boxes = Math.ceil(buy / 22);
       return {
         main: buy.toFixed(0), unit: 'FT² TO BUY',
         detail: [
           ['Floor area', area.toFixed(0) + ' ft²'],
           ['Waste factor', ((wasteMap[pattern]-1)*100).toFixed(0) + '%'],
-          ['~Boxes (@ 20 sf)', boxes],
-          ['Pattern', pattern]
+          ['Plank coverage', plankSqFt.toFixed(2) + ' ft²/plank'],
+          ['Planks needed', planks],
+          ['~Boxes (@ 22 sf)', boxes]
+        ]
+      };
+    }
+  },
+  {
+    slug: 'carpet-calculator',
+    name: 'Carpet',
+    category: 'home',
+    desc: 'Sq yds + pad',
+    formula: 'yd² = ft² × waste ÷ 9',
+    title: 'CARPET',
+    metaTitle: 'Carpet Calculator — Square Yards, Pad, and Seams | ProjectCalc',
+    metaDesc: 'Carpet calculator for any room. Enter dimensions and roll width — get square yards to buy plus pad coverage and a seam estimate.',
+    seoIntro: 'This carpet calculator gives you the square yards of carpet (and pad) needed for a room. Carpet is sold by the square yard from rolls 12 or 15 feet wide; the roll width determines whether your room can be covered seamlessly or whether you need a seam. Enter your room length and width, choose a roll width, and the calculator returns square yards to buy with a 10% waste factor plus a rough seam count. One square yard equals nine square feet; pricing is almost always quoted per yd² at retail and per ft² at warehouse outlets.',
+    note: 'Carpet sells by the square yard. Standard rolls are 12 ft or 15 ft wide. 1 yd² = 9 ft². Add 10% waste; seams add labor cost ($1–3/lin ft).',
+    inputs: [
+      { id: 'L', label: 'Room length', unit: 'ft', default: 16, step: 0.5 },
+      { id: 'W', label: 'Room width', unit: 'ft', default: 13, step: 0.5 },
+      { id: 'roll', label: 'Roll width', unit: '', type: 'select', default: '12',
+        tooltip: '12 ft is the most common carpet roll width; 15 ft is wider for large rooms with no seam.',
+        options: [['12','12 ft (standard)'],['15','15 ft (wide)']] },
+      { id: 'pad', label: 'Include pad?', unit: '', type: 'select', default: 'yes',
+        options: [['yes','Yes'],['no','No']] }
+    ],
+    calc: (data) => {
+      const L=+data.L, W=+data.W, roll=+data.roll, pad=data.pad as string;
+      const area = L * W;
+      const buy = area * 1.10;
+      const yards = buy / 9;
+      const shortSide = Math.min(L, W);
+      const seams = shortSide <= roll ? 0 : 1;
+      const padSqFt = pad === 'yes' ? Math.ceil(area * 1.10) : 0;
+      return {
+        main: yards.toFixed(1), unit: 'YD² TO BUY',
+        detail: [
+          ['Floor area', area.toFixed(0) + ' ft²'],
+          ['With 10% waste', buy.toFixed(0) + ' ft²'],
+          ['Roll width', roll + ' ft'],
+          ['Seams (est.)', seams],
+          ['Pad needed', padSqFt + ' ft²']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'vinyl-calculator',
+    name: 'Vinyl',
+    category: 'home',
+    desc: 'LVP planks + sq ft',
+    formula: 'planks = ft² × waste ÷ plank ft²',
+    title: 'VINYL FLOORING',
+    metaTitle: 'Vinyl & LVP Flooring Calculator — Planks and Square Feet | ProjectCalc',
+    metaDesc: 'Vinyl plank flooring calculator. Enter room size, plank width, and length — get square feet to buy, plank count, and a box estimate for LVP and SPC installs.',
+    seoIntro: 'This vinyl flooring calculator covers luxury vinyl plank (LVP) and rigid-core SPC click-lock installs. Enter your room dimensions, pick a plank width (5"–9") and length (36"–60"), and the calculator returns the square footage to buy with the correct waste factor — 8% for straight click-lock (less waste than nail-down hardwood since end-cuts can start the next row), 10% for offset, and 15% for diagonal or herringbone. Most LVP boxes cover 22–28 ft²; the calculator estimates box count at 24 ft²/box.',
+    note: 'LVP/SPC boxes average 22–28 ft²/box — confirm on the label. Click-lock waste runs lower than nail-down because end cuts start the next row.',
+    inputs: [
+      { id: 'L', label: 'Room length', unit: 'ft', default: 14, step: 0.5 },
+      { id: 'W', label: 'Room width', unit: 'ft', default: 12, step: 0.5 },
+      { id: 'pw', label: 'Plank width', unit: '', type: 'select', default: '7',
+        tooltip: '7" is the most common LVP width. 9" wide-plank is trending but shows seams on uneven subfloors.',
+        options: [['5','5 in'],['6','6 in'],['7','7 in (standard LVP)'],['8','8 in'],['9','9 in (wide)']] },
+      { id: 'pl', label: 'Plank length', unit: '', type: 'select', default: '48',
+        options: [['36','36 in'],['48','48 in (standard)'],['60','60 in (long)']] },
+      { id: 'pattern', label: 'Install pattern', unit: '', type: 'select', default: 'offset',
+        options: [['straight','Straight (8%)'],['offset','Offset plank (10%)'],['diagonal','Diagonal / herringbone (15%)']] }
+    ],
+    calc: (data) => {
+      const L=+data.L, W=+data.W, pw=+data.pw, pl=+data.pl, pattern=data.pattern as string;
+      const area = L * W;
+      const wasteMap: Record<string, number> = {straight: 1.08, offset: 1.10, diagonal: 1.15};
+      const buy = area * wasteMap[pattern];
+      const plankSqFt = (pw * pl) / 144;
+      const planks = Math.ceil(buy / plankSqFt);
+      const boxes = Math.ceil(buy / 24);
+      return {
+        main: buy.toFixed(0), unit: 'FT² TO BUY',
+        detail: [
+          ['Floor area', area.toFixed(0) + ' ft²'],
+          ['Waste factor', ((wasteMap[pattern]-1)*100).toFixed(0) + '%'],
+          ['Plank coverage', plankSqFt.toFixed(2) + ' ft²/plank'],
+          ['Planks needed', planks],
+          ['~Boxes (@ 24 sf)', boxes]
         ]
       };
     }

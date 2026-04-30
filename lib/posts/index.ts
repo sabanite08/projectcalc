@@ -25,7 +25,9 @@ import cmuBlock from './cmu-block-count';
 import stoneVeneer from './stone-veneer-coverage';
 import stucco from './stucco-bag-count';
 import tuckpointing from './tuckpointing-mortar';
-import flooring from './flooring-square-footage';
+import hardwood from './hardwood-flooring-guide';
+import carpet from './carpet-installation-guide';
+import vinyl from './vinyl-plank-flooring-guide';
 import fence from './fence-post-spacing';
 import deckStain from './deck-stain-coverage';
 import voltageDrop from './voltage-drop-nec';
@@ -44,7 +46,9 @@ import ventilationCfm from './ventilation-cfm-ashrae';
 import heatLoss from './heat-loss-envelope';
 
 export const posts: BlogPost[] = [
-  flooring,
+  hardwood,
+  carpet,
+  vinyl,
   fence,
   deckStain,
   voltageDrop,
