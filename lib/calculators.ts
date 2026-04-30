@@ -233,40 +233,44 @@ export const calculators: Calculator[] = [
     slug: 'vinyl-calculator',
     name: 'Vinyl',
     category: 'home',
-    desc: 'LVP planks + sq ft',
-    formula: 'planks = ft² × waste ÷ plank ft²',
-    title: 'VINYL FLOORING',
-    metaTitle: 'Vinyl & LVP Flooring Calculator — Planks and Square Feet | ProjectCalc',
-    metaDesc: 'Vinyl plank flooring calculator. Enter room size, plank width, and length — get square feet to buy, plank count, and a box estimate for LVP and SPC installs.',
-    seoIntro: 'This vinyl flooring calculator covers luxury vinyl plank (LVP) and rigid-core SPC click-lock installs. Enter your room dimensions, pick a plank width (5"–9") and length (36"–60"), and the calculator returns the square footage to buy with the correct waste factor — 8% for straight click-lock (less waste than nail-down hardwood since end-cuts can start the next row), 10% for offset, and 15% for diagonal or herringbone. Most LVP boxes cover 22–28 ft²; the calculator estimates box count at 24 ft²/box.',
-    note: 'LVP/SPC boxes average 22–28 ft²/box — confirm on the label. Click-lock waste runs lower than nail-down because end cuts start the next row.',
+    desc: 'Sheet vinyl + seams',
+    formula: 'lin ft = long side × strips × waste',
+    title: 'SHEET VINYL FLOORING',
+    metaTitle: 'Sheet Vinyl Flooring Calculator — Linear Feet and Square Yards | ProjectCalc',
+    metaDesc: 'Sheet vinyl flooring calculator. Enter room size and roll width — get linear feet to buy, square yards, and a seam estimate for residential sheet vinyl installs.',
+    seoIntro: 'This sheet vinyl calculator gives you the linear feet of roll vinyl, total square footage, and square yards needed for a sheet-goods install. Sheet vinyl is sold by the linear foot off rolls 6, 12, or 13 ft 2 in wide; the roll width determines whether your room covers seamlessly or needs a seam. Enter room dimensions and roll width, and the calculator returns the linear feet to buy with a 10% waste factor (15% for printed pattern repeats) plus an estimated seam count. Sheet vinyl is the cheapest and most water-resistant flooring per square foot — common in kitchens, baths, laundry rooms, and rentals.',
+    note: 'Sheet vinyl sold by the linear foot off the roll. 12 ft roll is the residential standard; 6 ft is for narrow halls and small baths. 1 yd² = 9 ft². Add 10% waste, 15% if the pattern has a repeat.',
     inputs: [
       { id: 'L', label: 'Room length', unit: 'ft', default: 14, step: 0.5 },
-      { id: 'W', label: 'Room width', unit: 'ft', default: 12, step: 0.5 },
-      { id: 'pw', label: 'Plank width', unit: '', type: 'select', default: '7',
-        tooltip: '7" is the most common LVP width. 9" wide-plank is trending but shows seams on uneven subfloors.',
-        options: [['5','5 in'],['6','6 in'],['7','7 in (standard LVP)'],['8','8 in'],['9','9 in (wide)']] },
-      { id: 'pl', label: 'Plank length', unit: '', type: 'select', default: '48',
-        options: [['36','36 in'],['48','48 in (standard)'],['60','60 in (long)']] },
-      { id: 'pattern', label: 'Install pattern', unit: '', type: 'select', default: 'offset',
-        options: [['straight','Straight (8%)'],['offset','Offset plank (10%)'],['diagonal','Diagonal / herringbone (15%)']] }
+      { id: 'W', label: 'Room width', unit: 'ft', default: 10, step: 0.5 },
+      { id: 'roll', label: 'Roll width', unit: '', type: 'select', default: '12',
+        tooltip: '12 ft covers most rooms seamlessly. 6 ft is cheaper but needs a seam in anything wider than a small bath. 13\'2" (European) is rarer and runs higher.',
+        options: [['6','6 ft (narrow)'],['12','12 ft (standard)'],['13.17','13\'2" (wide / European)']] },
+      { id: 'pattern', label: 'Pattern repeat?', unit: '', type: 'select', default: 'no',
+        tooltip: 'Printed sheet vinyl with a tile or wood-plank pattern needs extra material to align the repeat across cuts and seams.',
+        options: [['no','No / solid color (10% waste)'],['yes','Yes / patterned (15% waste)']] }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, pw=+data.pw, pl=+data.pl, pattern=data.pattern as string;
+      const L=+data.L, W=+data.W, roll=+data.roll, pattern=data.pattern as string;
       const area = L * W;
-      const wasteMap: Record<string, number> = {straight: 1.08, offset: 1.10, diagonal: 1.15};
-      const buy = area * wasteMap[pattern];
-      const plankSqFt = (pw * pl) / 144;
-      const planks = Math.ceil(buy / plankSqFt);
-      const boxes = Math.ceil(buy / 24);
+      const longSide = Math.max(L, W);
+      const shortSide = Math.min(L, W);
+      const waste = pattern === 'yes' ? 1.15 : 1.10;
+      const strips = Math.ceil(shortSide / roll);
+      const linFt = Math.ceil(strips * longSide * waste);
+      const buyArea = strips * longSide * roll;
+      const yards = (linFt * roll) / 9;
+      const seams = strips - 1;
       return {
-        main: buy.toFixed(0), unit: 'FT² TO BUY',
+        main: linFt, unit: 'LINEAR FT OF ROLL',
         detail: [
           ['Floor area', area.toFixed(0) + ' ft²'],
-          ['Waste factor', ((wasteMap[pattern]-1)*100).toFixed(0) + '%'],
-          ['Plank coverage', plankSqFt.toFixed(2) + ' ft²/plank'],
-          ['Planks needed', planks],
-          ['~Boxes (@ 24 sf)', boxes]
+          ['Roll width', roll === 13.17 ? '13\'2"' : roll + ' ft'],
+          ['Strips needed', strips],
+          ['Seams', seams],
+          ['Coverage purchased', buyArea.toFixed(0) + ' ft²'],
+          ['Square yards', yards.toFixed(1) + ' yd²'],
+          ['Waste factor', ((waste-1)*100).toFixed(0) + '%']
         ]
       };
     }

@@ -27,7 +27,7 @@ import stucco from './stucco-bag-count';
 import tuckpointing from './tuckpointing-mortar';
 import hardwood from './hardwood-flooring-guide';
 import carpet from './carpet-installation-guide';
-import vinyl from './vinyl-plank-flooring-guide';
+import vinyl from './sheet-vinyl-flooring-guide';
 import fence from './fence-post-spacing';
 import deckStain from './deck-stain-coverage';
 import voltageDrop from './voltage-drop-nec';

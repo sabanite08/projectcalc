@@ -95,20 +95,20 @@ export const faqs: Record<string, FAQItem[]> = {
   ],
   'vinyl-calculator': [
     {
-      q: 'LVP vs SPC vs WPC vinyl — what\'s the difference?',
-      a: 'All click-lock plank vinyl, but the cores differ. LVP has a flexible PVC core (cheapest, telegraphs subfloor flaws). WPC (wood-plastic composite) has a foam-like core that\'s warm underfoot but dents. SPC (stone-plastic composite) is the rigid core that handles uneven subfloors and heavy traffic — most common new installs are SPC.',
+      q: 'How is sheet vinyl sold?',
+      a: 'By the linear foot off a roll. Standard residential rolls are 12 ft wide; the price quote is per linear foot or sometimes per square yard. A 14 ft long room with a 12 ft roll needs 14 lin ft of material plus 10% waste — about 15 ft × 12 ft = 180 ft² of vinyl to cover a 14×10 room.',
     },
     {
-      q: 'Why is vinyl waste lower than hardwood?',
-      a: 'Click-lock systems let you start the next row with the offcut from the previous row, as long as the offcut is over 8 inches. Nail-down hardwood can do this too in theory, but tongue-and-groove ends limit reuse, so installers waste more. Straight click-lock LVP runs 8% waste; nail-down hardwood needs 10%.',
+      q: 'Felt-back vs fiberglass-back vinyl — which one?',
+      a: 'Felt-back is cheaper ($0.80–1.50/ft²) and gets fully glued down — permanent install, harder to replace later. Fiberglass-back (also called "loose lay" or "modified loose lay") costs more ($1.50–3.00/ft²) but only needs perimeter adhesive or double-sided tape — easier DIY install and easier to pull up if you redecorate. Both are vapor-resistant and good in wet areas.',
     },
     {
-      q: 'Do I need underlayment under LVP?',
-      a: 'Depends on the product. Most rigid-core SPC has attached underlayment (IXPE foam or cork) — adding more voids the warranty. Bare-back LVP needs separate 1mm foam underlayment. Always add a 6-mil poly vapor barrier over concrete subfloors regardless.',
+      q: 'Do I need to seam sheet vinyl?',
+      a: 'Only if your shorter room dimension is wider than the roll. 12 ft rolls cover almost every residential room seamlessly — bedrooms, kitchens, baths, laundry. Living rooms over 12 ft on the short side need one seam, sealed with chemical seam sealer (a solvent that fuses the two edges). DIYable but takes practice.',
     },
     {
-      q: 'How much expansion gap does LVP need?',
-      a: '1/4" to 3/8" around all walls, vertical pipes, and immovable objects. Floating click-lock floors expand and contract with humidity; a tight install will buckle in summer. The expansion gap hides under baseboards or quarter-round trim, so it\'s invisible after the install.',
+      q: 'Can sheet vinyl go over an existing floor?',
+      a: 'Over old vinyl, yes — if the old floor is flat, well-bonded, and not cushioned (no seams or texture telegraphing through). Over tile, only if you skim-coat the grout lines flat with self-leveling compound first. Over carpet, never. Sheet vinyl reads every irregularity in the substrate within 6 months.',
     },
   ],
   'tile-calculator': [
