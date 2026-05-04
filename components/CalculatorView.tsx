@@ -40,11 +40,12 @@ export default function CalculatorView({ slug }: { slug: string }) {
 
   if (!calc) return null;
 
-  // Recalculate when all number fields are filled with valid numbers.
-  // Selects always have a value; only number fields can be empty while
-  // the user is filling things in.
+  // Recalculate when all *visible* number fields are filled with valid numbers.
+  // Selects always have a value; hidden inputs (visibleWhen returns false) are
+  // ignored so they don't block the calc.
   useEffect(() => {
     const allFilled = calc.inputs.every(inp => {
+      if (inp.visibleWhen && !inp.visibleWhen(data)) return true;
       if (inp.type === 'select') return true;
       const v = data[inp.id];
       if (v === '' || v === undefined || v === null) return false;
@@ -87,7 +88,7 @@ export default function CalculatorView({ slug }: { slug: string }) {
   return (
     <div className="calc-body">
       <div className="inputs">
-        {calc.inputs.map(inp => {
+        {calc.inputs.filter(inp => !inp.visibleWhen || inp.visibleWhen(data)).map(inp => {
           const label = typeof inp.label === 'function' ? inp.label(data) : inp.label;
           const tooltip = typeof inp.tooltip === 'function' ? inp.tooltip(data) : inp.tooltip;
           return (

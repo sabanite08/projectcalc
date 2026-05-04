@@ -1,4 +1,5 @@
 import type { Calculator } from './types';
+import { SHAPE_INPUTS, extractShape, shapeDetailRows } from './shape';
 
 export const calculators: Calculator[] = [
   {
@@ -15,6 +16,7 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Room length', unit: 'ft', default: 12, step: 0.5 },
       { id: 'W', label: 'Room width', unit: 'ft', default: 10, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'H', label: 'Ceiling height', unit: 'ft', default: 8, step: 0.5 },
       { id: 'ceil', label: 'Include ceiling?', unit: '', type: 'select', default: 'yes',
         options: [['yes','Yes'],['no','No (walls only)']] },
@@ -24,8 +26,10 @@ export const calculators: Calculator[] = [
     ],
     calc: (data) => {
       const L = +data.L, W = +data.W, H = +data.H, ceil = data.ceil as string, sheet = data.sheet as string;
+      const s = extractShape(data);
+      // L-shape's wall perimeter equals the bounding rectangle's perimeter
       const wallArea = 2 * (L + W) * H;
-      const ceilArea = ceil === 'yes' ? L * W : 0;
+      const ceilArea = ceil === 'yes' ? s.net : 0;
       const total = wallArea + ceilArea;
       const sheetArea = sheet === '4x12' ? 48 : 32;
       const sheetLabel = sheet === '4x12' ? '4×12 SHEETS' : '4×8 SHEETS';
@@ -33,6 +37,7 @@ export const calculators: Calculator[] = [
       return {
         main: sheets, unit: sheetLabel,
         detail: [
+          ...shapeDetailRows(s),
           ['Wall area', wallArea.toFixed(0) + ' ft²'],
           ['Ceiling area', ceilArea.toFixed(0) + ' ft²'],
           ['Total area', total.toFixed(0) + ' ft²'],
@@ -91,11 +96,13 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Length', unit: 'ft', default: 10, step: 0.5 },
       { id: 'W', label: 'Width', unit: 'ft', default: 10, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'D', label: 'Thickness', unit: 'in', default: 4, step: 0.5 }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, D=+data.D;
-      const cubicFt = L * W * (D / 12);
+      const D = +data.D;
+      const s = extractShape(data);
+      const cubicFt = s.net * (D / 12);
       const cubicYd = cubicFt / 27;
       const cubicYdWithWaste = cubicYd * 1.10;
       const bags60 = Math.ceil(cubicFt / 0.45);
@@ -103,6 +110,7 @@ export const calculators: Calculator[] = [
       return {
         main: cubicYdWithWaste.toFixed(2), unit: 'CUBIC YARDS (W/ 10%)',
         detail: [
+          ...shapeDetailRows(s),
           ['Cubic feet', cubicFt.toFixed(2)],
           ['Cubic yards (exact)', cubicYd.toFixed(3)],
           ['60lb bags needed', bags60.toLocaleString()],
@@ -160,6 +168,7 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Room length', unit: 'ft', default: 14, step: 0.5 },
       { id: 'W', label: 'Room width', unit: 'ft', default: 12, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'pw', label: 'Plank width', unit: '', type: 'select', default: '5',
         tooltip: '2.25"–3.25" is traditional strip oak; 4"–5" is the common modern plank; 6"–7" is wide plank.',
         options: [['2.25','2.25 in (strip)'],['3.25','3.25 in (strip)'],['4','4 in'],['5','5 in (wide)'],['6','6 in (wide)'],['7','7 in (extra wide)']] },
@@ -170,17 +179,17 @@ export const calculators: Calculator[] = [
         options: [['straight','Straight (10%)'],['offset','Offset plank (12%)'],['diagonal','Diagonal / herringbone (15%)']] }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, pw=+data.pw, pl=+data.pl, pattern=data.pattern as string;
-      const area = L * W;
+      const pw=+data.pw, pl=+data.pl, pattern=data.pattern as string;
+      const s = extractShape(data);
       const wasteMap: Record<string, number> = {straight: 1.10, offset: 1.12, diagonal: 1.15};
-      const buy = area * wasteMap[pattern];
+      const buy = s.net * wasteMap[pattern];
       const plankSqFt = (pw * pl) / 144;
       const planks = Math.ceil(buy / plankSqFt);
       const boxes = Math.ceil(buy / 22);
       return {
         main: buy.toFixed(0), unit: 'FT² TO BUY',
         detail: [
-          ['Floor area', area.toFixed(0) + ' ft²'],
+          ...shapeDetailRows(s),
           ['Waste factor', ((wasteMap[pattern]-1)*100).toFixed(0) + '%'],
           ['Plank coverage', plankSqFt.toFixed(2) + ' ft²/plank'],
           ['Planks needed', planks],
@@ -203,6 +212,7 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Room length', unit: 'ft', default: 16, step: 0.5 },
       { id: 'W', label: 'Room width', unit: 'ft', default: 13, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'roll', label: 'Roll width', unit: '', type: 'select', default: '12',
         tooltip: '12 ft is the most common carpet roll width; 15 ft is wider for large rooms with no seam.',
         options: [['12','12 ft (standard)'],['15','15 ft (wide)']] },
@@ -211,16 +221,16 @@ export const calculators: Calculator[] = [
     ],
     calc: (data) => {
       const L=+data.L, W=+data.W, roll=+data.roll, pad=data.pad as string;
-      const area = L * W;
-      const buy = area * 1.10;
+      const s = extractShape(data);
+      const buy = s.net * 1.10;
       const yards = buy / 9;
       const shortSide = Math.min(L, W);
       const seams = shortSide <= roll ? 0 : 1;
-      const padSqFt = pad === 'yes' ? Math.ceil(area * 1.10) : 0;
+      const padSqFt = pad === 'yes' ? Math.ceil(s.net * 1.10) : 0;
       return {
         main: yards.toFixed(1), unit: 'YD² TO BUY',
         detail: [
-          ['Floor area', area.toFixed(0) + ' ft²'],
+          ...shapeDetailRows(s),
           ['With 10% waste', buy.toFixed(0) + ' ft²'],
           ['Roll width', roll + ' ft'],
           ['Seams (est.)', seams],
@@ -243,6 +253,7 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Room length', unit: 'ft', default: 14, step: 0.5 },
       { id: 'W', label: 'Room width', unit: 'ft', default: 10, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'roll', label: 'Roll width', unit: '', type: 'select', default: '12',
         tooltip: '12 ft covers most rooms seamlessly. 6 ft is cheaper but needs a seam in anything wider than a small bath. 13\'2" (European) is rarer and runs higher.',
         options: [['6','6 ft (narrow)'],['12','12 ft (standard)'],['13.17','13\'2" (wide / European)']] },
@@ -252,7 +263,8 @@ export const calculators: Calculator[] = [
     ],
     calc: (data) => {
       const L=+data.L, W=+data.W, roll=+data.roll, pattern=data.pattern as string;
-      const area = L * W;
+      const s = extractShape(data);
+      // Sheet vinyl is laid in strips covering the bounding rectangle; trim around any cutout.
       const longSide = Math.max(L, W);
       const shortSide = Math.min(L, W);
       const waste = pattern === 'yes' ? 1.15 : 1.10;
@@ -264,7 +276,7 @@ export const calculators: Calculator[] = [
       return {
         main: linFt, unit: 'LINEAR FT OF ROLL',
         detail: [
-          ['Floor area', area.toFixed(0) + ' ft²'],
+          ...shapeDetailRows(s),
           ['Roll width', roll === 13.17 ? '13\'2"' : roll + ' ft'],
           ['Strips needed', strips],
           ['Seams', seams],
@@ -289,21 +301,22 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Area length', unit: 'ft', default: 10, step: 0.5 },
       { id: 'W', label: 'Area width', unit: 'ft', default: 8, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'tile', label: 'Tile size', unit: '', type: 'select', default: '12x12',
         options: [['4x4','4×4 in (1.5 tiles/ft²... 9 tiles)'],['6x6','6×6 in (4 tiles/ft²)'],['12x12','12×12 in (1 tile/ft²)'],['12x24','12×24 in (0.5 tiles/ft²)'],['18x18','18×18 in (0.44 tiles/ft²)'],['24x24','24×24 in (0.25 tiles/ft²)']] },
       { id: 'pattern', label: 'Layout', unit: '', type: 'select', default: 'straight',
         options: [['straight','Straight (10%)'],['diagonal','Diagonal (15%)']] }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, tile=data.tile as string, pattern=data.pattern as string;
-      const area = L * W;
+      const tile=data.tile as string, pattern=data.pattern as string;
+      const s = extractShape(data);
       const tilesPerSqFt: Record<string, number> = {'4x4': 9, '6x6': 4, '12x12': 1, '12x24': 0.5, '18x18': 0.444, '24x24': 0.25};
       const waste = pattern === 'diagonal' ? 1.15 : 1.10;
-      const tiles = Math.ceil(area * tilesPerSqFt[tile] * waste);
+      const tiles = Math.ceil(s.net * tilesPerSqFt[tile] * waste);
       return {
         main: tiles, unit: 'TILES',
         detail: [
-          ['Area', area.toFixed(0) + ' ft²'],
+          ...shapeDetailRows(s),
           ['Tile size', tile + ' in'],
           ['Tiles per ft²', tilesPerSqFt[tile].toFixed(2)],
           ['Waste factor', ((waste-1)*100).toFixed(0) + '%']
@@ -325,17 +338,18 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Bed length', unit: 'ft', default: 20, step: 1 },
       { id: 'W', label: 'Bed width', unit: 'ft', default: 5, step: 1 },
+      ...SHAPE_INPUTS,
       { id: 'depth', label: 'Depth', unit: 'in', default: 3, step: 0.5 }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, depth=+data.depth;
-      const area = L * W;
-      const cubicYd = (area * (depth / 12)) / 27;
+      const depth=+data.depth;
+      const s = extractShape(data);
+      const cubicYd = (s.net * (depth / 12)) / 27;
       const bags = Math.ceil((cubicYd * 27) / 2);
       return {
         main: cubicYd.toFixed(2), unit: 'CUBIC YARDS',
         detail: [
-          ['Bed area', area.toFixed(0) + ' ft²'],
+          ...shapeDetailRows(s),
           ['Depth', depth + ' in'],
           ['~2 ft³ bags equivalent', bags.toLocaleString()],
           ['Cubic feet', (cubicYd * 27).toFixed(1)]
@@ -357,20 +371,22 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Length', unit: 'ft', default: 30, step: 1 },
       { id: 'W', label: 'Width', unit: 'ft', default: 12, step: 1 },
+      ...SHAPE_INPUTS,
       { id: 'depth', label: 'Depth', unit: 'in', default: 4, step: 0.5 },
       { id: 'material', label: 'Material', unit: '', type: 'select', default: 'gravel',
         options: [['gravel','Gravel (1.4 t/yd³)'],['topsoil','Topsoil (1.0 t/yd³)'],['sand','Sand (1.3 t/yd³)']] }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, depth=+data.depth, material=data.material as string;
-      const cubicYd = (L * W * (depth / 12)) / 27;
+      const depth=+data.depth, material=data.material as string;
+      const s = extractShape(data);
+      const cubicYd = (s.net * (depth / 12)) / 27;
       const tonsMap: Record<string, number> = {gravel: 1.4, topsoil: 1.0, sand: 1.3};
       const tons = cubicYd * tonsMap[material];
       return {
         main: cubicYd.toFixed(2), unit: 'CUBIC YARDS',
         detail: [
+          ...shapeDetailRows(s),
           ['Tons', tons.toFixed(2)],
-          ['Area', (L * W).toFixed(0) + ' ft²'],
           ['Depth', depth + ' in'],
           ['Material', material]
         ]
@@ -423,22 +439,23 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Deck length', unit: 'ft', default: 16, step: 0.5 },
       { id: 'W', label: 'Deck width', unit: 'ft', default: 12, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'railing', label: 'Railing perimeter', unit: 'ft', default: 30, step: 1 },
       { id: 'coats', label: 'Coats', unit: '', default: 2, step: 1 },
       { id: 'condition', label: 'Wood condition', unit: '', type: 'select', default: 'smooth',
         options: [['smooth','Smooth/sealed (250 ft²/gal)'],['weathered','Weathered/rough (150 ft²/gal)']] }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, railing=+data.railing, coats=+data.coats, condition=data.condition as string;
-      const deckArea = L * W;
+      const railing=+data.railing, coats=+data.coats, condition=data.condition as string;
+      const s = extractShape(data);
       const railArea = railing * 4;
-      const totalArea = deckArea + railArea;
+      const totalArea = s.net + railArea;
       const coverage = condition === 'smooth' ? 250 : 150;
       const gallons = (totalArea * coats) / coverage;
       return {
         main: Math.ceil(gallons), unit: 'GALLONS',
         detail: [
-          ['Deck area', deckArea.toFixed(0) + ' ft²'],
+          ...shapeDetailRows(s).map(([k, v]): [string, string] => k === 'Floor area' ? ['Deck area', v] : [k, v]),
           ['Railing area', railArea.toFixed(0) + ' ft²'],
           ['Total to cover', (totalArea * coats).toFixed(0) + ' ft²'],
           ['Coverage / gal', coverage + ' ft²']
@@ -527,18 +544,20 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Yard length', unit: 'ft', default: 50, step: 1 },
       { id: 'W', label: 'Yard width', unit: 'ft', default: 30, step: 1 },
+      ...SHAPE_INPUTS,
       { id: 'subtract', label: 'Hardscape to exclude', unit: 'ft²', default: 0, step: 10 }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, subtract=+data.subtract;
-      const gross = L * W;
-      const net = Math.max(0, gross - subtract);
+      const subtract=+data.subtract;
+      const s = extractShape(data);
+      const net = Math.max(0, s.net - subtract);
       const pallets = Math.ceil(net / 450);
       const rolls = Math.ceil(net / 10);
       return {
         main: pallets, unit: 'PALLETS',
         detail: [
-          ['Gross area', gross.toLocaleString() + ' ft²'],
+          ...shapeDetailRows(s),
+          ['Hardscape excluded', subtract.toLocaleString() + ' ft²'],
           ['Net to sod', net.toLocaleString() + ' ft²'],
           ['~Individual rolls', rolls.toLocaleString()],
           ['Coverage / pallet', '450 ft²']
@@ -2768,6 +2787,7 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Patio length', unit: 'ft', default: 12, step: 0.5 },
       { id: 'W', label: 'Patio width', unit: 'ft', default: 10, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'paver', label: 'Paver size', unit: '', type: 'select', default: '6x9',
         tooltip: 'Most home centers stock 4×8 brick pavers (4.5/ft²) and 6×9 standard pavers (2.67/ft²). 12×12 slabs are cheaper per ft² and faster to lay.',
         options: [
@@ -2788,10 +2808,9 @@ export const calculators: Calculator[] = [
         ] }
     ],
     calc: (data) => {
-      const L = +data.L, W = +data.W;
       const paver = data.paver as string;
       const pattern = data.pattern as string;
-      const area = L * W;
+      const s = extractShape(data);
       const paverAreaFt2: Record<string, number> = {
         '4x8': (4*8)/144, '6x6': (6*6)/144, '6x9': (6*9)/144,
         '8x8': (8*8)/144, '12x12': 1, '12x24': 2, '16x16': (16*16)/144,
@@ -2799,12 +2818,12 @@ export const calculators: Calculator[] = [
       const pAreaFt2 = paverAreaFt2[paver];
       const wasteMap: Record<string, number> = { straight: 1.05, diagonal: 1.15, herringbone: 1.20 };
       const waste = wasteMap[pattern];
-      const pavers = Math.ceil((area / pAreaFt2) * waste);
+      const pavers = Math.ceil((s.net / pAreaFt2) * waste);
       const wastePct = ((waste - 1) * 100).toFixed(0);
       return {
         main: pavers.toLocaleString(), unit: 'PAVERS',
         detail: [
-          ['Patio area', area.toFixed(0) + ' ft²'],
+          ...shapeDetailRows(s).map(([k, v]): [string, string] => k === 'Floor area' ? ['Patio area', v] : [k, v]),
           ['Per ft² (no waste)', (1/pAreaFt2).toFixed(2)],
           ['Pattern waste', wastePct + '%'],
           ['Pavers (rounded up)', pavers.toLocaleString()]
@@ -3442,15 +3461,14 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Area length', unit: 'ft', default: 8, step: 0.5 },
       { id: 'W', label: 'Area width', unit: 'ft', default: 4, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'depth', label: 'Fill depth', unit: 'in', default: 6, step: 0.5,
         tooltip: 'Raised beds: 8-12 in for vegetables, 6 in minimum for lawns over a graded base. Topdressing existing lawn: 0.25-0.5 in per pass.' }
     ],
     calc: (data) => {
-      const L = +data.L;
-      const W = +data.W;
       const depth = +data.depth;
-      const areaFt2 = L * W;
-      const cubicFt = areaFt2 * (depth / 12);
+      const s = extractShape(data);
+      const cubicFt = s.net * (depth / 12);
       const cubicYd = cubicFt / 27;
       const bags = Math.ceil(cubicFt / 0.75);
       const weightLbs = cubicFt * 75;
@@ -3458,7 +3476,7 @@ export const calculators: Calculator[] = [
         main: cubicYd.toFixed(2),
         unit: 'CUBIC YARDS',
         detail: [
-          ['Area', areaFt2.toFixed(0) + ' ft²'],
+          ...shapeDetailRows(s).map(([k, v]): [string, string] => k === 'Floor area' ? ['Area', v] : [k, v]),
           ['Depth', depth + ' in'],
           ['Cubic feet', cubicFt.toFixed(1) + ' ft³'],
           ['40 lb bags (~0.75 ft³ each)', bags],

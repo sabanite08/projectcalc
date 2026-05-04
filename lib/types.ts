@@ -11,6 +11,7 @@ export interface NumberInput {
   step?: number;
   type?: 'number';
   tooltip?: DynamicString;
+  visibleWhen?: (data: InputData) => boolean;
 }
 
 export interface SelectInput {
@@ -21,6 +22,7 @@ export interface SelectInput {
   type: 'select';
   options: [string, string][];
   tooltip?: DynamicString;
+  visibleWhen?: (data: InputData) => boolean;
 }
 
 export type CalcInput = NumberInput | SelectInput;

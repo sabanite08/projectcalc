@@ -20,10 +20,6 @@ const COMPATIBLE_CALCS: { slug: string; name: string; group: string }[] = [
   { slug: 'topsoil-calculator', name: 'Topsoil', group: 'Yard & Garden' },
 ];
 
-// Calcs where wall perimeter matters more than area — receive bounding L,W in L-shape
-// mode because an L-shape's perimeter equals its bounding rectangle's perimeter.
-const PERIMETER_CALCS = new Set(['drywall-calculator', 'paint-calculator']);
-
 const GROUPS = ['Walls & Ceilings', 'Flooring', 'Outdoor & Hardscape', 'Yard & Garden'];
 
 type Corner = 'tr' | 'tl' | 'br' | 'bl';
@@ -204,13 +200,14 @@ export default function RoomSketcher() {
   const rect = baseValid ? fitRect(Lnum, Wnum) : null;
 
   const buildUrl = (slug: string) => {
-    const a = area;
-    if (mode === 'lshape' && !PERIMETER_CALCS.has(slug)) {
-      // Adjust W so L*W equals the accurate L-shape area for pure-area calcs
-      const Wadj = +(a / Lnum).toFixed(2);
-      return `/${slug}?L=${Lnum}&W=${Wadj}&area=${a}`;
+    // Insulation's L is total wall length (perimeter), not room length
+    if (slug === 'insulation-calculator') {
+      return `/${slug}?L=${perimeter}`;
     }
-    return `/${slug}?L=${Lnum}&W=${Wnum}&area=${a}`;
+    if (mode === 'lshape') {
+      return `/${slug}?L=${Lnum}&W=${Wnum}&shape=lshape&cutoutL=${cLnum}&cutoutW=${cWnum}&cutoutCorner=${corner}`;
+    }
+    return `/${slug}?L=${Lnum}&W=${Wnum}`;
   };
 
   return (
@@ -576,7 +573,7 @@ export default function RoomSketcher() {
         )}
         {mode === 'lshape' && valid && (
           <div className="launcher-hint">
-            L-shape mode: drywall and paint receive the bounding rectangle (an L-shape&apos;s wall perimeter equals its bounding rectangle&apos;s). Pure-area calcs (flooring, sod, mulch, etc.) receive an adjusted width so length × width equals the accurate L-shape area.
+            L-shape mode: each launcher passes the bounding length, width, and cutout dimensions through to the calculator. The calc page shows the L-shape with a Shape: L-shape toggle and computes the net area exactly.
           </div>
         )}
       </div>
