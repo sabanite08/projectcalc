@@ -839,6 +839,202 @@ export const faqs: Record<string, FAQItem[]> = {
       a: 'Manual J adds three pieces this calculator doesn\'t: (1) infiltration loss — air leaking through the envelope, typically 0.35 ACH × volume × 0.018 BTU per CFH-°F, (2) duct losses — ducts in unconditioned attics or crawlspaces lose 15-25% of system output, (3) internal gains — bodies, lights, appliances offsetting load. Add 25-40% for full envelope; reduce by internal gains for net heating load.',
     },
   ],
+  'paver-calculator': [
+    {
+      q: 'How many extra pavers should I order beyond the calculator total?',
+      a: 'The waste percentage is already baked into the count by pattern (5% straight, 15% diagonal, 20% herringbone) — order what the calculator returns rounded up to the nearest full pallet. Then keep a half-pallet aside in dry storage for repairs; matching the dye lot two years from now is nearly impossible, and a single sunken paver in the middle of a patio looks worse than a whole new pour.',
+    },
+    {
+      q: 'Do I really need to set pavers in a herringbone pattern for a driveway?',
+      a: 'Yes for any driveway carrying vehicle weight. The 90° interlock of herringbone resists the rotation forces of tires turning and braking — straight-laid pavers slowly rack out of square under the same loads, and you end up with widening joints and edge creep within five years. Patios and walkways can use any pattern because foot traffic doesn\'t generate the same shear. A [rubber paver mallet](https://www.amazon.com/s?k=rubber+paver+mallet&tag=projectcalc-20) is the right tool for tapping pavers into the bed without chipping edges.',
+    },
+    {
+      q: 'How do I cut pavers cleanly?',
+      a: 'Two options. (1) [Paver splitter](https://www.amazon.com/s?k=paver+splitter&tag=projectcalc-20) — a guillotine-style hand tool that scores and snaps, fast and dust-free for full splits. (2) [Diamond blade angle grinder](https://www.amazon.com/s?k=diamond+blade+angle+grinder&tag=projectcalc-20) for any angled or curved cut. Wear eye protection and an N95 — silica dust from cutting concrete pavers is a serious lung hazard. Wet-cutting with a hose feed cuts dust dramatically.',
+    },
+  ],
+  'paver-sand-calculator': [
+    {
+      q: 'Why polymeric joint sand instead of regular sand?',
+      a: 'Polymeric sand has a polymer binder mixed in that activates when wetted, locking the grains into a flexible solid that resists weeds, ant tunneling, and washout. Regular mason sand stays loose, blows out in storms, and lets weeds root through within one season. The math works out: $25 for a 50 lb bag of [polymeric joint sand](https://www.amazon.com/s?k=polymeric+joint+sand&tag=projectcalc-20) covers ~75 ft² and lasts 10+ years; replacing washed-out plain sand every spring costs more in labor than the upfront polymeric premium.',
+    },
+    {
+      q: 'How important is compacting the base in 2-inch lifts?',
+      a: 'Critical. Dumping 4-8 inches of crushed stone all at once and running a plate compactor over the top only compacts the top 2-3 inches — the lower layers settle differentially over the next year and the patio sinks unevenly. The right way: spread 2 inches, run a [plate compactor](https://www.amazon.com/s?k=plate+compactor&tag=projectcalc-20) over it 4-6 passes (rent for $80/day), spread the next 2 inches, repeat. The labor difference is one extra hour total and the result is a permanently flat patio.',
+    },
+    {
+      q: 'Can I use leveling sand instead of stone dust for the bedding layer?',
+      a: 'Coarse concrete sand or "ASTM C33" sand is the right pick for the 1-inch bedding layer — sharp, angular grains lock together and don\'t shift under load. Avoid mason sand (too fine, holds water, freezes and pumps in cold climates), play sand (rounded grains, doesn\'t lock), or stone dust (sets up like cement after a few rains, making future repairs impossible). Pull a 6-ft 2×4 across [screed pipes](https://www.amazon.com/s?k=screed+pipe+1+inch&tag=projectcalc-20) to level the bedding layer flat before laying pavers.',
+    },
+  ],
+  'retaining-wall-calculator': [
+    {
+      q: 'Do I need to glue retaining wall blocks together?',
+      a: 'Yes for the cap course — wind, foot traffic, and frost heave will eventually shift loose caps. A bead of [masonry construction adhesive](https://www.amazon.com/s?k=loctite+pl+landscape+block+adhesive&tag=projectcalc-20) (Loctite PL Landscape, SikaBond) on the top course holds caps permanently. The body courses below the cap rely on gravity and the lip-style interlock molded into the back of each block — no glue needed if your block has the lip. Smooth-back blocks can use adhesive on the back vertical face for extra security on taller walls.',
+    },
+    {
+      q: 'How much base gravel goes under a retaining wall?',
+      a: 'Standard residential spec is 6 inches of compacted ¾-inch crushed stone in a trench 12 inches wider than the block face — that gives 3 inches of base on the front and 3 inches on the back of the block for drainage and load distribution. The calculator returns the cubic yards for this layout. Compact the base in 2-inch lifts with a [hand tamper](https://www.amazon.com/s?k=hand+tamper&tag=projectcalc-20) for short walls or a plate compactor for anything over 15 feet long. Skipping the base = sloped wall within two seasons.',
+    },
+    {
+      q: 'When does a retaining wall need a permit and engineering?',
+      a: 'Most jurisdictions require a permit for any retaining wall over 4 feet of exposed face height (some go as low as 30 inches), and engineering is typically required at the same threshold. Walls supporting a structure (driveway, patio, building foundation) require engineering at any height. Check your local building department before pouring footings — a $200 permit beats a $20,000 wall replacement after a rainy spring causes failure. A [4-foot post level](https://www.amazon.com/s?k=4+foot+level&tag=projectcalc-20) is the basic accuracy tool for setting your first course.',
+    },
+  ],
+  'roof-pitch-calculator': [
+    {
+      q: 'How do I measure roof pitch from inside the attic?',
+      a: 'Hold a 12-inch [Speed Square](https://www.amazon.com/s?k=swanson+speed+square&tag=projectcalc-20) flat against the underside of a rafter with the long edge horizontal (use a torpedo level to confirm), then measure the vertical drop from the level edge to the rafter at exactly 12 inches over. That number in inches is your pitch in /12 format. From the attic side avoids climbing on the roof and works year-round in any weather.',
+    },
+    {
+      q: 'Why does pitch matter for shingle ordering?',
+      a: 'Steeper roofs have more surface area than the building footprint. The plan-to-roof multiplier this calculator returns converts plan square footage (the building outline measured on the ground) into actual roof square footage (what the shingles cover). A 6/12 pitch has a multiplier of 1.118 — meaning a 2,000 ft² building footprint has 2,236 ft² of roof. Order shingles based on the roof number, not the plan number, or you will run short by 10-20%.',
+    },
+    {
+      q: 'What pitch is too steep to walk on safely?',
+      a: '8/12 (33.7°) is the practical limit for unaided walking on asphalt shingles in dry conditions; above that you need [roof harness and rope](https://www.amazon.com/s?k=roof+harness+kit&tag=projectcalc-20) or chicken ladders. Wet, mossy, or icy roofs of any pitch above 4/12 are dangerous without fall protection — most professional roofers tie off at 6/12 regardless of weather. Slope multiplier above 1.4 (10/12+) means specialty install with anchor points required.',
+    },
+  ],
+  'roof-truss-calculator': [
+    {
+      q: 'How far in advance should I order trusses?',
+      a: '4-8 weeks is typical lead time at most truss plants, longer in spring building season (April-June) where 10-12 weeks isn\'t unusual. Engineered trusses are made-to-order — the plant won\'t cut anything until your structural drawings are stamped and the order is confirmed. Order before pouring foundations if possible; stack-out delivery dates are easier to slip than truss build slots.',
+    },
+    {
+      q: 'Do I need bracing between trusses?',
+      a: 'Yes — both temporary and permanent. Temporary bracing during installation: 2x4 diagonals running corner-to-corner on the top and bottom chords, removed after sheathing goes on. Permanent bracing: [hurricane ties](https://www.amazon.com/s?k=hurricane+ties+truss&tag=projectcalc-20) at every truss-to-wall connection, plus permanent lateral bracing per the truss design package — typically 2x4 continuous along the bottom chord at 8-10 ft spacing. The truss engineer specifies all permanent bracing on the shop drawings.',
+    },
+    {
+      q: 'Can I cut or modify trusses on site?',
+      a: 'Never, unless the truss engineer signs off in writing. Trusses are designed as a single composite system — every chord, web, and gusset plate is sized assuming the geometry stays exactly as drawn. Cutting one web member or notching a top chord can drop the load capacity by 50% or more, and the failure mode is sudden, not progressive. If a duct, plumbing stack, or framing change forces a truss modification, the engineer reissues drawings and stamps a repair detail.',
+    },
+  ],
+  'snow-load-calculator': [
+    {
+      q: 'Where do I find the ground snow load (pg) for my address?',
+      a: 'Three sources, in order of preference. (1) Your local building department will list the design ground snow load in their adopted code amendments — this is the legally required value. (2) snowloadinfo.com pulls ASCE 7 mapped values by ZIP code and is a good cross-check. (3) ASCE 7-22 Figure 7.2-1 shows the national contour map. In mountainous and case-study regions, the local jurisdiction may require site-specific snow analysis from a structural engineer.',
+    },
+    {
+      q: 'Why does a steeper roof have a lower snow load?',
+      a: 'Snow slides off above 30° (about 7/12 pitch) on warm slippery roofs (asphalt shingle, metal, slate). The slope factor Cs reduces the design load between 30° and 70° — at 70° the load is essentially zero. Cold roofs (unheated barns, sheds) keep snow longer because the surface stays at outside air temp, so they get less reduction. Heated houses get the full slippery-surface reduction.',
+    },
+    {
+      q: 'How do I clear heavy snow off a low roof safely?',
+      a: 'A [telescoping snow rake](https://www.amazon.com/s?k=roof+snow+rake&tag=projectcalc-20) lets you clear the bottom 6-10 feet of roof from the ground — the area where ice dams form. Don\'t scrape down to the shingles (you\'ll damage granules); leave a thin layer. Avoid climbing onto a snow-loaded roof; shoveling from above causes 20+ deaths a year in the US from slip falls. Hire a roofing contractor for full-roof clearance on steep or icy roofs.',
+    },
+  ],
+  'floor-joist-span-calculator': [
+    {
+      q: 'What\'s the difference between simple span and continuous span?',
+      a: 'Simple span = joist supported only at the two ends (a single bearing point at each wall). Continuous span = joist runs over an intermediate support (a girder mid-span), which lets it span farther in each segment because the moment at the support flips sign. AWC tables and this calculator handle simple spans only — for continuous spans, use the IRC R502.3.3 multiplier or a structural engineer.',
+    },
+    {
+      q: 'Does I-joist or LVL beat dimensional lumber for span?',
+      a: 'Yes, dramatically. A 9.5" deep I-joist at 16" OC spans about 17\'-6" at 40 psf live load — roughly the same as a 2×12 SPF #2 in dimensional lumber. An 11-7/8" I-joist gets you to 21 feet. LVL beams at the same depth go even further. The trade-off is cost (1.5-2× the dimensional lumber price) and squeak-prone fastener requirements. Use this calculator for dimensional lumber only; for engineered lumber pull the manufacturer\'s span tables (Weyerhaeuser, LP, Boise Cascade).',
+    },
+    {
+      q: 'How do I attach joists to a beam or ledger?',
+      a: 'Three standard methods. (1) [Joist hangers](https://www.amazon.com/s?k=simpson+joist+hanger&tag=projectcalc-20) (Simpson Strong-Tie) face-nailed to the side of the beam — fastest and code-approved for any size. (2) Top-mount on a beam — joist sits on top, toenailed or hurricane-tied. (3) Notch-and-rest on a ledger — only allowed if the ledger is sized as a beam itself. Always use the manufacturer-specified nails (Simpson SDS or N10 nails); drywall screws or 16d common are not approved.',
+    },
+  ],
+  'rebar-calculator': [
+    {
+      q: 'How do I tie rebar intersections?',
+      a: '16-gauge annealed [rebar tie wire](https://www.amazon.com/s?k=rebar+tie+wire+16+gauge&tag=projectcalc-20) twisted with a [rebar tier tool](https://www.amazon.com/s?k=rebar+tier+tool&tag=projectcalc-20) is the standard. Tie every other intersection in the field and every intersection at slab edges and corners. The job goes 5× faster with a battery-powered auto-tier ($300+) versus a hand twister ($15) — worth buying for any slab over 200 ft². Snap-on plastic chairs hold the rebar grid 2 inches off the ground for proper concrete cover.',
+    },
+    {
+      q: 'How much overlap do I need where rebar splices?',
+      a: 'ACI 318 minimum lap length is 40× bar diameter for tension splices, 30× for compression. For #4 (½ in) rebar that\'s 20 in lap; for #5 (⅝ in) it\'s 25 in. Stagger splices so no more than 50% land at the same cross-section. For a 30-ft slab needing two 20-ft sticks, overlap them in the middle by at least the lap length and zip-tie the splice. Cut sticks with [bolt cutters](https://www.amazon.com/s?k=24+inch+bolt+cutters+rebar&tag=projectcalc-20) (24-inch handle for #4) or a cutoff wheel.',
+    },
+    {
+      q: 'How thick should the concrete cover over rebar be?',
+      a: 'ACI 318 minimum cover varies by exposure: 3 inches when concrete is cast against earth (footings, slab bottoms with no formwork), 1.5 inches when formed and exposed to weather, 0.75 inches when interior. For a 4-inch slab on grade, place the rebar at mid-depth (2 inches up) using [chairs or "dobies"](https://www.amazon.com/s?k=rebar+chair+dobie&tag=projectcalc-20). Resting rebar on the dirt or stones is the most common mistake — it ends up at the bottom of the slab where it does nothing.',
+    },
+  ],
+  'ac-tonnage-calculator': [
+    {
+      q: 'Is rule-of-thumb tonnage accurate enough for new install?',
+      a: 'For replacement of an existing system in a 1990s+ tract home, yes — within ½ ton, which is the resolution of standard equipment sizes anyway. For new construction, additions, full envelope retrofits, or any home with unusual orientation, glazing, or insulation, run an ACCA Manual J — the rule of thumb routinely oversizes by 30-50% on tight modern envelopes, leading to short-cycling and humidity problems. A [smart thermostat](https://www.amazon.com/s?k=smart+thermostat&tag=projectcalc-20) with cycle-time logging will tell you within a week whether your existing system is right-sized.',
+    },
+    {
+      q: 'Can I just match my old AC tonnage on replacement?',
+      a: 'Risky default. Most homes built before 2000 had oversized AC by current standards (rule of thumb hasn\'t changed, but envelopes got tighter and equipment got more efficient). If you\'ve added insulation, replaced windows, or air-sealed the attic since the original install, the new system should be one size smaller. If the old system short-cycled (kicked on and off frequently in moderate weather), that\'s also a sign it was oversized.',
+    },
+    {
+      q: 'What does SEER2 mean for my AC pick?',
+      a: 'SEER2 is the federal efficiency rating for residential AC since January 2023, replacing SEER. Federal minimum is 14.3 SEER2 (15.2 SEER2 in southern regions), and the high end is 22+ SEER2 for variable-speed inverter equipment. Higher SEER2 = lower bills but higher upfront cost. Sweet spot for most homes is 16-18 SEER2 — payback runs 5-7 years versus 14.3 SEER2 baseline. Pair any AC install with [washable filters](https://www.amazon.com/s?k=washable+air+filter&tag=projectcalc-20) or 4-inch media cabinet for static-pressure-friendly filtration.',
+    },
+  ],
+  'furnace-size-calculator': [
+    {
+      q: 'Why is furnace input BTU different from output BTU?',
+      a: 'Input BTU is the gas the burner consumes per hour — what\'s on the nameplate. Output BTU is the heat actually delivered to the house, which is input × AFUE efficiency. An 80,000 BTU input furnace at 80% AFUE delivers 64,000 BTU output; at 95% AFUE it delivers 76,000 output. Always size by output (the heat the house actually needs), then divide by AFUE to find the right input nameplate to order.',
+    },
+    {
+      q: 'Is bigger furnace better for very cold days?',
+      a: 'No. Manual J sizes furnaces for the 99% design temp — the temperature your area is colder than only 1% of the heating season hours. Sizing for the absolute coldest day on record means the furnace short-cycles 99% of the year, blowing through gas on startup losses without long efficient runs. A right-sized furnace will run nearly continuously on the coldest 2-3 days each year — that\'s the design intent, not a problem.',
+    },
+    {
+      q: 'How often should I change my furnace filter?',
+      a: '1-inch pleated filters: every 1-3 months depending on pets and usage. 4-inch media cabinet filters: every 6-12 months. Track replacement with the date written on the filter edge in marker. Stock [replacement furnace filters](https://www.amazon.com/s?k=furnace+air+filter+merv+11&tag=projectcalc-20) in MERV 8-11 for typical homes; MERV 13+ only if you have a system designed for the extra static pressure (most aren\'t — see the static pressure calculator).',
+    },
+  ],
+  'boiler-size-calculator': [
+    {
+      q: 'Modulating-condensing or cast-iron boiler — which lasts longer?',
+      a: 'Cast-iron boilers run 30-50 years with basic maintenance. Modulating-condensing boilers (mod-con) last 15-25 years — shorter life, but 10-15% lower fuel bills and dramatically better part-load efficiency. Mod-con only makes sense if your distribution system can run cooler return water (140°F or below); standard cast-iron radiators sized for 180°F supply water won\'t let a mod-con condense. Radiant floor systems and oversized fin-tube baseboard run cool enough.',
+    },
+    {
+      q: 'Why does radiant floor allow a smaller boiler?',
+      a: 'Radiant floor uses the entire floor as the radiator, so heat output per square foot is lower (~25-35 BTU/ft²) but coverage is uniform and water temp is much lower (90-130°F vs 180°F for fin-tube). Lower water temp = less standby loss in the distribution piping and condensing-mode operation in mod-con boilers. The 10-15% smaller boiler reflects both reduced design heat loss (uniform delivery is more efficient) and the option to use a smaller modulating boiler that throttles down to match part loads.',
+    },
+    {
+      q: 'How do I balance an existing radiator system?',
+      a: 'Two-step process. (1) [Thermostatic radiator valves (TRVs)](https://www.amazon.com/s?k=thermostatic+radiator+valve&tag=projectcalc-20) on each radiator let you set zone temps independently. (2) Lockshield valves on the return side throttle flow to under-served radiators (usually farthest from the boiler). Bleed all radiators at the start of heating season to remove trapped air — a $10 [radiator bleed key](https://www.amazon.com/s?k=radiator+bleed+key&tag=projectcalc-20) does the job. Cold tops on radiators = trapped air; cold bottoms = mineral sludge needing system flush.',
+    },
+  ],
+  'mini-split-sizing-calculator': [
+    {
+      q: 'Single-zone vs multi-zone mini-split — which is better?',
+      a: 'Single-zone (one outdoor unit per indoor head) has higher SEER2/HSPF2 efficiency, smaller footprint, and the unit modulates fully down to part loads. Multi-zone (one outdoor unit serving 2-5 indoor heads) is cheaper to install for whole-house coverage but loses 10-15% efficiency and the outdoor compressor often runs at fixed speed when only one zone calls for cooling. Rule: single-zone for 1-2 rooms, multi-zone for 3+ rooms.',
+    },
+    {
+      q: 'Do mini-splits work in cold weather?',
+      a: 'Modern hyper-heat (cold climate) mini-splits like Mitsubishi H2i and Fujitsu XLTH heat reliably down to -15°F outdoor air, with capacity dropping below 5°F. For climates with sustained sub-zero temps (Minnesota, Maine, Alaska), pair the mini-split with a backup heat source — propane, electric resistance, or wood — for the coldest days. Standard mini-splits (non-hyper-heat) lose performance below 20°F and shouldn\'t be sized as primary heat in cold climates.',
+    },
+    {
+      q: 'How much line set do I need for the install?',
+      a: 'Mini-splits ship with 15-25 ft of pre-charged [refrigerant line set](https://www.amazon.com/s?k=mini+split+line+set&tag=projectcalc-20). For longer runs (up to 50-100 ft depending on model) you cut and flare the line set yourself, then pull a vacuum and add refrigerant per the manufacturer\'s charge-per-foot spec. Line set adders are $4-8 per foot. Keep the run as short as possible — every extra foot adds capacity loss and pumps oil farther from the compressor. Add a [condensate pump](https://www.amazon.com/s?k=mini+split+condensate+pump&tag=projectcalc-20) if the line set can\'t drain to a gravity drain point.',
+    },
+  ],
+  'water-heater-size-calculator': [
+    {
+      q: 'Tank or tankless — which costs less long-term?',
+      a: 'Depends on usage pattern. Tankless saves 20-35% on energy bills if hot-water demand is moderate (under 60 gal/day) — most households save $80-200/year. Initial cost is 2-3× more ($1,200-2,500 installed vs $500-1,000 for a tank), payback is 8-15 years. Tank wins if you have heavy intermittent demand (multiple simultaneous showers + dishwasher + laundry), since tankless can\'t deliver more GPM than its rated capacity. The DOE Energy Saver site is the best tool for running your specific numbers.',
+    },
+    {
+      q: 'Do I need an expansion tank with a new water heater?',
+      a: 'Yes if your home has a pressure-reducing valve (PRV), check valve, or backflow preventer at the meter — meaning you\'re on a "closed" system. UPC and IPC both require a [thermal expansion tank](https://www.amazon.com/s?k=thermal+expansion+tank+water+heater&tag=projectcalc-20) on closed systems to absorb the volume change as cold water heats up (water expands ~2% from 50°F to 140°F). A 50-gallon water heater needs a 2-gallon expansion tank for typical residential pressure (60 PSI). Skipping it causes T&P relief valve drips, bulging tanks, or burst lines.',
+    },
+    {
+      q: 'Should I put my water heater on a stand?',
+      a: 'Required by code for gas water heaters in garages — UPC 507.13 and IFGC 305.4 both require the gas burner pilot 18 inches above the garage floor to keep gasoline vapor away from the ignition source. A [water heater stand](https://www.amazon.com/s?k=water+heater+stand+18+inch&tag=projectcalc-20) handles this. In conditioned spaces (utility room, basement), a [water heater drain pan](https://www.amazon.com/s?k=water+heater+drain+pan&tag=projectcalc-20) routed to a floor drain saves you from a $5,000 flood claim when the tank fails.',
+    },
+  ],
+  'topsoil-calculator': [
+    {
+      q: 'Bagged or bulk topsoil — when is each cheaper?',
+      a: 'Bulk delivery breaks even with bagged at about 1 cubic yard (~36 bags). Bulk runs $25-50 per yard delivered; bags run $4-7 per 0.75 ft³ bag. Above 1 yd³, bulk is dramatically cheaper — a 4-yard delivery for $200 replaces 144 bags at $720. Below 1 yd³, bagged is more convenient (no minimum order, no driveway cleanup, fits in a sedan trunk for a single raised bed).',
+    },
+    {
+      q: 'What\'s the difference between topsoil, garden soil, and compost?',
+      a: 'Topsoil: native excavated soil, mineral-heavy, low organic content (~3-5%) — used for fill, leveling, and lawn base. Garden soil: blended topsoil + compost + sometimes peat, sold for raised beds and planting — too rich for lawns, perfect for vegetables. Compost: 100% decomposed organic matter, mixed into garden beds at 20-30% by volume — too rich to plant directly into.',
+    },
+    {
+      q: 'How much topsoil for a 4×8 raised garden bed?',
+      a: 'A standard 4×8×12-inch raised bed needs 32 ft³ = 1.18 yd³ of fill. A common money-saving trick is to layer the bottom 6 inches with branches, leaves, and partially-finished compost (the "hugelkultur" method), then the top 6 inches with quality garden soil. Cuts soil cost in half and feeds the bed for years as the bottom layer decomposes. A [garden cart](https://www.amazon.com/s?k=garden+dump+cart&tag=projectcalc-20) moves bulk soil 5× faster than a wheelbarrow over flat ground.',
+    },
+  ],
 };
 
 export const getFAQ = (slug: string): FAQItem[] => faqs[slug] || [];
