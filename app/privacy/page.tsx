@@ -49,13 +49,6 @@ export default function Privacy() {
             These logs are retained for a short period and never combined with
             other data to identify individuals.
           </p>
-          <p>
-            <strong>Local storage on your device.</strong> Each calculator saves
-            your last-used inputs in your browser&apos;s localStorage so you
-            don&apos;t have to retype them. This data stays on your device. You can
-            clear it anytime via your browser settings.
-          </p>
-
           <h2 style={{ marginTop: 32 }}>What we don&apos;t collect</h2>
           <p>
             We don&apos;t use Google Analytics, Facebook Pixel, ad-tracking

@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         {/* @ts-ignore */}
-        <meta name='impact-site-verification' value='bf25917c-33a6-4451-b375-cc47d6789f12' />
+        <meta name='impact-site-verification' value='e1cdc443-992b-4317-9ff5-5fb602ce62e3' />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -80,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Sister project: <a href="https://operaite.net">Operaite</a> — AI tools for small business owners
           </div>
           <div className="footer-links">
+            <Link href="/about">About</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
             <Link href="https://github.com/sabanite08/projectcalc">GitHub</Link>
