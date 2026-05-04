@@ -16,6 +16,28 @@ export default function CalculatorView({ slug }: { slug: string }) {
   });
   const [result, setResult] = useState<CalcResult | null>(null);
 
+  // Prefill from URL search params (sent by /sketch and other helpers)
+  useEffect(() => {
+    if (typeof window === 'undefined' || !calc) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.toString() === '') return;
+    setData(prev => {
+      const next = { ...prev };
+      calc.inputs.forEach(inp => {
+        const v = params.get(inp.id);
+        if (v === null) return;
+        if (inp.type === 'select') {
+          if (inp.options.some(([opt]) => opt === v)) next[inp.id] = v;
+        } else {
+          const num = parseFloat(v);
+          if (!isNaN(num)) next[inp.id] = num;
+        }
+      });
+      return next;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (!calc) return null;
 
   // Recalculate when all number fields are filled with valid numbers.

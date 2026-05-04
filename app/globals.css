@@ -1328,6 +1328,124 @@ footer.site-footer a:hover { color: var(--hi-vis); }
   color: var(--hi-vis);
 }
 
+/* ─── ROOM SKETCHER ─── */
+.sketcher {
+  max-width: 760px;
+}
+
+.sketcher-canvas-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.sketcher-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+}
+
+.sketcher-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.sketcher-readout {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.readout-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 3px 0;
+}
+
+.readout-key {
+  color: var(--ink-3);
+  letter-spacing: 0.05em;
+}
+
+.readout-val {
+  color: var(--hi-vis);
+  font-weight: 700;
+}
+
+.sketcher-launchers {
+  margin-top: 24px;
+}
+
+.launcher-group {
+  margin-bottom: 18px;
+}
+
+.launcher-group-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.launcher-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.launcher-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--hi-vis);
+  border-radius: 4px;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.launcher-btn:hover {
+  background: var(--hi-vis);
+  color: var(--bg);
+}
+
+.launcher-btn-disabled {
+  border-color: var(--line);
+  color: var(--ink-3);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.launcher-hint {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .sketcher-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ─── PRINT ─── */
 @media print {
   header.site-header, footer.site-footer, .ticker, .ad-slot, .seo-block, .related, .actions, .scroll-cue, .breadcrumb, .calc-search { display: none !important; }
