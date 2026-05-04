@@ -82,21 +82,15 @@ export default function About() {
 
           <h2 style={{ marginTop: 32 }}>Contact</h2>
           <p>
-            Feedback, corrections, or partnership inquiries:{' '}
-            <a href="mailto:bullbears21@gmail.com" style={{ color: 'var(--hi-vis)' }}>
-              bullbears21@gmail.com
-            </a>
-          </p>
-          <p>
-            Open-source code and issue tracker:{' '}
+            Feedback, corrections, or partnership inquiries — open an issue on the{' '}
             <a
               href="https://github.com/sabanite08/projectcalc"
               style={{ color: 'var(--hi-vis)' }}
               target="_blank"
               rel="noopener noreferrer"
             >
-              github.com/sabanite08/projectcalc
-            </a>
+              GitHub repository
+            </a>.
           </p>
         </div>
       </section>
