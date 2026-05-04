@@ -3044,6 +3044,128 @@ export const calculators: Calculator[] = [
         ]
       };
     }
+  },
+  {
+    slug: 'floor-joist-span-calculator',
+    name: 'Floor Joist Span',
+    category: 'construction',
+    trade: 'Carpentry',
+    desc: 'Max joist span',
+    formula: 'Per IRC R502.3 + AWC tables',
+    title: 'MAX JOIST SPAN',
+    metaTitle: 'Floor Joist Span Calculator — IRC R502.3 + AWC Tables | ProjectCalc',
+    metaDesc: 'Floor joist span calculator. Pick lumber size, spacing, live load, and species — get the maximum allowable span per IRC R502.3 and AWC Maximum Spans tables.',
+    seoIntro: 'This floor joist span calculator returns the maximum allowable simple span for residential floor joists per IRC R502.3.1 and the American Wood Council Maximum Spans tables. The calculator covers four common joist sizes (2×6 through 2×12), two standard spacings (16 and 24 in OC), the two residential live loads (30 psf for sleeping rooms, 40 psf for living areas), and three common framing species (Doug Fir-Larch, Spruce-Pine-Fir, Southern Pine) — all at #2 grade with L/360 deflection limit and 10 psf dead load. Spans assume a simple span between bearing walls, no cantilever, and no concentrated loads.',
+    note: 'Estimate only — based on simplified AWC Maximum Spans for #2 grade lumber, L/360 deflection, 10 psf dead load. Verify with engineer or local code official before framing.',
+    inputs: [
+      { id: 'size', label: 'Joist size', unit: '', type: 'select', default: '2x10',
+        options: [['2x6','2×6'],['2x8','2×8'],['2x10','2×10'],['2x12','2×12']] },
+      { id: 'spacing', label: 'Spacing (OC)', unit: '', type: 'select', default: '16',
+        tooltip: '16 in OC is the residential standard. 24 in OC reduces lumber cost about 30% but cuts span 10-15% and may need thicker sheathing.',
+        options: [['16','16 in'],['24','24 in']] },
+      { id: 'live', label: 'Live load', unit: '', type: 'select', default: '40',
+        tooltip: '30 psf for sleeping rooms only. 40 psf for general living areas including kitchens, dining rooms, halls, and bathrooms.',
+        options: [['30','30 psf (sleeping rooms)'],['40','40 psf (living areas)']] },
+      { id: 'species', label: 'Lumber species', unit: '', type: 'select', default: 'DFL',
+        tooltip: 'DFL = Douglas Fir-Larch (West Coast). SPF = Spruce-Pine-Fir (Canadian, common in Northeast and Midwest). SP = Southern Pine (Southeast).',
+        options: [
+          ['DFL','Doug Fir-Larch #2'],
+          ['SPF','Spruce-Pine-Fir #2'],
+          ['SP','Southern Pine #2']
+        ] }
+    ],
+    calc: (data) => {
+      const size = data.size as string;
+      const spacing = +data.spacing;
+      const live = +data.live;
+      const species = data.species as string;
+      const SPANS: Record<string, Record<string, Record<number, Record<number, number>>>> = {
+        DFL: {
+          '2x6':  { 16: { 30: 10.75, 40: 9.75  }, 24: { 30: 9.33,  40: 8.5   } },
+          '2x8':  { 16: { 30: 14.17, 40: 12.83 }, 24: { 30: 12.33, 40: 11.25 } },
+          '2x10': { 16: { 30: 18.0,  40: 16.25 }, 24: { 30: 15.75, 40: 14.25 } },
+          '2x12': { 16: { 30: 21.75, 40: 19.83 }, 24: { 30: 19.08, 40: 17.25 } },
+        },
+        SPF: {
+          '2x6':  { 16: { 30: 10.25, 40: 9.33  }, 24: { 30: 8.92,  40: 8.0   } },
+          '2x8':  { 16: { 30: 13.5,  40: 12.25 }, 24: { 30: 11.75, 40: 10.67 } },
+          '2x10': { 16: { 30: 17.17, 40: 15.58 }, 24: { 30: 15.0,  40: 13.58 } },
+          '2x12': { 16: { 30: 20.83, 40: 18.92 }, 24: { 30: 18.17, 40: 16.42 } },
+        },
+        SP: {
+          '2x6':  { 16: { 30: 10.92, 40: 9.92  }, 24: { 30: 9.5,   40: 8.67  } },
+          '2x8':  { 16: { 30: 14.42, 40: 13.08 }, 24: { 30: 12.58, 40: 11.42 } },
+          '2x10': { 16: { 30: 18.33, 40: 16.5  }, 24: { 30: 16.0,  40: 14.42 } },
+          '2x12': { 16: { 30: 22.0,  40: 20.0  }, 24: { 30: 19.42, 40: 17.5  } },
+        },
+      };
+      const spanFt = SPANS[species]?.[size]?.[spacing]?.[live] ?? 0;
+      const ft = Math.floor(spanFt);
+      const inches = Math.round((spanFt - ft) * 12);
+      const spanLabel = `${ft}'-${inches}"`;
+      return {
+        main: spanLabel,
+        unit: 'MAX SPAN',
+        detail: [
+          ['Joist', size],
+          ['Spacing', spacing + ' in OC'],
+          ['Live + dead load', live + ' + 10 psf'],
+          ['Species/grade', species + ' #2'],
+          ['Deflection limit', 'L/360'],
+          ['Code reference', 'IRC R502.3.1 / AWC'],
+          ['Disclaimer', 'Estimate only — verify with engineer']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'rebar-calculator',
+    name: 'Rebar',
+    category: 'construction',
+    desc: 'Rebar grid for slabs',
+    formula: 'linft = (long_bars × L) + (short_bars × W)',
+    title: 'REBAR ORDER',
+    metaTitle: 'Rebar Calculator — Linear Feet and Sticks for a Slab | ProjectCalc',
+    metaDesc: 'Rebar calculator for concrete slabs. Enter slab dimensions, spacing, and bar size — get total linear feet, weight, and 20 ft sticks to order.',
+    seoIntro: 'This rebar calculator estimates the rebar grid for a residential concrete slab — driveway, patio, garage floor, or shed pad. Enter the slab length, width, the bar spacing on center, and the bar size (#3, #4, or #5 are common for residential slabs). The calculator returns the bar count in each direction, total linear feet, total weight, and the number of 20 ft sticks to order from the supply yard. Standard residential slab spacing is 18 in OC for patios and garages, 12-16 in OC for driveways carrying vehicle weight.',
+    note: 'Sized for unreinforced and lightly reinforced slabs only. Slabs supporting columns, walls, or vehicles over 5,000 lb need engineered design. Verify cover (3 in from earth, 1.5 in from finished surface) per ACI 318.',
+    inputs: [
+      { id: 'L', label: 'Slab length', unit: 'ft', default: 20, step: 1 },
+      { id: 'W', label: 'Slab width', unit: 'ft', default: 12, step: 1 },
+      { id: 'spacing', label: 'Bar spacing (OC)', unit: '', type: 'select', default: '18',
+        tooltip: '12 in OC for driveways and heavy-load slabs. 18 in OC for patios and garage floors. 24 in OC for sidewalks and light-duty slabs.',
+        options: [['12','12 in (driveway)'],['16','16 in'],['18','18 in (patio)'],['24','24 in (sidewalk)']] },
+      { id: 'size', label: 'Rebar size', unit: '', type: 'select', default: '#4',
+        tooltip: '#3 (3/8 in) is light-duty for sidewalks. #4 (1/2 in) is the residential standard for slabs and footings. #5 (5/8 in) for driveways and heavier loads.',
+        options: [['#3','#3 (3/8 in, ~0.38 lb/ft)'],['#4','#4 (1/2 in, ~0.67 lb/ft)'],['#5','#5 (5/8 in, ~1.04 lb/ft)']] }
+    ],
+    calc: (data) => {
+      const L = +data.L;
+      const W = +data.W;
+      const spacing = +data.spacing;
+      const size = data.size as string;
+      const spacingFt = spacing / 12;
+      const barsLong = Math.ceil(W / spacingFt) + 1;
+      const barsShort = Math.ceil(L / spacingFt) + 1;
+      const linftLong = barsLong * L;
+      const linftShort = barsShort * W;
+      const totalLinft = linftLong + linftShort;
+      const sticks20 = Math.ceil(totalLinft / 20);
+      const weightPerFt: Record<string, number> = { '#3': 0.376, '#4': 0.668, '#5': 1.043 };
+      const totalWeight = totalLinft * weightPerFt[size];
+      return {
+        main: sticks20.toLocaleString(),
+        unit: 'STICKS (20 ft)',
+        detail: [
+          ['Slab area', (L*W).toFixed(0) + ' ft²'],
+          ['Bars long direction', barsLong + ' × ' + L + ' ft'],
+          ['Bars short direction', barsShort + ' × ' + W + ' ft'],
+          ['Total linear feet', totalLinft.toFixed(0) + ' ft'],
+          ['Total weight', totalWeight.toFixed(0) + ' lb of ' + size],
+          ['20 ft sticks', sticks20]
+        ]
+      };
+    }
   }
 ];
 

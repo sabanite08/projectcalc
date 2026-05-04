@@ -50,6 +50,8 @@ import retainingWall from './retaining-wall-block-count';
 import roofPitch from './roof-pitch-how-to-find';
 import roofTruss from './roof-truss-spacing-and-count';
 import snowLoad from './snow-load-design';
+import floorJoist from './floor-joist-span-tables';
+import rebar from './rebar-for-concrete-slabs';
 
 export const posts: BlogPost[] = [
   paverQuantity,
@@ -58,6 +60,8 @@ export const posts: BlogPost[] = [
   roofPitch,
   roofTruss,
   snowLoad,
+  floorJoist,
+  rebar,
   hardwood,
   carpet,
   vinyl,
