@@ -8,7 +8,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Should I buy 4×8 or 4×12 drywall sheets?',
-      a: '4×8 is easier for one person to handle and fits most rooms with less waste. 4×12 reduces seams (faster mudding, smoother finish) but requires two people and a truck. For ceilings or rooms over 12 ft on the long side, 4×12 saves time. Most DIYers stick with 4×8.',
+      a: '4×8 is easier for one person to handle and fits most rooms with less waste. 4×12 reduces seams (faster mudding, smoother finish) but requires two people and a truck. For ceilings or rooms over 12 ft on the long side, 4×12 saves time — a [drywall lift](https://www.amazon.com/s?k=drywall+lift&tag=projectcalc-20) makes solo ceiling installs realistic. Most DIYers stick with 4×8.',
     },
     {
       q: 'Do I need to subtract windows and doors?',

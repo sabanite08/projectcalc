@@ -7,6 +7,7 @@ import { getPostsForCalc } from '@/lib/posts';
 import CalculatorView from '@/components/CalculatorView';
 import ToolkitCTA from '@/components/ToolkitCTA';
 import { getToolkitForCalc } from '@/lib/toolkits';
+import { renderInline, stripInlineLinks } from '@/lib/render';
 
 const categoryLabels: Record<string, string> = {
   construction: 'TRADES',
@@ -47,6 +48,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
     .slice(0, 6);
 
   const faq = getFAQ(calc.slug);
+  const hasAffiliateLink = faq.some(f => /\]\([^)]*amazon\./i.test(f.a));
   const relatedPosts = getPostsForCalc(calc.slug);
   const isFinanceAdvice = calc.category === 'finance' && calc.slug !== 'tip-calculator';
   const toolkit = getToolkitForCalc(calc.slug);
@@ -69,7 +71,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
       mainEntity: faq.map(item => ({
         '@type': 'Question',
         name: item.q,
-        acceptedAnswer: { '@type': 'Answer', text: item.a },
+        acceptedAnswer: { '@type': 'Answer', text: stripInlineLinks(item.a) },
       })),
     });
   }
@@ -133,10 +135,16 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
         {faq.length > 0 && (
           <div className="faq-block">
             <h2>Common questions</h2>
+            {hasAffiliateLink && (
+              <p className="affiliate-note">
+                Tool and material links below are affiliate links — we may earn a
+                small commission if you buy, at no extra cost to you.
+              </p>
+            )}
             {faq.map((item, i) => (
               <details key={i} className="faq-item">
                 <summary>{item.q}</summary>
-                <div className="faq-answer">{item.a}</div>
+                <div className="faq-answer">{renderInline(item.a)}</div>
               </details>
             ))}
           </div>
