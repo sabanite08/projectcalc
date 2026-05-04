@@ -3403,7 +3403,7 @@ export const calculators: Calculator[] = [
   {
     slug: 'water-heater-size-calculator',
     name: 'Water Heater Size',
-    category: 'home',
+    category: 'construction',
     trade: 'Plumbing',
     desc: 'Tank gallons or tankless GPM',
     formula: 'Per DOE FHR + GPM tables',

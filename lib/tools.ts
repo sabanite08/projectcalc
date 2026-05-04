@@ -172,7 +172,6 @@ const HOME_OVERRIDES: Record<string, string> = {
   'paver-calculator': 'masonry',
   'paver-sand-calculator': 'masonry',
   'retaining-wall-calculator': 'masonry',
-  'water-heater-size-calculator': 'plumbing',
 };
 
 export function getToolsCategoryForCalc(
