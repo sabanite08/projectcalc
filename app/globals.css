@@ -1341,6 +1341,88 @@ footer.site-footer a:hover { color: var(--hi-vis); }
   margin-bottom: 20px;
 }
 
+.sketcher-handle {
+  fill: #ffd400;
+  stroke: #0e0e0c;
+  stroke-width: 2;
+  transition: r 0.1s, fill 0.1s;
+  touch-action: none;
+}
+
+.sketcher-handle:hover {
+  fill: #ffec5c;
+}
+
+.sketcher-mode {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mode-pill input {
+  margin: 0;
+  accent-color: var(--hi-vis);
+}
+
+.mode-pill.is-active {
+  border-color: var(--hi-vis);
+  color: var(--hi-vis);
+}
+
+.sketcher-cutout {
+  margin-top: 8px;
+  margin-bottom: 32px;
+  padding: 16px;
+  background: var(--bg-2);
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+}
+
+.cutout-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.cutout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.cutout-warn {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 90, 31, 0.08);
+  border-left: 3px solid var(--safety);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+@media (max-width: 600px) {
+  .cutout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .sketcher-svg {
   display: block;
   width: 100%;
