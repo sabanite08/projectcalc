@@ -2911,6 +2911,139 @@ export const calculators: Calculator[] = [
         ]
       };
     }
+  },
+  {
+    slug: 'roof-pitch-calculator',
+    name: 'Roof Pitch',
+    category: 'home',
+    desc: 'Pitch, angle, slope %',
+    formula: 'pitch = (rise × 12) ÷ run',
+    title: 'ROOF PITCH',
+    metaTitle: 'Roof Pitch Calculator — Rise Over Run, Angle, and Slope | ProjectCalc',
+    metaDesc: 'Free roof pitch calculator. Enter rise and run — get pitch in /12, angle in degrees, slope percentage, and the multiplier to convert plan area to roof area.',
+    seoIntro: 'This roof pitch calculator converts a measured rise and run into the four ways pitch is expressed: the trade format (X in 12), the angle in degrees, the slope as a percentage, and the slope multiplier used to convert plan-view square footage into actual roof surface area for shingle ordering. Standard residential pitches run from 4/12 (low) through 12/12 (steep). Anything under 2/12 is considered low slope and needs a membrane roof, not asphalt shingles.',
+    note: 'Measure rise at exactly 12 inches of run for the trade format. Pitches below 2/12 require membrane roofing. Below 4/12 needs ice and water shield in cold climates.',
+    inputs: [
+      { id: 'rise', label: 'Rise', unit: 'in', default: 6, step: 0.25,
+        tooltip: 'Vertical distance the roof goes up over the chosen run distance. Measure with a level held flat against the rafter — the gap between the level tip and the roof at 12 in horizontal is your rise.' },
+      { id: 'run', label: 'Run (horizontal)', unit: 'in', default: 12, step: 1,
+        tooltip: 'Horizontal distance over which the rise was measured. The trade convention is exactly 12 inches — keep this at 12 unless you are converting a measurement taken over a different span.' }
+    ],
+    calc: (data) => {
+      const rise = +data.rise;
+      const run = +data.run;
+      const pitchPer12 = (rise * 12) / run;
+      const angleDeg = Math.atan(rise / run) * 180 / Math.PI;
+      const percentage = (rise / run) * 100;
+      const slopeMultiplier = Math.sqrt(1 + Math.pow(rise / run, 2));
+      let materialNote = '';
+      if (pitchPer12 < 2) materialNote = 'Low slope — membrane required';
+      else if (pitchPer12 < 4) materialNote = 'Add ice & water shield (cold)';
+      else if (pitchPer12 <= 12) materialNote = 'Standard asphalt OK';
+      else materialNote = 'Steep slope — special install';
+      return {
+        main: pitchPer12.toFixed(1) + '/12',
+        unit: 'PITCH',
+        detail: [
+          ['Angle', angleDeg.toFixed(1) + '°'],
+          ['Slope %', percentage.toFixed(1) + '%'],
+          ['Plan-to-roof multiplier', slopeMultiplier.toFixed(3)],
+          ['Material guidance', materialNote]
+        ]
+      };
+    }
+  },
+  {
+    slug: 'roof-truss-calculator',
+    name: 'Roof Trusses',
+    category: 'construction',
+    trade: 'Carpentry',
+    desc: 'Truss count for a roof',
+    formula: 'trusses = ceil(L × 12 ÷ spacing) + 1',
+    title: 'TRUSS COUNT',
+    metaTitle: 'Roof Truss Calculator — Count for 16 or 24 OC Spacing | ProjectCalc',
+    metaDesc: 'Roof truss calculator. Enter building length and truss spacing — get the number of common trusses, gable end trusses, and total to order.',
+    seoIntro: 'This roof truss calculator estimates the number of prefabricated roof trusses needed for a residential or light commercial building, based on building length and spacing. Standard residential spacing is 24 inches on center; 16-inch spacing is used for heavier snow loads, longer spans, or to allow lighter top-chord lumber. The calculator returns common trusses for the field, gable end trusses for the two end walls, and the total piece count to order. Engineered trusses must be sized by the supplier for your specific span, snow load, and roof loads.',
+    note: 'Engineered design required — supplier sizes lumber and connections for span, snow, and dead loads. This calculator handles count only, not truss design or pricing.',
+    inputs: [
+      { id: 'len', label: 'Building length', unit: 'ft', default: 30, step: 1,
+        tooltip: 'Length of the building running parallel to the ridge. The trusses span the building width (perpendicular to length) and are spaced along this length dimension.' },
+      { id: 'spacing', label: 'Truss spacing', unit: '', type: 'select', default: '24',
+        tooltip: '24 in OC is the residential standard. 16 in OC is used for heavy snow regions, longer spans (over 32 ft), or when lighter top-chord lumber is preferred.',
+        options: [['16','16 in OC (heavy snow / long span)'],['24','24 in OC (standard residential)']] },
+      { id: 'gable', label: 'Gable end trusses?', unit: '', type: 'select', default: 'yes',
+        tooltip: 'Gable end trusses are special trusses with vertical studs at each cavity — they double as the gable wall framing. Skip if your end walls are conventionally framed.',
+        options: [['yes','Yes (2 gable trusses)'],['no','No (all common trusses)']] }
+    ],
+    calc: (data) => {
+      const len = +data.len;
+      const spacing = +data.spacing;
+      const gable = data.gable as string;
+      const total = Math.ceil((len * 12) / spacing) + 1;
+      const gableCount = gable === 'yes' ? 2 : 0;
+      const commonCount = total - gableCount;
+      return {
+        main: total.toLocaleString(),
+        unit: 'TRUSSES',
+        detail: [
+          ['Building length', len + ' ft'],
+          ['Spacing', spacing + ' in OC'],
+          ['Common trusses', commonCount],
+          ['Gable end trusses', gableCount],
+          ['Lead time', 'Order 4-8 weeks ahead'],
+          ['Disclaimer', 'Engineered by supplier — verify span and load']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'snow-load-calculator',
+    name: 'Snow Load',
+    category: 'construction',
+    trade: 'Carpentry',
+    desc: 'Roof snow load (ASCE 7)',
+    formula: 'pf = 0.7 × Ce × Ct × I × pg',
+    title: 'ROOF SNOW LOAD',
+    metaTitle: 'Roof Snow Load Calculator — ASCE 7 Simplified | ProjectCalc',
+    metaDesc: 'Snow load calculator using the ASCE 7 simplified formula. Enter ground snow, roof type, exposure, and pitch — get the design snow load in psf.',
+    seoIntro: 'This snow load calculator returns the design snow load for a residential pitched roof using the ASCE 7 simplified formula: pf = 0.7 × Ce × Ct × I × pg. The four multipliers account for exposure (Ce), thermal effect (Ct, heated vs unheated structures), importance (I, set to 1.0 for residential Risk Category II), and ground snow load (pg, the regional value from your local building department or snowloadinfo.com). For sloped roofs above 30 degrees on warm slippery surfaces, the slope factor Cs reduces the load further. The result is the design load (psf) that rafters, trusses, and sheathing must support — used by structural engineers and code officials to verify framing.',
+    note: 'Per ASCE 7-22 simplified method. Estimate only — local jurisdictions may require site-specific snow analysis. Always verify pg with your building department.',
+    inputs: [
+      { id: 'pg', label: 'Ground snow load (pg)', unit: 'psf', default: 30, step: 5,
+        tooltip: 'Regional ground snow load in pounds per square foot. Pull from your local building department or snowloadinfo.com. Common values: Boston 35, Denver 25, Chicago 25, Buffalo 50, mountain regions 70-100+.' },
+      { id: 'ct', label: 'Roof type', unit: '', type: 'select', default: '1.0',
+        tooltip: 'Heated: house with insulated, conditioned space below the roof. Unheated: barn, detached garage, or open-air structure where roof temperature matches outside air.',
+        options: [['1.0','Heated (house) — Ct = 1.0'],['1.2','Unheated (barn/shed) — Ct = 1.2']] },
+      { id: 'ce', label: 'Exposure', unit: '', type: 'select', default: '1.0',
+        tooltip: 'Partially exposed (default): typical suburban with some trees or nearby buildings. Fully exposed: open terrain, no obstructions. Sheltered: dense trees or taller buildings on all sides.',
+        options: [['0.9','Fully exposed — Ce = 0.9'],['1.0','Partially exposed (typical) — Ce = 1.0'],['1.2','Sheltered — Ce = 1.2']] },
+      { id: 'pitch', label: 'Roof pitch', unit: '/12', default: 6, step: 0.5,
+        tooltip: 'Rise per 12 in run. Slope reduction kicks in above 7/12 (about 30 degrees) for asphalt shingle and warm slippery roofs.' }
+    ],
+    calc: (data) => {
+      const pg = +data.pg;
+      const ct = +data.ct;
+      const ce = +data.ce;
+      const pitch = +data.pitch;
+      const I = 1.0;
+      const pf = 0.7 * ce * ct * I * pg;
+      const angleDeg = Math.atan(pitch / 12) * 180 / Math.PI;
+      let cs = 1.0;
+      if (angleDeg > 30) cs = Math.max(0, (70 - angleDeg) / 40);
+      const ps = cs * pf;
+      return {
+        main: ps.toFixed(1),
+        unit: 'PSF (SLOPED)',
+        detail: [
+          ['Flat roof load (pf)', pf.toFixed(1) + ' psf'],
+          ['Roof angle', angleDeg.toFixed(1) + '°'],
+          ['Slope factor (Cs)', cs.toFixed(2)],
+          ['Sloped roof load (ps)', ps.toFixed(1) + ' psf'],
+          ['Per ASCE 7-22', 'Residential, Risk Cat II'],
+          ['Disclaimer', 'Estimate only — verify with code official']
+        ]
+      };
+    }
   }
 ];
 

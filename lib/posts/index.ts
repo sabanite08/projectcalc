@@ -47,11 +47,17 @@ import heatLoss from './heat-loss-envelope';
 import paverQuantity from './paver-quantity-and-pattern-waste';
 import paverSand from './paver-base-and-sand-yards';
 import retainingWall from './retaining-wall-block-count';
+import roofPitch from './roof-pitch-how-to-find';
+import roofTruss from './roof-truss-spacing-and-count';
+import snowLoad from './snow-load-design';
 
 export const posts: BlogPost[] = [
   paverQuantity,
   paverSand,
   retainingWall,
+  roofPitch,
+  roofTruss,
+  snowLoad,
   hardwood,
   carpet,
   vinyl,
