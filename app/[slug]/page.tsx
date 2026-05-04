@@ -8,6 +8,7 @@ import CalculatorView from '@/components/CalculatorView';
 import ToolkitCTA from '@/components/ToolkitCTA';
 import { getToolkitForCalc } from '@/lib/toolkits';
 import { renderInline, stripInlineLinks } from '@/lib/render';
+import { getToolsCategoryForCalc } from '@/lib/tools';
 
 const categoryLabels: Record<string, string> = {
   construction: 'TRADES',
@@ -52,6 +53,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
   const relatedPosts = getPostsForCalc(calc.slug);
   const isFinanceAdvice = calc.category === 'finance' && calc.slug !== 'tip-calculator';
   const toolkit = getToolkitForCalc(calc.slug);
+  const toolsCategory = getToolsCategoryForCalc(calc.slug, calc.trade, calc.category);
 
   // JSON-LD structured data for Google — combine WebApplication + FAQPage in @graph
   const ldGraph: object[] = [
@@ -97,6 +99,16 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
         </div>
 
         <CalculatorView slug={calc.slug} />
+
+        {toolsCategory && (
+          <Link href={`/tools/${toolsCategory.slug}`} className="tools-cta">
+            <div className="tools-cta-label">RECOMMENDED TOOLS</div>
+            <div className="tools-cta-text">
+              {toolsCategory.name} we recommend for projects like this
+            </div>
+            <div className="tools-cta-arrow">→</div>
+          </Link>
+        )}
 
         {toolkit && <ToolkitCTA toolkit={toolkit} />}
 

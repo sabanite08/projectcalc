@@ -925,21 +925,22 @@ footer.site-footer a:hover { color: var(--hi-vis); }
   display: flex;
   align-items: center;
   background: var(--bg-2);
-  border: 1px solid var(--line);
+  border: 2px solid var(--hi-vis);
   border-radius: 4px;
   padding: 0 10px;
-  height: 34px;
-  transition: border-color 0.15s, background 0.15s;
+  height: 36px;
+  box-shadow: 0 0 0 3px rgba(255, 212, 0, 0.18);
+  transition: box-shadow 0.15s, background 0.15s, border-color 0.15s;
 }
 
 .calc-search:focus-within {
-  border-color: var(--hi-vis);
   background: var(--bg-3);
+  box-shadow: 0 0 0 4px rgba(255, 212, 0, 0.30);
 }
 
 .calc-search-icon {
   font-size: 14px;
-  color: var(--ink-3);
+  color: var(--hi-vis);
   margin-right: 8px;
   line-height: 1;
 }
@@ -1181,6 +1182,150 @@ footer.site-footer a:hover { color: var(--hi-vis); }
 .offline-retry:hover {
   background: var(--hi-vis);
   color: var(--bg);
+}
+
+/* ─── TOOLS PAGES ─── */
+.trade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.trade-tile {
+  display: block;
+  padding: 20px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.trade-tile:hover {
+  border-color: var(--hi-vis);
+  transform: translateY(-1px);
+}
+
+.trade-tile .cat-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  color: var(--hi-vis);
+  margin-bottom: 6px;
+}
+
+.trade-tile .cat-desc {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.tools-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+  max-width: 760px;
+}
+
+.tool-card {
+  display: block;
+  padding: 18px 20px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.tool-card:hover {
+  border-color: var(--hi-vis);
+  background: var(--bg-3);
+}
+
+.tool-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.tool-name {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-essential {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  background: var(--hi-vis);
+  color: var(--bg);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+.tool-retailer {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--hi-vis);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tool-blurb {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* ─── TOOLS CTA ON CALC PAGES ─── */
+.tools-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  margin-top: 24px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.tools-cta:hover {
+  border-color: var(--hi-vis);
+  background: var(--bg-3);
+}
+
+.tools-cta-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--hi-vis);
+  white-space: nowrap;
+}
+
+.tools-cta-text {
+  flex: 1;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.tools-cta-arrow {
+  font-size: 18px;
+  color: var(--hi-vis);
 }
 
 /* ─── PRINT ─── */
