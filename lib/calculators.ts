@@ -3166,6 +3166,219 @@ export const calculators: Calculator[] = [
         ]
       };
     }
+  },
+  {
+    slug: 'ac-tonnage-calculator',
+    name: 'AC Tonnage',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'AC size in tons',
+    formula: 'tons = (ft² × 20 × adj) ÷ 12,000',
+    title: 'AC TONNAGE',
+    metaTitle: 'AC Tonnage Calculator — What Size AC Do I Need | ProjectCalc',
+    metaDesc: 'AC tonnage calculator. Enter room size, sun exposure, and occupants — get the cooling tons and recommended residential AC unit size.',
+    seoIntro: 'This AC tonnage calculator returns the cooling capacity needed for a room or whole house, expressed in tons (the unit HVAC contractors quote and that residential AC equipment is rated in). 1 ton = 12,000 BTU/hr of cooling. The math is the standard residential rule of thumb — 20 BTU per square foot of conditioned area, adjusted for sun exposure and occupant count, divided by 12,000 to convert to tons. For a tighter spec on equipment over 3 tons or houses with unusual envelope construction, an HVAC contractor should run a full Manual J load calculation.',
+    note: 'Rule of thumb. 1 ton = 12,000 BTU/hr. Add 600 BTU/person above 2. For tight specs use Manual J.',
+    inputs: [
+      { id: 'sqft', label: 'Conditioned area', unit: 'ft²', default: 1500, step: 50 },
+      { id: 'sun', label: 'Sun exposure', unit: '', default: 'normal', type: 'select',
+        options: [['shaded','Heavily shaded (-10%)'],['normal','Normal'],['sunny','Very sunny (+10%)']] },
+      { id: 'occ', label: 'Occupants (regular)', unit: 'ppl', default: 4, step: 1 }
+    ],
+    calc: (data) => {
+      const sqft = +data.sqft, sun = data.sun as string, occ = +data.occ;
+      let base = sqft * 20;
+      if (sun === 'shaded') base *= 0.9;
+      if (sun === 'sunny') base *= 1.1;
+      const extra = Math.max(0, occ - 2) * 600;
+      const total = base + extra;
+      const tons = total / 12000;
+      const unit = tons <= 1.0 ? '1.0 ton' : tons <= 1.5 ? '1.5 ton' : tons <= 2.0 ? '2.0 ton' : tons <= 2.5 ? '2.5 ton' : tons <= 3.0 ? '3.0 ton' : tons <= 3.5 ? '3.5 ton' : tons <= 4.0 ? '4.0 ton' : tons <= 4.5 ? '4.5 ton' : tons <= 5.0 ? '5.0 ton' : '5.0+ ton (consider zoning)';
+      return {
+        main: tons.toFixed(1),
+        unit: 'TONS',
+        detail: [
+          ['Total cooling load', Math.round(total).toLocaleString() + ' BTU/hr'],
+          ['Base load (20 BTU/ft²)', Math.round(base).toLocaleString()],
+          ['Occupant load', extra.toLocaleString()],
+          ['Suggested unit', unit],
+          ['Standard sizes', '1.5 / 2.0 / 2.5 / 3.0 / 3.5 / 4.0 / 5.0 ton']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'furnace-size-calculator',
+    name: 'Furnace Size',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'Furnace BTU by climate',
+    formula: 'BTU/hr = ft² × climate_factor',
+    title: 'FURNACE SIZE',
+    metaTitle: 'Furnace Size Calculator — BTU by Climate Zone | ProjectCalc',
+    metaDesc: 'Furnace size calculator. Enter house square footage and climate zone — get the heating BTU and recommended furnace input size accounting for AFUE.',
+    seoIntro: 'This furnace size calculator returns the heating output a residential furnace needs for a given conditioned area and climate zone. The rule of thumb runs 25-60 BTU per square foot of heating output depending on climate severity, building tightness, and insulation level. The calculator returns both heating output BTU/hr (what the equipment delivers to the house) and input BTU/hr (the rated nameplate size, accounting for typical 80-95% AFUE efficiency). For tight specs in cold climates or large houses, an HVAC contractor should run an ACCA Manual J load calculation against the actual building envelope.',
+    note: 'Rule of thumb based on climate zone. AFUE 80% common for older furnaces, 90-96% for high-efficiency condensing models. Input BTU = output BTU ÷ AFUE.',
+    inputs: [
+      { id: 'sqft', label: 'Conditioned area', unit: 'ft²', default: 2000, step: 50 },
+      { id: 'climate', label: 'Climate zone', unit: '', type: 'select', default: '40',
+        tooltip: 'Mild: Atlanta, Dallas, LA. Moderate: DC, St Louis, San Francisco. Cool: Chicago, Boston, Denver. Cold: Minneapolis, Buffalo. Very cold: Anchorage, Burlington VT, Fargo.',
+        options: [
+          ['30','Mild (zones 1-3) — 30 BTU/ft²'],
+          ['35','Mild-moderate (zone 3-4) — 35 BTU/ft²'],
+          ['40','Moderate (zone 4) — 40 BTU/ft²'],
+          ['45','Cool (zone 5) — 45 BTU/ft²'],
+          ['50','Cold (zone 6) — 50 BTU/ft²'],
+          ['60','Very cold (zone 7-8) — 60 BTU/ft²']
+        ] },
+      { id: 'afue', label: 'Furnace efficiency (AFUE)', unit: '', type: 'select', default: '0.95',
+        tooltip: 'AFUE is the percentage of fuel energy that becomes heat in the house. 80% standard non-condensing. 90-95% high-efficiency condensing. 96-98% premium condensing.',
+        options: [
+          ['0.80','80% (standard non-condensing)'],
+          ['0.90','90% (entry condensing)'],
+          ['0.95','95% (high-efficiency condensing)'],
+          ['0.98','98% (premium condensing)']
+        ] }
+    ],
+    calc: (data) => {
+      const sqft = +data.sqft;
+      const climate = +data.climate;
+      const afue = +data.afue;
+      const outputBtu = sqft * climate;
+      const inputBtu = outputBtu / afue;
+      const stdSizes = [40000, 60000, 80000, 100000, 120000, 140000];
+      const recommendedInput = stdSizes.find(s => s >= inputBtu) || (inputBtu > 140000 ? Math.ceil(inputBtu / 20000) * 20000 : 140000);
+      return {
+        main: outputBtu.toLocaleString(),
+        unit: 'BTU/HR HEATING',
+        detail: [
+          ['Conditioned area', sqft.toLocaleString() + ' ft²'],
+          ['Climate factor', climate + ' BTU/ft²'],
+          ['Output BTU (delivered)', outputBtu.toLocaleString() + ' BTU/hr'],
+          ['Input BTU (nameplate)', Math.round(inputBtu).toLocaleString() + ' BTU/hr at ' + (afue * 100).toFixed(0) + '% AFUE'],
+          ['Suggested furnace size', recommendedInput.toLocaleString() + ' BTU/hr input'],
+          ['Disclaimer', 'Estimate only — verify with Manual J for tight specs']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'boiler-size-calculator',
+    name: 'Boiler Size',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'Boiler BTU by climate',
+    formula: 'BTU/hr = ft² × climate_factor',
+    title: 'BOILER SIZE',
+    metaTitle: 'Boiler Size Calculator — Hydronic Heating BTU | ProjectCalc',
+    metaDesc: 'Boiler size calculator. Enter house square footage and climate zone — get the heating output and recommended boiler size for hydronic radiator or radiant systems.',
+    seoIntro: 'This boiler size calculator returns the heating output needed for a residential hydronic system, whether the distribution is radiators, baseboard, or radiant floor. The rule of thumb is the same as forced-air furnace sizing — 25-60 BTU/ft² depending on climate zone — but boilers are quoted in input BTU at the gas burner and the typical efficiency profile (AFUE) ranges from 82% non-condensing to 95% modulating-condensing. For radiant floor systems specifically, design heat loss is typically lower than radiator systems because the entire floor is the emitter, but the boiler sizing follows the same envelope load.',
+    note: 'Rule of thumb based on climate zone. Cast-iron boilers commonly 82% AFUE; modulating condensing boilers 90-95%. Radiant systems sometimes specced 10-15% lower than radiator systems.',
+    inputs: [
+      { id: 'sqft', label: 'Conditioned area', unit: 'ft²', default: 2000, step: 50 },
+      { id: 'climate', label: 'Climate zone', unit: '', type: 'select', default: '45',
+        tooltip: 'Boilers are most common in cold climates. Mild: Atlanta. Moderate: DC. Cool: Chicago, Boston. Cold: Minneapolis. Very cold: Burlington VT, Fargo.',
+        options: [
+          ['30','Mild — 30 BTU/ft²'],
+          ['35','Mild-moderate — 35 BTU/ft²'],
+          ['40','Moderate — 40 BTU/ft²'],
+          ['45','Cool — 45 BTU/ft²'],
+          ['50','Cold — 50 BTU/ft²'],
+          ['60','Very cold — 60 BTU/ft²']
+        ] },
+      { id: 'system', label: 'Distribution', unit: '', type: 'select', default: 'radiator',
+        tooltip: 'Radiator/baseboard systems use the standard rule. Radiant floor systems can be sized 10-15% lower because the entire floor radiates heat at lower water temperatures.',
+        options: [
+          ['radiator','Radiators or baseboard (full load)'],
+          ['radiant','Radiant floor (-10%)']
+        ] },
+      { id: 'afue', label: 'Boiler efficiency (AFUE)', unit: '', type: 'select', default: '0.95',
+        tooltip: '82% standard cast-iron. 87% mid-efficiency. 90-95% modulating condensing.',
+        options: [
+          ['0.82','82% (cast-iron, atmospheric vent)'],
+          ['0.87','87% (mid-efficiency)'],
+          ['0.95','95% (modulating condensing)']
+        ] }
+    ],
+    calc: (data) => {
+      const sqft = +data.sqft;
+      const climate = +data.climate;
+      const system = data.system as string;
+      const afue = +data.afue;
+      let outputBtu = sqft * climate;
+      if (system === 'radiant') outputBtu *= 0.9;
+      const inputBtu = outputBtu / afue;
+      const stdSizes = [60000, 80000, 100000, 120000, 140000, 175000];
+      const recommendedInput = stdSizes.find(s => s >= inputBtu) || 200000;
+      return {
+        main: outputBtu.toLocaleString(undefined, { maximumFractionDigits: 0 }),
+        unit: 'BTU/HR HEATING',
+        detail: [
+          ['Conditioned area', sqft.toLocaleString() + ' ft²'],
+          ['Climate factor', climate + ' BTU/ft²'],
+          ['System adjustment', system === 'radiant' ? '-10% (radiant floor)' : 'None (radiators)'],
+          ['Output BTU', Math.round(outputBtu).toLocaleString() + ' BTU/hr'],
+          ['Input BTU (nameplate)', Math.round(inputBtu).toLocaleString() + ' BTU/hr at ' + (afue * 100).toFixed(0) + '% AFUE'],
+          ['Suggested boiler size', recommendedInput.toLocaleString() + ' BTU/hr input'],
+          ['Disclaimer', 'Estimate only — verify with Manual J']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'mini-split-sizing-calculator',
+    name: 'Mini-Split',
+    category: 'construction',
+    trade: 'HVAC',
+    desc: 'BTU per indoor head',
+    formula: 'BTU/hr = ft² × climate_factor',
+    title: 'MINI-SPLIT SIZE',
+    metaTitle: 'Mini-Split Sizing Calculator — BTU per Zone | ProjectCalc',
+    metaDesc: 'Mini-split sizing calculator. Enter zone area, climate, and use — get the BTU/hr per indoor head and the standard 9k/12k/18k/24k size to order.',
+    seoIntro: 'This mini-split sizing calculator returns the cooling and heating capacity needed per indoor head for a ductless system. Mini-splits are sized per zone (one indoor head per room or open area), and standard residential head sizes are 9,000, 12,000, 18,000, 24,000, and 36,000 BTU/hr. The cooling load runs about 25 BTU/ft² for a single zone (slightly higher than central AC because zones do not share air handling), and heating load matches the climate-zone rule used for furnaces. For open-concept spaces over 600 ft², a single high-capacity head is usually less efficient than two smaller heads on a multi-zone system.',
+    note: 'Sized per indoor head. Standard sizes: 9k, 12k, 18k, 24k, 36k BTU/hr. Multi-zone systems share an outdoor unit but each indoor head is sized to its room.',
+    inputs: [
+      { id: 'sqft', label: 'Zone (room) area', unit: 'ft²', default: 350, step: 25 },
+      { id: 'climate', label: 'Climate zone', unit: '', type: 'select', default: '45',
+        tooltip: 'Affects heating load primarily. Mini-splits with hyper-heat work down to -15°F outdoor in cold climates, but capacity drops below 5°F.',
+        options: [
+          ['30','Mild — 30 BTU/ft² heating'],
+          ['35','Mild-moderate — 35 BTU/ft²'],
+          ['40','Moderate — 40 BTU/ft²'],
+          ['45','Cool — 45 BTU/ft²'],
+          ['50','Cold — 50 BTU/ft²'],
+          ['60','Very cold — 60 BTU/ft²']
+        ] },
+      { id: 'sun', label: 'Sun exposure', unit: '', type: 'select', default: 'normal',
+        tooltip: 'Affects cooling load. Heavy sun on west or south walls bumps the load 10%.',
+        options: [['shaded','Heavily shaded (-10%)'],['normal','Normal'],['sunny','Very sunny (+10%)']] }
+    ],
+    calc: (data) => {
+      const sqft = +data.sqft;
+      const climate = +data.climate;
+      const sun = data.sun as string;
+      let cooling = sqft * 25;
+      if (sun === 'shaded') cooling *= 0.9;
+      if (sun === 'sunny') cooling *= 1.1;
+      const heating = sqft * climate;
+      const designLoad = Math.max(cooling, heating);
+      const stdSizes = [9000, 12000, 18000, 24000, 36000, 48000];
+      const recommendedSize = stdSizes.find(s => s >= designLoad) || 48000;
+      const oversize = designLoad > 36000;
+      const sizeLabel = `${(recommendedSize / 1000).toFixed(0)}k BTU/hr` + (oversize ? ' (consider 2 heads)' : '');
+      return {
+        main: sizeLabel,
+        unit: 'INDOOR HEAD',
+        detail: [
+          ['Zone area', sqft.toLocaleString() + ' ft²'],
+          ['Cooling load', Math.round(cooling).toLocaleString() + ' BTU/hr'],
+          ['Heating load', heating.toLocaleString() + ' BTU/hr'],
+          ['Design load (max)', Math.round(designLoad).toLocaleString() + ' BTU/hr'],
+          ['Suggested head size', sizeLabel],
+          ['Standard sizes', '9k / 12k / 18k / 24k / 36k']
+        ]
+      };
+    }
   }
 ];
 

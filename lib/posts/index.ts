@@ -52,6 +52,10 @@ import roofTruss from './roof-truss-spacing-and-count';
 import snowLoad from './snow-load-design';
 import floorJoist from './floor-joist-span-tables';
 import rebar from './rebar-for-concrete-slabs';
+import acTonnage from './ac-tonnage-explained';
+import furnaceSize from './furnace-size-by-climate';
+import boilerSize from './boiler-size-hydronic';
+import miniSplit from './mini-split-sizing-per-zone';
 
 export const posts: BlogPost[] = [
   paverQuantity,
@@ -62,6 +66,10 @@ export const posts: BlogPost[] = [
   snowLoad,
   floorJoist,
   rebar,
+  acTonnage,
+  furnaceSize,
+  boilerSize,
+  miniSplit,
   hardwood,
   carpet,
   vinyl,
