@@ -3122,6 +3122,7 @@ export const calculators: Calculator[] = [
     slug: 'rebar-calculator',
     name: 'Rebar',
     category: 'construction',
+    trade: 'Masonry & Siding',
     desc: 'Rebar grid for slabs',
     formula: 'linft = (long_bars × L) + (short_bars × W)',
     title: 'REBAR ORDER',
