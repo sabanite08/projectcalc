@@ -56,6 +56,9 @@ import acTonnage from './ac-tonnage-explained';
 import furnaceSize from './furnace-size-by-climate';
 import boilerSize from './boiler-size-hydronic';
 import miniSplit from './mini-split-sizing-per-zone';
+import waterHeater from './water-heater-sizing-guide';
+import topsoil from './topsoil-yards-and-bags';
+import evCharger from './ev-charger-circuit-sizing';
 
 export const posts: BlogPost[] = [
   paverQuantity,
@@ -70,6 +73,9 @@ export const posts: BlogPost[] = [
   furnaceSize,
   boilerSize,
   miniSplit,
+  waterHeater,
+  topsoil,
+  evCharger,
   hardwood,
   carpet,
   vinyl,

@@ -3379,6 +3379,93 @@ export const calculators: Calculator[] = [
         ]
       };
     }
+  },
+  {
+    slug: 'water-heater-size-calculator',
+    name: 'Water Heater Size',
+    category: 'home',
+    trade: 'Plumbing',
+    desc: 'Tank gallons or tankless GPM',
+    formula: 'Per DOE FHR + GPM tables',
+    title: 'WATER HEATER SIZE',
+    metaTitle: 'Water Heater Sizing Calculator — Tank Gallons or Tankless GPM | ProjectCalc',
+    metaDesc: 'Water heater sizing calculator. Pick tank or tankless and household size — get the recommended gallons or GPM rating to match your hot water demand.',
+    seoIntro: 'This water heater sizing calculator returns the recommended residential water heater capacity for either a tank-style heater (rated in gallons) or a tankless heater (rated in GPM at a 70°F temperature rise). The math follows DOE Energy Saver guidelines based on household size, the strongest predictor of peak-hour hot water demand. For tank heaters, the recommendation accounts for First Hour Rating (FHR) — the gallons of hot water available in the busiest hour of the day. For tankless, the GPM target assumes one shower plus a bathroom sink running simultaneously at the household&apos;s typical peak.',
+    note: 'Tank sizing per DOE Energy Saver FHR guidelines. Tankless GPM assumes 70°F temperature rise (typical for cold-climate winter inlet). Adjust GPM up 20-30% for inlet temps below 50°F.',
+    inputs: [
+      { id: 'people', label: 'People in household', unit: '', default: 4, step: 1 },
+      { id: 'type', label: 'Heater type', unit: '', type: 'select', default: 'tank',
+        tooltip: 'Tank: stores hot water at temp, sized in gallons. Tankless: heats water on demand, sized in GPM. Tankless saves 20-30% on energy if usage is moderate but costs more upfront.',
+        options: [['tank','Tank (storage)'],['tankless','Tankless (on-demand)']] }
+    ],
+    calc: (data) => {
+      const people = +data.people;
+      const type = data.type as string;
+      let recTank: number;
+      if (people <= 2) recTank = 40;
+      else if (people <= 3) recTank = 50;
+      else if (people <= 4) recTank = 60;
+      else if (people <= 5) recTank = 75;
+      else recTank = 80;
+      let recGPM: number;
+      if (people <= 2) recGPM = 5;
+      else if (people <= 3) recGPM = 6;
+      else if (people <= 4) recGPM = 8;
+      else if (people <= 5) recGPM = 9;
+      else recGPM = 11;
+      return {
+        main: type === 'tank' ? recTank.toString() : recGPM.toString(),
+        unit: type === 'tank' ? 'GAL TANK' : 'GPM TANKLESS',
+        detail: [
+          ['Household size', people + ' people'],
+          ['Tank recommendation', recTank + ' gal'],
+          ['Tankless recommendation', recGPM + ' GPM at 70°F rise'],
+          ['Tank common sizes', '30 / 40 / 50 / 65 / 75 / 80 gal'],
+          ['Tankless common sizes', '5.5 / 6.5 / 8.5 / 9.5 / 11 GPM'],
+          ['Note', 'Cold inlet (<50°F) reduces tankless GPM 20-30%']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'topsoil-calculator',
+    name: 'Topsoil',
+    category: 'home',
+    desc: 'Yards or bags for fill',
+    formula: 'yd³ = ft² × depth_in ÷ 324',
+    title: 'TOPSOIL VOLUME',
+    metaTitle: 'Topsoil Calculator — Yards and Bags for Fill | ProjectCalc',
+    metaDesc: 'Topsoil calculator. Enter area and depth — get cubic yards, cubic feet, and 40 lb bag count for raised beds, lawn fill, or grading.',
+    seoIntro: 'This topsoil calculator returns the cubic yards, cubic feet, and bag count needed for filling raised garden beds, leveling low spots in a yard, building up the soil profile for a lawn, or topdressing existing turf. Topsoil is sold both in bulk by the cubic yard at landscape supply yards (typically $25-50 delivered per yard depending on quality and region) and in 40 lb bags at home centers (~0.75 ft³ per bag, 5-8 dollars each). For any project over 1 cubic yard (about 36 bags), bulk delivery is dramatically cheaper than bagged.',
+    note: 'A cubic yard of topsoil weighs about 1,800-2,400 lb depending on moisture and organic content. Bagged topsoil is convenient for under 1 yd³; over that, order bulk delivered.',
+    inputs: [
+      { id: 'L', label: 'Area length', unit: 'ft', default: 8, step: 0.5 },
+      { id: 'W', label: 'Area width', unit: 'ft', default: 4, step: 0.5 },
+      { id: 'depth', label: 'Fill depth', unit: 'in', default: 6, step: 0.5,
+        tooltip: 'Raised beds: 8-12 in for vegetables, 6 in minimum for lawns over a graded base. Topdressing existing lawn: 0.25-0.5 in per pass.' }
+    ],
+    calc: (data) => {
+      const L = +data.L;
+      const W = +data.W;
+      const depth = +data.depth;
+      const areaFt2 = L * W;
+      const cubicFt = areaFt2 * (depth / 12);
+      const cubicYd = cubicFt / 27;
+      const bags = Math.ceil(cubicFt / 0.75);
+      const weightLbs = cubicFt * 75;
+      return {
+        main: cubicYd.toFixed(2),
+        unit: 'CUBIC YARDS',
+        detail: [
+          ['Area', areaFt2.toFixed(0) + ' ft²'],
+          ['Depth', depth + ' in'],
+          ['Cubic feet', cubicFt.toFixed(1) + ' ft³'],
+          ['40 lb bags (~0.75 ft³ each)', bags],
+          ['Approx weight', weightLbs.toFixed(0) + ' lb (~' + (weightLbs/2000).toFixed(2) + ' tons)'],
+          ['Bulk vs bag breakeven', cubicYd > 1 ? 'Order bulk delivered' : 'Bags OK']
+        ]
+      };
+    }
   }
 ];
 
