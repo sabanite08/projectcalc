@@ -2753,6 +2753,164 @@ export const calculators: Calculator[] = [
         ]
       };
     }
+  },
+  {
+    slug: 'paver-calculator',
+    name: 'Pavers',
+    category: 'home',
+    desc: 'Pavers for a patio',
+    formula: 'pavers = area ÷ paver ft² × waste',
+    title: 'PAVER COUNT',
+    metaTitle: 'Paver Calculator — How Many Pavers for a Patio | ProjectCalc',
+    metaDesc: 'Free paver calculator. Enter your patio dimensions and paver size, get the exact count to order with the right waste factor for the laying pattern.',
+    seoIntro: 'This paver calculator estimates how many concrete or brick pavers you need for a patio, walkway, or driveway. Enter the project dimensions and the paver size sold at your supplier, choose the laying pattern (straight runs cost about 5% in cuts; 45° diagonal and herringbone climb to 15-20%), and the calculator returns the total piece count rounded up. The math is the project area divided by the area of a single paver, multiplied by the waste factor for the pattern. Brick-format 4×8 in pavers run 4.5 per ft² before waste; 12×12 in slabs run 1 per ft².',
+    note: 'Waste built in by pattern: straight 5%, 45° 15%, herringbone 20%. Order full pallets — most yards sell 100-144 ft² per pallet of standard pavers.',
+    inputs: [
+      { id: 'L', label: 'Patio length', unit: 'ft', default: 12, step: 0.5 },
+      { id: 'W', label: 'Patio width', unit: 'ft', default: 10, step: 0.5 },
+      { id: 'paver', label: 'Paver size', unit: '', type: 'select', default: '6x9',
+        tooltip: 'Most home centers stock 4×8 brick pavers (4.5/ft²) and 6×9 standard pavers (2.67/ft²). 12×12 slabs are cheaper per ft² and faster to lay.',
+        options: [
+          ['4x8','4×8 in (brick, ~4.5/ft²)'],
+          ['6x6','6×6 in (~4/ft²)'],
+          ['6x9','6×9 in (standard, ~2.67/ft²)'],
+          ['8x8','8×8 in (~2.25/ft²)'],
+          ['12x12','12×12 in (slab, 1/ft²)'],
+          ['12x24','12×24 in (large slab, 0.5/ft²)'],
+          ['16x16','16×16 in (~0.56/ft²)']
+        ] },
+      { id: 'pattern', label: 'Laying pattern', unit: '', type: 'select', default: 'straight',
+        tooltip: 'Straight bond cuts the least at the borders. 45° and herringbone need diagonal cuts at every perimeter piece, doubling waste.',
+        options: [
+          ['straight','Straight / running bond (5% waste)'],
+          ['diagonal','45° diagonal (15% waste)'],
+          ['herringbone','Herringbone (20% waste)']
+        ] }
+    ],
+    calc: (data) => {
+      const L = +data.L, W = +data.W;
+      const paver = data.paver as string;
+      const pattern = data.pattern as string;
+      const area = L * W;
+      const paverAreaFt2: Record<string, number> = {
+        '4x8': (4*8)/144, '6x6': (6*6)/144, '6x9': (6*9)/144,
+        '8x8': (8*8)/144, '12x12': 1, '12x24': 2, '16x16': (16*16)/144,
+      };
+      const pAreaFt2 = paverAreaFt2[paver];
+      const wasteMap: Record<string, number> = { straight: 1.05, diagonal: 1.15, herringbone: 1.20 };
+      const waste = wasteMap[pattern];
+      const pavers = Math.ceil((area / pAreaFt2) * waste);
+      const wastePct = ((waste - 1) * 100).toFixed(0);
+      return {
+        main: pavers.toLocaleString(), unit: 'PAVERS',
+        detail: [
+          ['Patio area', area.toFixed(0) + ' ft²'],
+          ['Per ft² (no waste)', (1/pAreaFt2).toFixed(2)],
+          ['Pattern waste', wastePct + '%'],
+          ['Pavers (rounded up)', pavers.toLocaleString()]
+        ]
+      };
+    }
+  },
+  {
+    slug: 'paver-sand-calculator',
+    name: 'Paver Base & Sand',
+    category: 'home',
+    desc: 'Base gravel + bedding sand',
+    formula: 'yd³ = ft² × depth_in ÷ 324',
+    title: 'PAVER BASE + SAND',
+    metaTitle: 'Paver Base & Sand Calculator — Gravel and Bedding Yards | ProjectCalc',
+    metaDesc: 'Paver base calculator. Enter patio area and project type — get the cubic yards of gravel base, sand bedding, and bags of polymeric joint sand.',
+    seoIntro: 'This paver base calculator returns the gravel base, sand bedding, and polymeric joint sand needed for a paver patio, walkway, or driveway. The base layer is compacted crushed stone (commonly Class 5 or 3/4-inch minus) at 4 inches for foot-traffic patios, 6-8 inches for walkways with light vehicle use, and 8-12 inches for full driveways. The bedding layer is 1 inch of clean concrete sand or stone dust under the pavers themselves. Joint sand fills the gaps between pavers — polymeric joint sand sets up like mortar after wetting and resists weeds, ant colonization, and washout.',
+    note: 'Standard recipes: patio = 4" base + 1" sand bed; driveway = 8-12" base + 1" sand bed. Always compact base in 2-inch lifts with a plate compactor.',
+    inputs: [
+      { id: 'area', label: 'Patio area', unit: 'ft²', default: 120, step: 10 },
+      { id: 'use', label: 'Project type', unit: '', type: 'select', default: 'patio',
+        tooltip: 'Driveways need a deeper base because vehicle weight cycles the substrate. Patios and walkways at 4 inches over compacted subgrade are stable for foot traffic.',
+        options: [
+          ['patio','Patio (4" base)'],
+          ['walkway','Walkway (4" base)'],
+          ['driveway','Driveway (8" base)'],
+          ['heavy','Heavy driveway (12" base)']
+        ] },
+      { id: 'joint', label: 'Polymeric joint sand?', unit: '', type: 'select', default: 'yes',
+        tooltip: 'Polymeric joint sand sets up after watering and prevents weeds. Plain mason sand is cheaper but washes out and lets weeds in.',
+        options: [['yes','Yes — calculate bags'],['no','No — plain sand']] }
+    ],
+    calc: (data) => {
+      const area = +data.area;
+      const use = data.use as string;
+      const joint = data.joint as string;
+      const baseDepthIn: Record<string, number> = { patio: 4, walkway: 4, driveway: 8, heavy: 12 };
+      const baseIn = baseDepthIn[use];
+      const baseYd3 = (area * baseIn) / 324;
+      const beddingYd3 = (area * 1) / 324;
+      const polyBags = joint === 'yes' ? Math.ceil(area / 75) : 0;
+      return {
+        main: (baseYd3 + beddingYd3).toFixed(2), unit: 'YD³ TOTAL',
+        detail: [
+          ['Base depth', baseIn + ' in'],
+          ['Gravel base', baseYd3.toFixed(2) + ' yd³'],
+          ['Sand bedding (1")', beddingYd3.toFixed(2) + ' yd³'],
+          ['Polymeric joint sand', polyBags > 0 ? polyBags + ' × 50 lb bags' : 'Not needed'],
+          ['Compact in lifts of', '2 in']
+        ]
+      };
+    }
+  },
+  {
+    slug: 'retaining-wall-calculator',
+    name: 'Retaining Wall',
+    category: 'home',
+    desc: 'Block count + base',
+    formula: 'blocks = (L÷blkL) × (H÷blkH)',
+    title: 'WALL BLOCK COUNT',
+    metaTitle: 'Retaining Wall Calculator — Blocks, Caps, and Base Gravel | ProjectCalc',
+    metaDesc: 'Retaining wall calculator. Enter wall length and height, pick a block size — get block count, cap count, and the cubic yards of base gravel.',
+    seoIntro: 'This retaining wall calculator estimates the segmental concrete blocks, cap blocks, and cubic yards of base gravel needed for a small landscape retaining wall. Enter the wall length and finished height, pick a block size sold at your local home center, and the calculator returns full courses plus caps and the leveling pad gravel. Walls under 4 feet of exposed face are typically gravity walls a homeowner can build over a weekend; anything taller usually requires geogrid soil reinforcement and engineered design per local code.',
+    note: 'Walls over 4 ft of exposed height typically require engineered design and a permit. This calculator handles unreinforced gravity walls only. Verify local code before building.',
+    inputs: [
+      { id: 'L', label: 'Wall length', unit: 'ft', default: 20, step: 1 },
+      { id: 'H', label: 'Wall height', unit: 'ft', default: 2, step: 0.25,
+        tooltip: 'Use the exposed (above-grade) finished height. Add 6 inches buried below grade for the first course; the calculator does not include buried courses.' },
+      { id: 'block', label: 'Block size', unit: '', type: 'select', default: '12x4x8',
+        tooltip: 'Sizes are length × height × depth in inches. Most home centers stock the small (12×4×8) and standard (16×6×10) sizes. Heavier blocks build taller stable walls but need a wheelbarrow per piece.',
+        options: [
+          ['12x4x8','12×4×8 in (small landscape, ~25 lb)'],
+          ['16x6x10','16×6×10 in (standard, ~60 lb)'],
+          ['18x6x12','18×6×12 in (large, ~85 lb)']
+        ] },
+      { id: 'caps', label: 'Include cap blocks?', unit: '', type: 'select', default: 'yes',
+        tooltip: 'Caps finish the top course flat and are sold separately. Skip if your block has a flat top face or you plan to set planters on top.',
+        options: [['yes','Yes'],['no','No']] }
+    ],
+    calc: (data) => {
+      const L = +data.L, H = +data.H;
+      const block = data.block as string;
+      const caps = data.caps as string;
+      const blockDims: Record<string, [number, number]> = {
+        '12x4x8': [12, 4], '16x6x10': [16, 6], '18x6x12': [18, 6],
+      };
+      const [blkL, blkH] = blockDims[block];
+      const blocksPerCourse = Math.ceil((L * 12) / blkL);
+      const courses = Math.ceil((H * 12) / blkH);
+      const totalBlocks = blocksPerCourse * courses;
+      const capCount = caps === 'yes' ? blocksPerCourse : 0;
+      const baseAreaFt2 = (L + 1) * 1;
+      const baseYd3 = (baseAreaFt2 * 6) / 324;
+      const heightWarn = H > 4 ? 'Engineer required (>4 ft)' : 'Gravity wall OK';
+      return {
+        main: totalBlocks.toLocaleString(), unit: 'BLOCKS',
+        detail: [
+          ['Blocks per course', blocksPerCourse],
+          ['Courses', courses],
+          ['Cap blocks', capCount],
+          ['Base gravel (6" × 12" wide)', baseYd3.toFixed(2) + ' yd³'],
+          ['Height check', heightWarn],
+          ['Disclaimer', 'Estimate only — verify local code']
+        ]
+      };
+    }
   }
 ];
 

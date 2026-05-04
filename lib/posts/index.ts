@@ -44,8 +44,14 @@ import refrigerantCharge from './refrigerant-charge-basics';
 import staticPressure from './static-pressure-tesp';
 import ventilationCfm from './ventilation-cfm-ashrae';
 import heatLoss from './heat-loss-envelope';
+import paverQuantity from './paver-quantity-and-pattern-waste';
+import paverSand from './paver-base-and-sand-yards';
+import retainingWall from './retaining-wall-block-count';
 
 export const posts: BlogPost[] = [
+  paverQuantity,
+  paverSand,
+  retainingWall,
   hardwood,
   carpet,
   vinyl,
