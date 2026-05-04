@@ -18,7 +18,7 @@ export const faqs: Record<string, FAQItem[]> = {
   'paint-calculator': [
     {
       q: 'How much paint do I need for a 12×12 room?',
-      a: 'A 12×12 room with 8 ft ceilings has about 384 ft² of wall area. At 350 ft²/gallon coverage with 2 coats, you need about 2.2 gallons — round up to 3. Add another gallon if you\'re also painting the ceiling.',
+      a: 'A 12×12 room with 8 ft ceilings has about 384 ft² of wall area. At 350 ft²/gallon coverage with 2 coats, you need about 2.2 gallons — round up to 3. Add another gallon if you\'re also painting the ceiling. A solid [paint roller kit](https://www.amazon.com/s?k=paint+roller+kit&tag=projectcalc-20) and a [5-gallon paint bucket grid](https://www.amazon.com/s?k=5+gallon+paint+bucket+grid&tag=projectcalc-20) are the two tools that pay for themselves on the first room.',
     },
     {
       q: 'Should I buy 1-gallon cans or a 5-gallon bucket?',
@@ -40,13 +40,13 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How thick should my concrete slab be?',
-      a: '4 inches is standard for residential patios, walkways, and shed pads. Driveways need 4–6 inches with rebar. Garage floors and heavy equipment areas need 6 inches. Footings depend on local code — typically 8–12 inches.',
+      a: '4 inches is standard for residential patios, walkways, and shed pads. Driveways need 4–6 inches with rebar. Garage floors and heavy equipment areas need 6 inches. Footings depend on local code — typically 8–12 inches. For finishing, a [magnesium bull float](https://www.amazon.com/s?k=magnesium+bull+float&tag=projectcalc-20) and [edger trowel set](https://www.amazon.com/s?k=concrete+edger+groover&tag=projectcalc-20) handle most residential pours.',
     },
   ],
   'roofing-calculator': [
     {
       q: 'How long do asphalt shingles last?',
-      a: '3-tab shingles last 15–20 years. Architectural (dimensional) shingles last 25–30 years. Premium shingles can last 40–50 years. Climate matters — southern heat shortens lifespan; northern cold/ice extends it.',
+      a: '3-tab shingles last 15–20 years. Architectural (dimensional) shingles last 25–30 years. Premium shingles can last 40–50 years. Climate matters — southern heat shortens lifespan; northern cold/ice extends it. A [coil roofing nailer](https://www.amazon.com/s?k=coil+roofing+nailer&tag=projectcalc-20) cuts install time roughly in half versus hand-nailing — worth renting or buying for a full re-roof.',
     },
     {
       q: 'How much does a roofing square cost?',
@@ -54,7 +54,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How do I figure my roof pitch?',
-      a: 'Use a level on the roof or a ladder against the gable. Hold the level horizontal, measure straight down 12 inches from the level, then measure up to the roof — that vertical number is your pitch. A roof rising 6 inches per 12-inch run is "6/12 pitch."',
+      a: 'Use a level on the roof or a ladder against the gable. Hold the level horizontal, measure straight down 12 inches from the level, then measure up to the roof — that vertical number is your pitch. A roof rising 6 inches per 12-inch run is "6/12 pitch." A [roof pitch gauge](https://www.amazon.com/s?k=roof+pitch+gauge&tag=projectcalc-20) is faster if you\'re measuring more than one slope.',
     },
   ],
   'hardwood-calculator': [
@@ -68,7 +68,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How much extra hardwood should I buy for repairs?',
-      a: 'One full unopened box on top of the calculator total. Same-lot replacement boards become impossible to find within a year, and repaired sections from a different lot are visible even with a stain match. Keep the box label — manufacturer, lot, and color code make warranty claims easier.',
+      a: 'One full unopened box on top of the calculator total. Same-lot replacement boards become impossible to find within a year, and repaired sections from a different lot are visible even with a stain match. Keep the box label — manufacturer, lot, and color code make warranty claims easier. A [pinless moisture meter](https://www.amazon.com/s?k=pinless+moisture+meter&tag=projectcalc-20) is the one tool worth owning before any wood-floor install — acclimating boards to the room is non-negotiable.',
     },
     {
       q: 'Do wider planks waste more material?',
@@ -90,7 +90,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Where do seams go in a carpeted room?',
-      a: 'Out of sight lines. Best practice: seam runs perpendicular to the main door so you walk along the seam, not across it; seams should fall under furniture or in low-traffic zones. Cut-pile carpet hides seams better than loop pile (Berber), where seams stand out for the life of the carpet.',
+      a: 'Out of sight lines. Best practice: seam runs perpendicular to the main door so you walk along the seam, not across it; seams should fall under furniture or in low-traffic zones. Cut-pile carpet hides seams better than loop pile (Berber), where seams stand out for the life of the carpet. DIYing the install? You\'ll need a [knee kicker](https://www.amazon.com/s?k=carpet+knee+kicker&tag=projectcalc-20) and [carpet stretcher](https://www.amazon.com/s?k=carpet+power+stretcher&tag=projectcalc-20) — renting is fine for a single room, buying makes sense for a whole house.',
     },
   ],
   'vinyl-calculator': [
@@ -104,7 +104,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Do I need to seam sheet vinyl?',
-      a: 'Only if your shorter room dimension is wider than the roll. 12 ft rolls cover almost every residential room seamlessly — bedrooms, kitchens, baths, laundry. Living rooms over 12 ft on the short side need one seam, sealed with chemical seam sealer (a solvent that fuses the two edges). DIYable but takes practice.',
+      a: 'Only if your shorter room dimension is wider than the roll. 12 ft rolls cover almost every residential room seamlessly — bedrooms, kitchens, baths, laundry. Living rooms over 12 ft on the short side need one seam, sealed with [chemical seam sealer](https://www.amazon.com/s?k=vinyl+seam+sealer&tag=projectcalc-20) (a solvent that fuses the two edges). DIYable but takes practice — a [vinyl floor cutter](https://www.amazon.com/s?k=vinyl+floor+cutter&tag=projectcalc-20) gives a cleaner edge than a utility knife.',
     },
     {
       q: 'Can sheet vinyl go over an existing floor?',
@@ -118,7 +118,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Do I need spacers and what size?',
-      a: 'Yes — even tiles look amateur without consistent grout lines. Standard sizes: 1/16" for rectified porcelain (sleek modern look), ⅛" for most ceramic, 3/16"–¼" for rustic stone or large-format. Smaller spacers = harder install but cleaner look.',
+      a: 'Yes — even tiles look amateur without consistent grout lines. Standard sizes: 1/16" for rectified porcelain (sleek modern look), ⅛" for most ceramic, 3/16"–¼" for rustic stone or large-format. Smaller spacers = harder install but cleaner look. A [tile spacer assortment pack](https://www.amazon.com/s?k=tile+spacers+assorted&tag=projectcalc-20) is cheap insurance — running out mid-job and trying to mix sizes ruins the grid.',
     },
     {
       q: 'What\'s the difference between ceramic and porcelain tile?',
@@ -132,7 +132,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How deep should I lay mulch?',
-      a: '2–3 inches for established beds with shrubs and perennials. 3 inches around trees (but never piled against the trunk — keep a 3-inch gap). 1 inch for new gardens with annuals. Pine straw goes thicker — 4–6 inches.',
+      a: '2–3 inches for established beds with shrubs and perennials. 3 inches around trees (but never piled against the trunk — keep a 3-inch gap). 1 inch for new gardens with annuals. Pine straw goes thicker — 4–6 inches. A [mulch fork](https://www.amazon.com/s?k=mulch+fork&tag=projectcalc-20) moves bulk mulch 3× faster than a regular shovel — flat tines slide under loose mulch instead of slicing through it.',
     },
     {
       q: 'When should I refresh mulch?',
@@ -160,7 +160,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Do I really need concrete on every post?',
-      a: 'Yes for gates and corner posts (they take the most stress). For line posts, gravel-only or compacted soil works in some soils, but concrete lasts longer. Use 2 bags of 60lb fast-set concrete per 4×4 post in a 10-inch hole.',
+      a: 'Yes for gates and corner posts (they take the most stress). For line posts, gravel-only or compacted soil works in some soils, but concrete lasts longer. Use 2 bags of 60lb fast-set concrete per 4×4 post in a 10-inch hole. A [post hole digger](https://www.amazon.com/s?k=post+hole+digger&tag=projectcalc-20) handles short fence runs; rent an auger for anything past 20 posts. Strap a [post level](https://www.amazon.com/s?k=post+level&tag=projectcalc-20) to plumb in two planes hands-free.',
     },
     {
       q: 'How much does a wood privacy fence cost?',
@@ -174,7 +174,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Should I use stain or sealer?',
-      a: 'Both at once is ideal — most modern products are stain + sealer combined. Pure sealer (clear) protects from water but lets the wood gray over time. Stain (with pigment) blocks UV, preserves color, and is what you want for visible decks.',
+      a: 'Both at once is ideal — most modern products are stain + sealer combined. Pure sealer (clear) protects from water but lets the wood gray over time. Stain (with pigment) blocks UV, preserves color, and is what you want for visible decks. A [stain pad applicator](https://www.amazon.com/s?k=deck+stain+pad+applicator&tag=projectcalc-20) on an extension pole moves 5× faster than a brush on open decking.',
     },
     {
       q: 'Can I stain a brand new pressure-treated deck?',
@@ -188,7 +188,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Faced or unfaced insulation?',
-      a: 'Faced (kraft paper or foil) for walls and ceilings — the facing is a vapor barrier and faces the warm side. Unfaced for layering on top of existing insulation, or where you\'ll add a separate vapor barrier. Never put two faced layers in one cavity.',
+      a: 'Faced (kraft paper or foil) for walls and ceilings — the facing is a vapor barrier and faces the warm side. Unfaced for layering on top of existing insulation, or where you\'ll add a separate vapor barrier. Never put two faced layers in one cavity. An [insulation knife](https://www.amazon.com/s?k=insulation+knife&tag=projectcalc-20) cuts batts cleaner and faster than a utility blade — and a [respirator](https://www.amazon.com/s?k=N95+respirator+fiberglass&tag=projectcalc-20) is mandatory for fiberglass work.',
     },
     {
       q: 'How much does insulation cost?',
@@ -202,7 +202,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Do I need to remove old siding first?',
-      a: 'Vinyl can sometimes go over existing wood siding if it\'s flat and sound. Fiber cement and stucco require removal. Always remove if siding is rotted, has insect damage, or trapping moisture. Code in many areas requires removal regardless.',
+      a: 'Vinyl can sometimes go over existing wood siding if it\'s flat and sound. Fiber cement and stucco require removal. Always remove if siding is rotted, has insect damage, or trapping moisture. Code in many areas requires removal regardless. Vinyl installs need a [snap-lock punch](https://www.amazon.com/s?k=vinyl+siding+snap+lock+punch&tag=projectcalc-20) and [zip tool](https://www.amazon.com/s?k=vinyl+siding+zip+tool&tag=projectcalc-20) for finishing courses; fiber cement needs a [shears or fiber-cement blade](https://www.amazon.com/s?k=fiber+cement+shears&tag=projectcalc-20).',
     },
     {
       q: 'How long does siding last?',
@@ -220,7 +220,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How long until I can walk on new sod?',
-      a: 'Light foot traffic: 2 weeks. Mowing: 3 weeks (when blades are 3+ inches). Heavy use (kids, dogs, sports): 6 weeks. Roots take about 3 weeks to anchor — anything earlier and you\'ll lift the sod.',
+      a: 'Light foot traffic: 2 weeks. Mowing: 3 weeks (when blades are 3+ inches). Heavy use (kids, dogs, sports): 6 weeks. Roots take about 3 weeks to anchor — anything earlier and you\'ll lift the sod. A [lawn roller](https://www.amazon.com/s?k=push+lawn+roller&tag=projectcalc-20) right after install presses sod into soil contact and dramatically improves rooting speed.',
     },
   ],
   'brick-calculator': [
@@ -234,7 +234,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How many bags of mortar do I need?',
-      a: 'About 1 bag of 70lb mortar mix for every 100–125 bricks laid (modular size with ⅜" joints). For a 1,000-brick wall, plan on 8–10 bags of mortar plus sand if you\'re mixing your own.',
+      a: 'About 1 bag of 70lb mortar mix for every 100–125 bricks laid (modular size with ⅜" joints). For a 1,000-brick wall, plan on 8–10 bags of mortar plus sand if you\'re mixing your own. A [brick trowel](https://www.amazon.com/s?k=brick+trowel&tag=projectcalc-20), [mason\'s line](https://www.amazon.com/s?k=masons+line+blocks&tag=projectcalc-20), and [jointer](https://www.amazon.com/s?k=mortar+jointer+tool&tag=projectcalc-20) are the minimum tool kit.',
     },
   ],
   'lumber-calculator': [
@@ -262,7 +262,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Does aluminum wire have more voltage drop?',
-      a: 'Yes — aluminum has about 1.6× the resistance of same-gauge copper. SE-rated aluminum wire is sized larger to compensate. For a given amperage, aluminum service entrance cable is typically 2 sizes larger (e.g., 4/0 AL replaces 2/0 CU).',
+      a: 'Yes — aluminum has about 1.6× the resistance of same-gauge copper. SE-rated aluminum wire is sized larger to compensate. For a given amperage, aluminum service entrance cable is typically 2 sizes larger (e.g., 4/0 AL replaces 2/0 CU). For verifying drop in the field, a [Klein clamp meter](https://www.amazon.com/s?k=klein+clamp+meter&tag=projectcalc-20) reads voltage under load — far more useful than a multimeter at no load.',
     },
   ],
   'btu-calculator': [
@@ -296,7 +296,7 @@ export const faqs: Record<string, FAQItem[]> = {
   'lumber-cut-calculator': [
     {
       q: 'What is a saw kerf and why does it matter?',
-      a: 'The kerf is the slot of material the blade removes on each cut — typically 1/8" for a standard circular or miter saw, 3/32" for a thin-kerf framing blade. Ignoring it underestimates waste: ten 12-inch cuts in a 120-inch board only yields nine cuts once kerf is factored in (10 × 12 + 10 × 0.125 = 121.25"), so you actually need a longer stick or accept one short piece.',
+      a: 'The kerf is the slot of material the blade removes on each cut — typically 1/8" for a standard circular or miter saw, 3/32" for a [thin-kerf framing blade](https://www.amazon.com/s?k=thin+kerf+framing+blade&tag=projectcalc-20). Ignoring it underestimates waste: ten 12-inch cuts in a 120-inch board only yields nine cuts once kerf is factored in (10 × 12 + 10 × 0.125 = 121.25"), so you actually need a longer stick or accept one short piece.',
     },
     {
       q: 'What is the standard length of a wall stud?',
@@ -310,7 +310,7 @@ export const faqs: Record<string, FAQItem[]> = {
   'conduit-fill-calculator': [
     {
       q: 'What is the NEC fill limit for EMT?',
-      a: 'NEC Chapter 9, Note 4: 53% maximum fill for one conductor, 31% for two, and 40% for three or more. The lower limit on two-wire pulls is intentional — two stiff conductors jam in a way that one or three+ don\'t. Going over these numbers is an inspection failure.',
+      a: 'NEC Chapter 9, Note 4: 53% maximum fill for one conductor, 31% for two, and 40% for three or more. The lower limit on two-wire pulls is intentional — two stiff conductors jam in a way that one or three+ don\'t. Going over these numbers is an inspection failure. An [EMT cutter](https://www.amazon.com/s?k=EMT+conduit+cutter&tag=projectcalc-20) leaves cleaner ends than a hacksaw and pulls smoother once you start filling.',
     },
     {
       q: 'Does this calculator account for conductor derating?',
@@ -332,7 +332,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Does this apply to vent pipes?',
-      a: 'Vent pipes only need to slope back toward the drain so condensation drains out — exact pitch isn\'t code-critical. The drain-side rules are what matters for waste flow. For sewer mains, also confirm your local jurisdiction\'s amendments — some cities tighten the IPC defaults.',
+      a: 'Vent pipes only need to slope back toward the drain so condensation drains out — exact pitch isn\'t code-critical. The drain-side rules are what matters for waste flow. For sewer mains, also confirm your local jurisdiction\'s amendments — some cities tighten the IPC defaults. A [magnetic torpedo level](https://www.amazon.com/s?k=magnetic+torpedo+level&tag=projectcalc-20) with built-in pitch vials makes drain slope checks one-handed.',
     },
   ],
   'water-supply-pipe-size-calculator': [
@@ -342,7 +342,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Why is the PEX size bigger than the copper size?',
-      a: 'PEX has a thicker wall than copper for the same nominal size, so the inside diameter is smaller and friction loss is higher per foot. To deliver the same flow rate, PEX usually needs to be one nominal size up. A ¾" copper line is roughly equivalent to a 1" PEX line at typical residential pressure.',
+      a: 'PEX has a thicker wall than copper for the same nominal size, so the inside diameter is smaller and friction loss is higher per foot. To deliver the same flow rate, PEX usually needs to be one nominal size up. A ¾" copper line is roughly equivalent to a 1" PEX line at typical residential pressure. A [PEX cinch clamp tool](https://www.amazon.com/s?k=pex+cinch+clamp+tool&tag=projectcalc-20) is the cheapest entry to PEX work; expansion-style fittings need a different (and pricier) [PEX expansion tool](https://www.amazon.com/s?k=pex+expansion+tool&tag=projectcalc-20).',
     },
     {
       q: 'Does this work for well water systems?',
@@ -374,7 +374,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'When can I use an air admittance valve (AAV) instead of running a vent through the roof?',
-      a: 'AAVs (Studor vents) are allowed by IPC for individual, branch, or circuit vents serving fixtures inside the building, but every drainage system still needs at least one vent open to the outside air. AAVs are great for kitchen island sinks and remodel work where running a stack to the roof would mean ripping out finished walls. Check local amendments — a handful of jurisdictions still don\'t accept them.',
+      a: '[AAVs (Studor vents)](https://www.amazon.com/s?k=studor+air+admittance+valve&tag=projectcalc-20) are allowed by IPC for individual, branch, or circuit vents serving fixtures inside the building, but every drainage system still needs at least one vent open to the outside air. AAVs are great for kitchen island sinks and remodel work where running a stack to the roof would mean ripping out finished walls. Check local amendments — a handful of jurisdictions still don\'t accept them.',
     },
   ],
   'pressure-loss-calculator': [
@@ -388,7 +388,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Why does velocity matter if my friction loss is acceptable?',
-      a: 'Two reasons. Erosion: water above 8 fps (5 fps hot) physically scours the inside of pipe and fittings, especially at elbows, eventually causing pinhole leaks. Water hammer: high velocity means high momentum, so any sudden valve closure produces a pressure spike that can crack joints. Both effects are independent of friction loss — a system can pencil out on PSI drop while still failing on velocity.',
+      a: 'Two reasons. Erosion: water above 8 fps (5 fps hot) physically scours the inside of pipe and fittings, especially at elbows, eventually causing pinhole leaks. Water hammer: high velocity means high momentum, so any sudden valve closure produces a pressure spike that can crack joints. Both effects are independent of friction loss — a system can pencil out on PSI drop while still failing on velocity. Pin down incoming static with a [hose-bib pressure gauge](https://www.amazon.com/s?k=water+pressure+test+gauge&tag=projectcalc-20) before sizing anything.',
     },
   ],
   'gpm-to-pipe-size-calculator': [
@@ -472,7 +472,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How do I prevent the pump from short-cycling?',
-      a: 'Two ways. Add a pressure tank downstream of the pump (typical 4–14 gal bladder tank) to give the pump time between starts — sized for at least one minute of run time at peak demand. Or use a VFD pump that ramps speed instead of cycling on/off. Short-cycling kills pump motors fast — the start current is 6–8× running current and the bearings/seals see the thermal shock at every start.',
+      a: 'Two ways. Add a [pressure tank](https://www.amazon.com/s?k=well+pump+pressure+tank&tag=projectcalc-20) downstream of the pump (typical 4–14 gal bladder tank) to give the pump time between starts — sized for at least one minute of run time at peak demand. Or use a VFD pump that ramps speed instead of cycling on/off. Short-cycling kills pump motors fast — the start current is 6–8× running current and the bearings/seals see the thermal shock at every start.',
     },
   ],
   'expansion-tank-sizing-calculator': [
@@ -486,7 +486,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Where does the expansion tank install?',
-      a: 'On the cold water inlet side of the water heater, between the heater and the shut-off valve. Hanging vertically (tank below pipe) is preferred so debris drains out of the bladder area. Pre-charge the tank air pressure to match the supply pressure (typically 60 PSI) before installing — most tanks ship at 40 PSI from the factory and need to be adjusted. Use a Schrader-valve gauge with the tank disconnected from water pressure.',
+      a: 'On the cold water inlet side of the water heater, between the heater and the shut-off valve. Hanging vertically (tank below pipe) is preferred so debris drains out of the bladder area. Pre-charge the tank air pressure to match the supply pressure (typically 60 PSI) before installing — most tanks ship at 40 PSI from the factory and need to be adjusted. Use a [Schrader-valve gauge](https://www.amazon.com/s?k=schrader+valve+pressure+gauge&tag=projectcalc-20) with the tank disconnected from water pressure. Replacement [thermal expansion tanks](https://www.amazon.com/s?k=thermal+expansion+tank+water+heater&tag=projectcalc-20) (2 and 4.4 gallon) run $40-60.',
     },
   ],
   'duct-cfm-calculator': [
@@ -500,7 +500,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Why does correct duct sizing matter?',
-      a: 'Undersized ducts starve airflow — coils freeze in cooling mode, heat exchangers crack in heating mode, and equipment lifespan drops. Oversized ducts waste fan energy, leak more, and can produce uncomfortable air velocity. Manual D sizing pays back in efficiency and longevity.',
+      a: 'Undersized ducts starve airflow — coils freeze in cooling mode, heat exchangers crack in heating mode, and equipment lifespan drops. Oversized ducts waste fan energy, leak more, and can produce uncomfortable air velocity. Manual D sizing pays back in efficiency and longevity. Verify register CFM with a [hot-wire anemometer](https://www.amazon.com/s?k=hot+wire+anemometer&tag=projectcalc-20) or [airflow capture hood](https://www.amazon.com/s?k=airflow+capture+hood&tag=projectcalc-20).',
     },
   ],
   'mortgage-calculator': [
@@ -552,7 +552,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How long of a 2x12 do I need for a stair stringer?',
-      a: 'Take the diagonal stringer length the calculator returns, round up to the nearest standard length, and add at least 12 inches for the seat cut at the bottom and the plumb cut at the top. A 9-foot rise with a 14-tread layout typically needs a 16-foot 2x12 even though the diagonal is only ~14 ft. Always lay out the cuts on paper before going to the lumberyard. This sizing is an estimate — confirm with your local building inspector before cutting.',
+      a: 'Take the diagonal stringer length the calculator returns, round up to the nearest standard length, and add at least 12 inches for the seat cut at the bottom and the plumb cut at the top. A 9-foot rise with a 14-tread layout typically needs a 16-foot 2x12 even though the diagonal is only ~14 ft. Always lay out the cuts on paper before going to the lumberyard. A [framing square with stair gauges](https://www.amazon.com/s?k=stair+gauge+framing+square&tag=projectcalc-20) makes the layout repeatable across all stringers. This sizing is an estimate — confirm with your local building inspector before cutting.',
     },
     {
       q: 'Should I use 2 or 3 stringers?',
@@ -580,7 +580,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'What thickness of plywood for subfloor?',
-      a: '23/32" tongue-and-groove is the standard for residential floors over 16" o.c. joists. 19/32" works on 12" o.c. spacing or where a separate underlayment will be added. 1-1/8" T&G is used on 24" o.c. engineered I-joists. OSB rated as Sturd-I-Floor is acceptable in the same thicknesses. Always match the APA rated stamp on the sheet to the joist spacing called out in the framing plan.',
+      a: '23/32" tongue-and-groove is the standard for residential floors over 16" o.c. joists. 19/32" works on 12" o.c. spacing or where a separate underlayment will be added. 1-1/8" T&G is used on 24" o.c. engineered I-joists. OSB rated as Sturd-I-Floor is acceptable in the same thicknesses. Always match the APA rated stamp on the sheet to the joist spacing called out in the framing plan. A [chalk reel](https://www.amazon.com/s?k=chalk+reel+line&tag=projectcalc-20) and [framing nailer](https://www.amazon.com/s?k=framing+nailer&tag=projectcalc-20) handle most subfloor layout and fastening.',
     },
     {
       q: 'OSB or plywood for sheathing — which is better?',
@@ -590,7 +590,7 @@ export const faqs: Record<string, FAQItem[]> = {
   'rafter-length-calculator': [
     {
       q: 'How do I figure rafter length from pitch and run?',
-      a: 'Multiply the run (half the building width) by the pitch factor √(pitch² + 144) ÷ 12. For a 24-ft-wide building with 6/12 pitch, run is 12 ft and the pitch factor is √(36+144)/12 ≈ 1.118, so the slope length from ridge to wall is 12 × 1.118 ≈ 13.4 ft. Add the eave overhang along the slope to get the total rafter length to cut. Always verify against the architect or engineer\'s roof plan.',
+      a: 'Multiply the run (half the building width) by the pitch factor √(pitch² + 144) ÷ 12. For a 24-ft-wide building with 6/12 pitch, run is 12 ft and the pitch factor is √(36+144)/12 ≈ 1.118, so the slope length from ridge to wall is 12 × 1.118 ≈ 13.4 ft. Add the eave overhang along the slope to get the total rafter length to cut. Always verify against the architect or engineer\'s roof plan. A [Speed Square](https://www.amazon.com/s?k=swanson+speed+square&tag=projectcalc-20) has the pitch tables stamped right on it for plumb and seat cuts in the field.',
     },
     {
       q: 'Do I subtract the ridge board thickness?',
@@ -604,7 +604,7 @@ export const faqs: Record<string, FAQItem[]> = {
   'header-size-calculator': [
     {
       q: 'What size header for a 6-foot opening?',
-      a: 'For a non-bearing wall: a (2) 2x6 header is plenty. For an exterior bearing wall carrying roof and ceiling only: (2) 2x8. With one floor above plus the roof: (2) 2x10. With two floors above: (3) 2x10. These come from a simplified read of IRC R602.7 and assume average residential loading — your inspector or engineer is still the final word, especially in snow regions or with wider building widths.',
+      a: 'For a non-bearing wall: a (2) 2x6 header is plenty. For an exterior bearing wall carrying roof and ceiling only: (2) 2x8. With one floor above plus the roof: (2) 2x10. With two floors above: (3) 2x10. These come from a simplified read of IRC R602.7 and assume average residential loading — your inspector or engineer is still the final word, especially in snow regions or with wider building widths. A [Speed Square](https://www.amazon.com/s?k=swanson+speed+square&tag=projectcalc-20) and [framing nailer](https://www.amazon.com/s?k=framing+nailer&tag=projectcalc-20) handle 90% of header carpentry once layout is set.',
     },
     {
       q: 'How many jack studs per side for a header?',
@@ -626,7 +626,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How much grout for a 100 sq ft floor?',
-      a: 'For 12×12 tile with a 1/8" joint, one 25-lb bag of sanded grout typically covers 100-200 ft² depending on the manufacturer and how thick you bed the grout. For 4×4 tile with a 1/4" joint, that same bag drops to 50-75 ft² because joint length per area is roughly 3× higher. Always cross-check the manufacturer\'s coverage chart for the specific product before ordering.',
+      a: 'For 12×12 tile with a 1/8" joint, one 25-lb bag of sanded grout typically covers 100-200 ft² depending on the manufacturer and how thick you bed the grout. For 4×4 tile with a 1/4" joint, that same bag drops to 50-75 ft² because joint length per area is roughly 3× higher. Always cross-check the manufacturer\'s coverage chart for the specific product before ordering. A [rubber grout float](https://www.amazon.com/s?k=rubber+grout+float&tag=projectcalc-20) and [grout sponge set](https://www.amazon.com/s?k=tile+grout+sponge&tag=projectcalc-20) is the minimum kit for any grouting job.',
     },
   ],
   'cmu-block-calculator': [
@@ -636,7 +636,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How many bags of mortar for 100 concrete blocks?',
-      a: 'Three 80-lb bags of Type S or N mortar per 100 blocks — about 0.5 ft³ of mortar per 100 blocks at a 3/8 in joint. Type S is the standard for load-bearing CMU walls (1,800 psi compressive strength). For below-grade foundations or seismic regions, the engineer may spec Type M (2,500 psi). Add 10% waste for spillage and partial bags.',
+      a: 'Three 80-lb bags of Type S or N mortar per 100 blocks — about 0.5 ft³ of mortar per 100 blocks at a 3/8 in joint. Type S is the standard for load-bearing CMU walls (1,800 psi compressive strength). For below-grade foundations or seismic regions, the engineer may spec Type M (2,500 psi). Add 10% waste for spillage and partial bags. A [block trowel](https://www.amazon.com/s?k=mason+block+trowel&tag=projectcalc-20) is wider than a brick trowel and sized specifically for CMU coursing.',
     },
     {
       q: 'When does a CMU wall need rebar?',
@@ -650,7 +650,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Do I need lath behind manufactured stone veneer?',
-      a: 'Yes — every code-compliant manufactured stone install over framing or sheathing needs metal lath stapled through to the studs (not just the sheathing) followed by a scratch coat before the stones go on. ASTM C1670 and most manufacturer specs call for 2.5-lb diamond mesh galvanized lath fastened at 6" o.c. on studs. Skip the lath and the veneer fails — usually within five years.',
+      a: 'Yes — every code-compliant manufactured stone install over framing or sheathing needs [metal lath](https://www.amazon.com/s?k=galvanized+diamond+mesh+lath&tag=projectcalc-20) stapled through to the studs (not just the sheathing) followed by a scratch coat before the stones go on. ASTM C1670 and most manufacturer specs call for 2.5-lb diamond mesh galvanized lath fastened at 6" o.c. on studs. Skip the lath and the veneer fails — usually within five years.',
     },
     {
       q: 'How many bags of mortar per 100 sq ft of stone veneer?',
@@ -664,7 +664,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How long does stucco take to install?',
-      a: 'A standard 3-coat job on a 1,500 ft² house takes 5-7 working days minimum: day 1 for lath, day 2 for scratch coat, days 3-4 to cure (the brown coat goes on after the scratch is moisture-cured for 48 hours), day 5 for brown coat, days 6-7 to cure, then 1 day for finish coat. Fast-tracking the cure between coats causes the cracking you see on rushed builds.',
+      a: 'A standard 3-coat job on a 1,500 ft² house takes 5-7 working days minimum: day 1 for lath, day 2 for scratch coat, days 3-4 to cure (the brown coat goes on after the scratch is moisture-cured for 48 hours), day 5 for brown coat, days 6-7 to cure, then 1 day for finish coat. Fast-tracking the cure between coats causes the cracking you see on rushed builds. A [hawk and trowel set](https://www.amazon.com/s?k=plasterers+hawk+and+trowel&tag=projectcalc-20) is the basic two-tool kit; a [scratching rake](https://www.amazon.com/s?k=stucco+scratching+rake&tag=projectcalc-20) speeds up the first coat.',
     },
     {
       q: 'Can I do stucco over plywood?',
@@ -674,7 +674,7 @@ export const faqs: Record<string, FAQItem[]> = {
   'tuckpointing-calculator': [
     {
       q: 'How deep should I cut out a joint for tuckpointing?',
-      a: 'BIA Technical Note 7F recommends a minimum repoint depth of 2× the joint width and never less than 5/8 in. For a typical 3/8 in joint, that\'s 3/4 in deep. Cutting shallower means the new mortar pops out within a few years because there isn\'t enough surface area for the bond. Cutting deeper is fine and often necessary on weathered walls — go until you reach sound, undamaged mortar.',
+      a: 'BIA Technical Note 7F recommends a minimum repoint depth of 2× the joint width and never less than 5/8 in. For a typical 3/8 in joint, that\'s 3/4 in deep. Cutting shallower means the new mortar pops out within a few years because there isn\'t enough surface area for the bond. Cutting deeper is fine and often necessary on weathered walls — go until you reach sound, undamaged mortar. An [angle grinder](https://www.amazon.com/s?k=angle+grinder+4.5+inch&tag=projectcalc-20) with a [diamond tuckpointing blade](https://www.amazon.com/s?k=diamond+tuckpointing+blade&tag=projectcalc-20) cuts joints 5× faster than a chisel and leaves a flat profile for the new bed.',
     },
     {
       q: 'What mortar type for tuckpointing an old building?',
@@ -702,7 +702,7 @@ export const faqs: Record<string, FAQItem[]> = {
   'wire-gauge-calculator': [
     {
       q: 'What AWG is needed for 20 amps?',
-      a: '12 AWG copper handles 20 A at 75°C terminations per NEC 310.16. 14 AWG is rated 15 A and pairs with a 15 A breaker only. Aluminum runs one size larger — 10 AWG aluminum is the minimum for a 20 A circuit.',
+      a: '12 AWG copper handles 20 A at 75°C terminations per NEC 310.16. 14 AWG is rated 15 A and pairs with a 15 A breaker only. Aluminum runs one size larger — 10 AWG aluminum is the minimum for a 20 A circuit. A pair of [Klein wire strippers](https://www.amazon.com/s?k=klein+wire+strippers&tag=projectcalc-20) sized for 10-22 AWG handles every common residential gauge in one tool.',
     },
     {
       q: 'When does run length force me to upsize?',
@@ -738,7 +738,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Do I need to count gas appliances?',
-      a: 'No. Only electric loads count toward the panel calculation. A gas range, gas dryer, or gas water heater contributes zero to the demand. The calculator is built so entering 0 kW for gas appliances drops them out cleanly.',
+      a: 'No. Only electric loads count toward the panel calculation. A gas range, gas dryer, or gas water heater contributes zero to the demand. The calculator is built so entering 0 kW for gas appliances drops them out cleanly. Before any panel work, kill the main and verify dead with a [non-contact voltage tester](https://www.amazon.com/s?k=non+contact+voltage+tester&tag=projectcalc-20) — known-source / unknown-source / known-source per OSHA 1910.333.',
     },
   ],
   'conduit-bending-calculator': [
@@ -748,7 +748,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Why do offset multipliers exist?',
-      a: 'They convert the rise (vertical step you need) into the distance between the two bend marks on the pipe. 30° = 2.0 (mark-to-mark = 2× rise); 45° = 1.4; 22.5° = 2.6. Without the multiplier you would have to do trig on the job — benders that print these on the handle (Klein, Greenlee) save the math.',
+      a: 'They convert the rise (vertical step you need) into the distance between the two bend marks on the pipe. 30° = 2.0 (mark-to-mark = 2× rise); 45° = 1.4; 22.5° = 2.6. Without the multiplier you would have to do trig on the job — benders that print these on the handle ([Klein](https://www.amazon.com/s?k=klein+conduit+bender&tag=projectcalc-20), [Greenlee](https://www.amazon.com/s?k=greenlee+conduit+bender&tag=projectcalc-20)) save the math.',
     },
     {
       q: 'How does a 3-bend saddle differ from an offset?',
@@ -766,7 +766,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'Do I need a transfer switch?',
-      a: 'Anything wired into the home panel needs a manual transfer switch or a UL-listed interlock kit per NEC 702. Backfeeding through a dryer outlet without an interlock is illegal and can kill a lineman working on the de-energized service. Portable generators powering extension cords directly to appliances are exempt.',
+      a: 'Anything wired into the home panel needs a [manual transfer switch](https://www.amazon.com/s?k=generator+manual+transfer+switch&tag=projectcalc-20) or a [UL-listed interlock kit](https://www.amazon.com/s?k=generator+interlock+kit&tag=projectcalc-20) per NEC 702. Backfeeding through a dryer outlet without an interlock is illegal and can kill a lineman working on the de-energized service. Portable generators powering extension cords directly to appliances are exempt.',
     },
   ],
   'manual-j-heat-load-calculator': [
@@ -786,7 +786,7 @@ export const faqs: Record<string, FAQItem[]> = {
   'refrigerant-charge-calculator': [
     {
       q: 'How is final refrigerant charge actually verified?',
-      a: 'Subcooling for TXV / EEV systems (most modern equipment): measure liquid line temp at the condenser, compare to saturation temp at liquid pressure, target the manufacturer\'s subcooling spec (typically 8-12°F). Superheat for fixed-orifice systems: measure suction line temp at the condenser, compare to saturation at suction pressure, target the chart on the equipment.',
+      a: 'Subcooling for TXV / EEV systems (most modern equipment): measure liquid line temp at the condenser, compare to saturation temp at liquid pressure, target the manufacturer\'s subcooling spec (typically 8-12°F). Superheat for fixed-orifice systems: measure suction line temp at the condenser, compare to saturation at suction pressure, target the chart on the equipment. A [digital HVAC manifold gauge set](https://www.amazon.com/s?k=digital+hvac+manifold+gauge&tag=projectcalc-20) reads pressure and saturation temps simultaneously — much faster than analog gauges plus a separate P-T chart.',
     },
     {
       q: 'Do I need a Section 608 license to handle refrigerant?',
@@ -808,7 +808,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How do I actually measure TESP?',
-      a: 'Drill a 3/8" hole in the supply plenum after the coil and another in the return plenum before the filter. Insert a Magnehelic gauge probe (or a digital manometer) in each, set the gauge to read pressure differential, and read the result with the blower running on cooling speed. Plug the holes with grommets when finished. Total cost: $50 for a basic gauge, $300 for a digital manometer.',
+      a: 'Drill a 3/8" hole in the supply plenum after the coil and another in the return plenum before the filter. Insert a [Magnehelic gauge](https://www.amazon.com/s?k=dwyer+magnehelic+gauge&tag=projectcalc-20) probe (or a [digital manometer](https://www.amazon.com/s?k=digital+manometer+hvac&tag=projectcalc-20)) in each, set the gauge to read pressure differential, and read the result with the blower running on cooling speed. Plug the holes with grommets when finished. Total cost: $50 for a basic gauge, $300 for a digital manometer.',
     },
   ],
   'ventilation-cfm-calculator': [
@@ -822,7 +822,7 @@ export const faqs: Record<string, FAQItem[]> = {
     },
     {
       q: 'How is bath exhaust counted toward whole-house?',
-      a: 'A bath fan can pull double duty: provide the local 50 CFM exhaust during shower use, AND run continuously on a low setting to provide whole-house ventilation. Panasonic WhisperGreen and similar fans have dual-speed controls specifically for this. Cheaper and simpler than a separate whole-house exhaust fan.',
+      a: 'A bath fan can pull double duty: provide the local 50 CFM exhaust during shower use, AND run continuously on a low setting to provide whole-house ventilation. [Panasonic WhisperGreen](https://www.amazon.com/s?k=panasonic+whispergreen&tag=projectcalc-20) and similar fans have dual-speed controls specifically for this. Cheaper and simpler than a separate whole-house exhaust fan.',
     },
   ],
   'heat-loss-calculator': [
