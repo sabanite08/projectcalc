@@ -599,6 +599,16 @@ header.site-header {
   color: var(--ink-2);
 }
 
+.seo-block h3 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-top: 28px;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
 .seo-block p {
   font-size: 15px;
   line-height: 1.65;

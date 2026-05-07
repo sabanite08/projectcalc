@@ -100,18 +100,6 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
 
         <CalculatorView slug={calc.slug} />
 
-        {toolsCategory && (
-          <Link href={`/tools/${toolsCategory.slug}`} className="tools-cta">
-            <div className="tools-cta-label">RECOMMENDED TOOLS</div>
-            <div className="tools-cta-text">
-              {toolsCategory.name} we recommend for projects like this
-            </div>
-            <div className="tools-cta-arrow">→</div>
-          </Link>
-        )}
-
-        {toolkit && <ToolkitCTA toolkit={toolkit} />}
-
         {isFinanceAdvice && (
           <div className="disclaimer">
             <strong>Not financial advice.</strong> This calculator provides
@@ -125,8 +113,66 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
 
         <div className="seo-block">
           <h2>About this calculator</h2>
-          <p>{calc.seoIntro}</p>
+          {calc.seoIntro.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+
+          {calc.howToUse && (
+            <>
+              <h3>How to use this calculator</h3>
+              {calc.howToUse.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+            </>
+          )}
+
+          {calc.workedExample && (
+            <>
+              <h3>Worked example</h3>
+              {calc.workedExample.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+            </>
+          )}
+
+          {calc.commonMistakes && (
+            <>
+              <h3>Common mistakes &amp; waste factors</h3>
+              {calc.commonMistakes.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+            </>
+          )}
+
+          {calc.rulesOfThumb && (
+            <>
+              <h3>Rules of thumb</h3>
+              {calc.rulesOfThumb.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+            </>
+          )}
         </div>
+
+        {faq.length > 0 && (
+          <div className="faq-block">
+            <h2>Common questions</h2>
+            {hasAffiliateLink && (
+              <p className="affiliate-note">
+                Tool and material links below are affiliate links — we may earn a
+                small commission if you buy, at no extra cost to you.
+              </p>
+            )}
+            {faq.map((item, i) => (
+              <details key={i} className="faq-item" open={i === 0}>
+                <summary>{item.q}</summary>
+                <div className="faq-answer">{renderInline(item.a)}</div>
+              </details>
+            ))}
+          </div>
+        )}
+
+        {toolsCategory && (
+          <Link href={`/tools/${toolsCategory.slug}`} className="tools-cta">
+            <div className="tools-cta-label">RECOMMENDED TOOLS</div>
+            <div className="tools-cta-text">
+              {toolsCategory.name} we recommend for projects like this
+            </div>
+            <div className="tools-cta-arrow">→</div>
+          </Link>
+        )}
+
+        {toolkit && <ToolkitCTA toolkit={toolkit} />}
 
         {relatedPosts.length > 0 && (
           <div className="related">
@@ -141,24 +187,6 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
                 </Link>
               ))}
             </div>
-          </div>
-        )}
-
-        {faq.length > 0 && (
-          <div className="faq-block">
-            <h2>Common questions</h2>
-            {hasAffiliateLink && (
-              <p className="affiliate-note">
-                Tool and material links below are affiliate links — we may earn a
-                small commission if you buy, at no extra cost to you.
-              </p>
-            )}
-            {faq.map((item, i) => (
-              <details key={i} className="faq-item">
-                <summary>{item.q}</summary>
-                <div className="faq-answer">{renderInline(item.a)}</div>
-              </details>
-            ))}
           </div>
         )}
 

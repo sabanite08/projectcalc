@@ -51,6 +51,10 @@ export interface Calculator {
   metaTitle: string;
   metaDesc: string;
   seoIntro: string;
+  howToUse?: string;
+  workedExample?: string;
+  commonMistakes?: string;
+  rulesOfThumb?: string;
   note: string;
   inputs: CalcInput[];
   calc: (data: Record<string, string | number>) => CalcResult;
