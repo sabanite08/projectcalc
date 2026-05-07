@@ -65,6 +65,87 @@ export default function About() {
             upsize a wire gauge.
           </p>
 
+          <h2 style={{ marginTop: 32 }}>Methodology &amp; sources</h2>
+          <p>
+            Calculator formulas come from current code editions and industry
+            references, not blog posts:
+          </p>
+          <ul>
+            <li>
+              <strong>Electrical</strong> — National Electrical Code (NEC) for
+              voltage drop (Hazen-Williams not applicable; we use the
+              standard K=12.9 copper resistivity), conduit fill (NEC Chapter
+              9), wire gauge ampacity (Table 310.16, 75°C terminations), panel
+              load (NEC 220 Part III standard method), and circuit breaker
+              sizing (NEC 240.6 + 210.20(A)).
+            </li>
+            <li>
+              <strong>Plumbing</strong> — International Plumbing Code (IPC)
+              for drain pipe sizing (Table 710.1), vent sizing (Table 906.1),
+              trap sizing (Table 1002.1), and fixture units. Hazen-Williams
+              for friction loss with material-specific C-factors.
+            </li>
+            <li>
+              <strong>HVAC</strong> — ACCA Manual J approach for whole-home
+              cooling/heating loads (with Heat Transfer Multipliers by IECC
+              climate zone), CFM = BTU &divide; (1.08 &times; &Delta;T) for
+              duct sizing, ASHRAE 62.2 for ventilation rates, EPA Section 608
+              references for refrigerant.
+            </li>
+            <li>
+              <strong>Carpentry</strong> — IRC R602.7 for header sizing
+              (simplified residential ranges), AWC Maximum Spans for floor
+              joists and rafters, NDS allowable stresses for built-up beams.
+              ASCE 7 simplified for snow loads.
+            </li>
+            <li>
+              <strong>Masonry</strong> — Brick Industry Association (BIA) for
+              modular brick math (6.86 bricks/ft&sup2; with 3/8&quot; joint),
+              ACI 318 for rebar cover requirements, manufacturer spec sheets
+              for stone veneer and stucco coverage.
+            </li>
+            <li>
+              <strong>Finance</strong> — Standard amortization formula
+              (M = P&middot;r(1+r)<sup>n</sup> &divide; ((1+r)<sup>n</sup>&minus;1)) for
+              mortgages, car loans, and personal loans. No proprietary
+              modeling.
+            </li>
+          </ul>
+          <p>
+            Where formulas have multiple acceptable approaches (e.g., several
+            slope reduction equations for snow load), we use the simplest
+            approach that produces results within 10% of the more complex
+            methods, and document any deviation in the calculator&apos;s notes
+            section.
+          </p>
+
+          <h2 style={{ marginTop: 32 }}>Accuracy &amp; limits</h2>
+          <p>
+            All calculators are <strong>estimating tools</strong>, not
+            substitutes for engineered drawings, code-stamped tables, or
+            licensed professional sign-off. Code editions evolve and local
+            jurisdictions amend them &mdash; the math here is good for
+            planning, ordering, and sanity-checking. For permit submittal,
+            structural design, code compliance, or anything where being wrong
+            has real consequences, defer to your local building department,
+            licensed electrician, plumber, HVAC contractor, or structural
+            engineer.
+          </p>
+          <p>
+            Structural and life-safety calculators (beam span, header size,
+            stair stringer, snow load, panel load, etc.) carry an explicit
+            &ldquo;estimate only&rdquo; disclaimer in the result row.
+          </p>
+
+          <h2 style={{ marginTop: 32 }}>Updates</h2>
+          <p>
+            Calculator math is reviewed annually against the latest code
+            cycle. Major changes (e.g., the 2026 IRS mileage rate, NEC code
+            cycle updates) trigger faster updates. The blog publishes new
+            project guides on a regular cadence; calculator additions ship as
+            new use cases come up.
+          </p>
+
           <h2 style={{ marginTop: 32 }}>Pro Toolkits</h2>
           <p>
             For contractors who need a full estimating workflow, we sell Pro
@@ -78,6 +159,8 @@ export default function About() {
             ProjectCalc is an independent site run by a solo developer based in
             the United States. It is funded by affiliate commissions and
             advertising — no subscriptions, no paywalls, no account required.
+            Inputs to every calculator stay in your browser; nothing is sent
+            to a server.
           </p>
 
           <h2 style={{ marginTop: 32 }}>Contact</h2>
@@ -90,7 +173,9 @@ export default function About() {
               rel="noopener noreferrer"
             >
               GitHub repository
-            </a>.
+            </a>. Code corrections are especially welcome &mdash; if a calc
+            disagrees with current code or a published source, file an issue
+            with the citation and it gets fixed.
           </p>
         </div>
       </section>
