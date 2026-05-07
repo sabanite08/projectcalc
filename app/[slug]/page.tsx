@@ -100,6 +100,18 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
 
         <CalculatorView slug={calc.slug} />
 
+        {toolsCategory && (
+          <Link href={`/tools/${toolsCategory.slug}`} className="tools-cta">
+            <div className="tools-cta-label">RECOMMENDED TOOLS</div>
+            <div className="tools-cta-text">
+              {toolsCategory.name} we recommend for projects like this
+            </div>
+            <div className="tools-cta-arrow">→</div>
+          </Link>
+        )}
+
+        {toolkit && <ToolkitCTA toolkit={toolkit} />}
+
         {isFinanceAdvice && (
           <div className="disclaimer">
             <strong>Not financial advice.</strong> This calculator provides
@@ -116,31 +128,39 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
           {calc.seoIntro.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
 
           {calc.howToUse && (
-            <>
-              <h3>How to use this calculator</h3>
-              {calc.howToUse.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-            </>
+            <details className="prose-section" open>
+              <summary>How to use this calculator</summary>
+              <div className="prose-content">
+                {calc.howToUse.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            </details>
           )}
 
           {calc.workedExample && (
-            <>
-              <h3>Worked example</h3>
-              {calc.workedExample.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-            </>
+            <details className="prose-section">
+              <summary>Worked example</summary>
+              <div className="prose-content">
+                {calc.workedExample.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            </details>
           )}
 
           {calc.commonMistakes && (
-            <>
-              <h3>Common mistakes &amp; waste factors</h3>
-              {calc.commonMistakes.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-            </>
+            <details className="prose-section">
+              <summary>Common mistakes &amp; waste factors</summary>
+              <div className="prose-content">
+                {calc.commonMistakes.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            </details>
           )}
 
           {calc.rulesOfThumb && (
-            <>
-              <h3>Rules of thumb</h3>
-              {calc.rulesOfThumb.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-            </>
+            <details className="prose-section">
+              <summary>Rules of thumb</summary>
+              <div className="prose-content">
+                {calc.rulesOfThumb.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            </details>
           )}
         </div>
 
@@ -161,18 +181,6 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
             ))}
           </div>
         )}
-
-        {toolsCategory && (
-          <Link href={`/tools/${toolsCategory.slug}`} className="tools-cta">
-            <div className="tools-cta-label">RECOMMENDED TOOLS</div>
-            <div className="tools-cta-text">
-              {toolsCategory.name} we recommend for projects like this
-            </div>
-            <div className="tools-cta-arrow">→</div>
-          </Link>
-        )}
-
-        {toolkit && <ToolkitCTA toolkit={toolkit} />}
 
         {relatedPosts.length > 0 && (
           <div className="related">
