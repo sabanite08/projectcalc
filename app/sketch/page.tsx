@@ -31,8 +31,9 @@ export default function SketchPage() {
             sketch with the area, then jump straight into a matching
             calculator with your dimensions already filled in. Works for any
             rectangular space &mdash; bedrooms, patios, decks, garden beds &mdash;
-            and includes an L-shape mode for rooms with bump-outs or
-            recessed corners.
+            and includes an L-shape mode for rooms with bump-outs and a
+            <strong> Custom shape</strong> mode where you can drag any number of
+            points around to match an irregular room or yard.
           </p>
         </div>
 
@@ -77,6 +78,27 @@ export default function SketchPage() {
             cutout to the destination calc as URL parameters so the calc loads
             with your numbers ready. You can still edit them in the calc
             itself if needed.
+          </p>
+
+          <h2 style={{ marginTop: 32 }}>Custom shape mode</h2>
+          <p>
+            For rooms or yards that aren&apos;t rectangles or simple L-shapes,
+            switch to <strong>Custom shape</strong>. The sketcher opens with a
+            four-point square &mdash; drag any corner to reshape it, tap the
+            <strong> + </strong>button on any edge to insert a new point, and
+            tap the <strong>×</strong> next to a point to remove it (minimum 3
+            points). Edge lengths and the live area in square feet update as
+            you drag, so you can match the actual footprint of a patio with a
+            curved edge, a kitchen with an angled wall, a garden bed that
+            tapers, or any other shape that doesn&apos;t fit a rectangle.
+          </p>
+          <p>
+            When you launch a calculator from custom mode, the calc opens
+            with Shape set to &ldquo;Custom (from sketch)&rdquo; and the exact
+            area and perimeter from your polygon pre-filled. The math uses
+            those values directly rather than treating the shape as a
+            rectangle, so wall-based calcs like drywall and paint also pick up
+            the real perimeter.
           </p>
 
           <h2 style={{ marginTop: 32 }}>L-shape mode</h2>

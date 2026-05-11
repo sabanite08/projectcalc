@@ -23,11 +23,18 @@ const COMPATIBLE_CALCS: { slug: string; name: string; group: string }[] = [
 const GROUPS = ['Walls & Ceilings', 'Flooring', 'Outdoor & Hardscape', 'Yard & Garden'];
 
 type Corner = 'tr' | 'tl' | 'br' | 'bl';
-type Mode = 'rectangle' | 'lshape';
+type Mode = 'rectangle' | 'lshape' | 'custom';
+type Pt = { x: number; y: number };
 
 const CANVAS_W = 600;
 const CANVAS_H = 360;
 const PADDING = 50;
+const SNAP_FT = 0.5;
+const MIN_FT = 1;
+
+function snap(v: number) {
+  return Math.max(MIN_FT, Math.round(v / SNAP_FT) * SNAP_FT);
+}
 
 function fitRect(L: number, W: number) {
   const availW = CANVAS_W - PADDING * 2;
@@ -96,6 +103,51 @@ function cutoutRect(
   };
 }
 
+function fitPolygon(pts: Pt[]) {
+  if (pts.length === 0) return null;
+  const xs = pts.map(p => p.x);
+  const ys = pts.map(p => p.y);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+  const w = Math.max(0.1, maxX - minX);
+  const h = Math.max(0.1, maxY - minY);
+  const availW = CANVAS_W - PADDING * 2;
+  const availH = CANVAS_H - PADDING * 2;
+  const scale = Math.min(availW / w, availH / h);
+  const offsetX = (CANVAS_W - w * scale) / 2 - minX * scale;
+  const offsetY = (CANVAS_H - h * scale) / 2 - minY * scale;
+  return { scale, offsetX, offsetY, minX, minY, maxX, maxY, w, h };
+}
+
+function polygonArea(pts: Pt[]) {
+  let a = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const j = (i + 1) % pts.length;
+    a += pts[i].x * pts[j].y - pts[j].x * pts[i].y;
+  }
+  return Math.abs(a) / 2;
+}
+
+function polygonPerimeter(pts: Pt[]) {
+  let p = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const j = (i + 1) % pts.length;
+    const dx = pts[j].x - pts[i].x;
+    const dy = pts[j].y - pts[i].y;
+    p += Math.sqrt(dx * dx + dy * dy);
+  }
+  return p;
+}
+
+const DEFAULT_POLY: Pt[] = [
+  { x: 0,  y: 0 },
+  { x: 12, y: 0 },
+  { x: 12, y: 10 },
+  { x: 0,  y: 10 },
+];
+
 export default function RoomSketcher() {
   const [mode, setMode] = useState<Mode>('rectangle');
   const [L, setL] = useState<number | ''>(12);
@@ -103,9 +155,11 @@ export default function RoomSketcher() {
   const [cL, setCL] = useState<number | ''>(4);
   const [cW, setCW] = useState<number | ''>(3);
   const [corner, setCorner] = useState<Corner>('tr');
+  const [poly, setPoly] = useState<Pt[]>(DEFAULT_POLY);
 
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const dragRef = useRef<{
+  // rectangle/L-shape drag (resize corners of bounding rect)
+  const rectDragRef = useRef<{
     handle: 'tl' | 'tr' | 'bl' | 'br';
     startX: number;
     startY: number;
@@ -113,7 +167,14 @@ export default function RoomSketcher() {
     origW: number;
     pxPerFt: number;
   } | null>(null);
-  const [, forceTick] = useState(0); // re-render after non-state ref updates
+  // custom polygon vertex drag
+  const polyDragRef = useRef<{
+    index: number;
+    scale: number;
+    offsetX: number;
+    offsetY: number;
+  } | null>(null);
+  const [, forceTick] = useState(0);
 
   function getSvgPoint(clientX: number, clientY: number): { x: number; y: number } {
     const svg = svgRef.current;
@@ -129,32 +190,46 @@ export default function RoomSketcher() {
 
   useEffect(() => {
     function onMove(e: MouseEvent | TouchEvent) {
-      const drag = dragRef.current;
-      if (!drag) return;
       const point =
         'touches' in e
           ? getSvgPoint(e.touches[0].clientX, e.touches[0].clientY)
           : getSvgPoint(e.clientX, e.clientY);
-      const dxPx = point.x - drag.startX;
-      const dyPx = point.y - drag.startY;
-      const dxFt = dxPx / drag.pxPerFt;
-      const dyFt = dyPx / drag.pxPerFt;
-      let newL = drag.origL;
-      let newW = drag.origW;
-      switch (drag.handle) {
-        case 'tr': newL = drag.origL + dxFt; newW = drag.origW - dyFt; break;
-        case 'tl': newL = drag.origL - dxFt; newW = drag.origW - dyFt; break;
-        case 'br': newL = drag.origL + dxFt; newW = drag.origW + dyFt; break;
-        case 'bl': newL = drag.origL - dxFt; newW = drag.origW + dyFt; break;
+
+      const rectDrag = rectDragRef.current;
+      if (rectDrag) {
+        const dxPx = point.x - rectDrag.startX;
+        const dyPx = point.y - rectDrag.startY;
+        const dxFt = dxPx / rectDrag.pxPerFt;
+        const dyFt = dyPx / rectDrag.pxPerFt;
+        let newL = rectDrag.origL;
+        let newW = rectDrag.origW;
+        switch (rectDrag.handle) {
+          case 'tr': newL = rectDrag.origL + dxFt; newW = rectDrag.origW - dyFt; break;
+          case 'tl': newL = rectDrag.origL - dxFt; newW = rectDrag.origW - dyFt; break;
+          case 'br': newL = rectDrag.origL + dxFt; newW = rectDrag.origW + dyFt; break;
+          case 'bl': newL = rectDrag.origL - dxFt; newW = rectDrag.origW + dyFt; break;
+        }
+        setL(snap(newL));
+        setW(snap(newW));
+        if (e.cancelable) e.preventDefault();
+        return;
       }
-      newL = Math.max(1, Math.round(newL * 2) / 2);
-      newW = Math.max(1, Math.round(newW * 2) / 2);
-      setL(newL);
-      setW(newW);
-      if (e.cancelable) e.preventDefault();
+
+      const polyDrag = polyDragRef.current;
+      if (polyDrag) {
+        const fx = (point.x - polyDrag.offsetX) / polyDrag.scale;
+        const fy = (point.y - polyDrag.offsetY) / polyDrag.scale;
+        setPoly(prev => prev.map((p, i) =>
+          i === polyDrag.index
+            ? { x: Math.round(fx / SNAP_FT) * SNAP_FT, y: Math.round(fy / SNAP_FT) * SNAP_FT }
+            : p,
+        ));
+        if (e.cancelable) e.preventDefault();
+      }
     }
     function onUp() {
-      dragRef.current = null;
+      rectDragRef.current = null;
+      polyDragRef.current = null;
       forceTick(t => t + 1);
     }
     window.addEventListener('mousemove', onMove);
@@ -169,10 +244,10 @@ export default function RoomSketcher() {
     };
   }, []);
 
-  function startDrag(handle: 'tl' | 'tr' | 'bl' | 'br', clientX: number, clientY: number) {
+  function startRectDrag(handle: 'tl' | 'tr' | 'bl' | 'br', clientX: number, clientY: number) {
     if (!rect) return;
     const point = getSvgPoint(clientX, clientY);
-    dragRef.current = {
+    rectDragRef.current = {
       handle,
       startX: point.x,
       startY: point.y,
@@ -183,26 +258,80 @@ export default function RoomSketcher() {
     forceTick(t => t + 1);
   }
 
+  function startPolyDrag(index: number, clientX: number, clientY: number) {
+    const fit = fitPolygon(poly);
+    if (!fit) return;
+    polyDragRef.current = {
+      index,
+      scale: fit.scale,
+      offsetX: fit.offsetX,
+      offsetY: fit.offsetY,
+    };
+    // We don't need to capture clientX/Y because we compute the vertex's
+    // new position directly from cursor → feet coords.
+    void clientX; void clientY;
+    forceTick(t => t + 1);
+  }
+
+  function addVertex(edgeIndex: number) {
+    setPoly(prev => {
+      const a = prev[edgeIndex];
+      const b = prev[(edgeIndex + 1) % prev.length];
+      const mid = {
+        x: Math.round((a.x + b.x) / 2 / SNAP_FT) * SNAP_FT,
+        y: Math.round((a.y + b.y) / 2 / SNAP_FT) * SNAP_FT,
+      };
+      const next = [...prev];
+      next.splice(edgeIndex + 1, 0, mid);
+      return next;
+    });
+  }
+
+  function removeVertex(index: number) {
+    setPoly(prev => (prev.length <= 3 ? prev : prev.filter((_, i) => i !== index)));
+  }
+
+  function resetPoly() {
+    setPoly(DEFAULT_POLY);
+  }
+
   const Lnum = typeof L === 'number' ? L : 0;
   const Wnum = typeof W === 'number' ? W : 0;
   const cLnum = typeof cL === 'number' ? cL : 0;
   const cWnum = typeof cW === 'number' ? cW : 0;
 
   const baseValid = Lnum > 0 && Wnum > 0;
-  const cutoutValid = mode === 'rectangle' || (cLnum > 0 && cWnum > 0 && cLnum < Lnum && cWnum < Wnum);
-  const valid = baseValid && cutoutValid;
+  const cutoutValid = mode === 'rectangle' || mode === 'custom' || (cLnum > 0 && cWnum > 0 && cLnum < Lnum && cWnum < Wnum);
+  const customValid = mode !== 'custom' || (poly.length >= 3 && polygonArea(poly) > 0);
 
-  const boundingArea = baseValid ? Lnum * Wnum : 0;
-  const cutoutArea = mode === 'lshape' && cutoutValid ? cLnum * cWnum : 0;
-  const area = boundingArea - cutoutArea;
-  const perimeter = baseValid ? 2 * (Lnum + Wnum) : 0;
+  let area = 0;
+  let perimeter = 0;
+  if (mode === 'custom') {
+    area = polygonArea(poly);
+    perimeter = polygonPerimeter(poly);
+  } else if (baseValid) {
+    const boundingArea = Lnum * Wnum;
+    const cutoutArea = mode === 'lshape' && cutoutValid ? cLnum * cWnum : 0;
+    area = boundingArea - cutoutArea;
+    perimeter = 2 * (Lnum + Wnum);
+  }
 
-  const rect = baseValid ? fitRect(Lnum, Wnum) : null;
+  const valid =
+    (mode === 'custom' ? customValid : baseValid && cutoutValid);
+
+  const rect = mode !== 'custom' && baseValid ? fitRect(Lnum, Wnum) : null;
+  const polyFit = mode === 'custom' ? fitPolygon(poly) : null;
+  // For custom mode the bounding box L/W is the polygon's box in feet
+  const bboxL = polyFit ? polyFit.w : 0;
+  const bboxW = polyFit ? polyFit.h : 0;
 
   const buildUrl = (slug: string) => {
-    // Insulation's L is total wall length (perimeter), not room length
+    // Insulation: L is wall length (total perimeter)
     if (slug === 'insulation-calculator') {
-      return `/${slug}?L=${perimeter}`;
+      return `/${slug}?L=${perimeter.toFixed(2)}`;
+    }
+    if (mode === 'custom') {
+      return `/${slug}?shape=custom&customArea=${area.toFixed(2)}&customPerimeter=${perimeter.toFixed(2)}&L=${bboxL.toFixed(2)}&W=${bboxW.toFixed(2)}`;
     }
     if (mode === 'lshape') {
       return `/${slug}?L=${Lnum}&W=${Wnum}&shape=lshape&cutoutL=${cLnum}&cutoutW=${cWnum}&cutoutCorner=${corner}`;
@@ -288,14 +417,12 @@ export default function RoomSketcher() {
 
           {rect && mode === 'lshape' && cutoutValid && (
             <>
-              {/* L-shape filled polygon */}
               <polygon
                 points={lShapePoints(Lnum, Wnum, cLnum, cWnum, corner, rect)}
                 fill="rgba(255, 212, 0, 0.10)"
                 stroke="#ffd400"
                 strokeWidth={3}
               />
-              {/* Cutout area shown as dashed outline */}
               {(() => {
                 const c = cutoutRect(Lnum, Wnum, cLnum, cWnum, corner, rect);
                 return (
@@ -311,7 +438,6 @@ export default function RoomSketcher() {
                   />
                 );
               })()}
-              {/* Bounding dimension labels */}
               <text
                 x={rect.x + rect.width / 2}
                 y={rect.y - 14}
@@ -336,7 +462,6 @@ export default function RoomSketcher() {
               >
                 {Wnum} ft
               </text>
-              {/* Cutout label */}
               {(() => {
                 const c = cutoutRect(Lnum, Wnum, cLnum, cWnum, corner, rect);
                 return (
@@ -353,9 +478,7 @@ export default function RoomSketcher() {
                   </text>
                 );
               })()}
-              {/* Area label — pick a spot inside the L-shape */}
               {(() => {
-                // Place area label opposite the cutout corner for readability
                 const labelX =
                   corner === 'tl' || corner === 'bl'
                     ? rect.x + rect.width * 0.7
@@ -393,7 +516,7 @@ export default function RoomSketcher() {
             </>
           )}
 
-          {rect && (
+          {rect && mode !== 'custom' && (
             <>
               {(['tl', 'tr', 'bl', 'br'] as const).map(name => {
                 const cx =
@@ -412,13 +535,144 @@ export default function RoomSketcher() {
                     style={{ cursor }}
                     onMouseDown={e => {
                       e.preventDefault();
-                      startDrag(name, e.clientX, e.clientY);
+                      startRectDrag(name, e.clientX, e.clientY);
                     }}
                     onTouchStart={e => {
                       const t = e.touches[0];
-                      startDrag(name, t.clientX, t.clientY);
+                      startRectDrag(name, t.clientX, t.clientY);
                     }}
                   />
+                );
+              })}
+            </>
+          )}
+
+          {mode === 'custom' && polyFit && (
+            <>
+              <polygon
+                points={poly.map(p => `${p.x * polyFit.scale + polyFit.offsetX},${p.y * polyFit.scale + polyFit.offsetY}`).join(' ')}
+                fill="rgba(255, 212, 0, 0.10)"
+                stroke="#ffd400"
+                strokeWidth={3}
+              />
+              {/* Edge midpoint "+" buttons (add vertex on that edge) */}
+              {poly.map((p, i) => {
+                const q = poly[(i + 1) % poly.length];
+                const mx = (p.x + q.x) / 2 * polyFit.scale + polyFit.offsetX;
+                const my = (p.y + q.y) / 2 * polyFit.scale + polyFit.offsetY;
+                const len = Math.sqrt(Math.pow(q.x - p.x, 2) + Math.pow(q.y - p.y, 2));
+                return (
+                  <g key={`edge-${i}`}>
+                    <text
+                      x={mx}
+                      y={my - 12}
+                      textAnchor="middle"
+                      fill="#ffd400"
+                      fontFamily="JetBrains Mono, monospace"
+                      fontSize="11"
+                      fontWeight="700"
+                      pointerEvents="none"
+                    >
+                      {len.toFixed(1)} ft
+                    </text>
+                    <g
+                      style={{ cursor: 'copy' }}
+                      onClick={e => { e.stopPropagation(); addVertex(i); }}
+                    >
+                      <circle cx={mx} cy={my} r={8} fill="#0e0e0c" stroke="#76726a" strokeWidth={1.5} />
+                      <text
+                        x={mx}
+                        y={my + 4}
+                        textAnchor="middle"
+                        fill="#f4f1ea"
+                        fontFamily="JetBrains Mono, monospace"
+                        fontSize="13"
+                        fontWeight="700"
+                        pointerEvents="none"
+                      >
+                        +
+                      </text>
+                    </g>
+                  </g>
+                );
+              })}
+              {/* Area label at polygon centroid */}
+              {(() => {
+                const cx = poly.reduce((s, p) => s + p.x, 0) / poly.length;
+                const cy = poly.reduce((s, p) => s + p.y, 0) / poly.length;
+                const sx = cx * polyFit.scale + polyFit.offsetX;
+                const sy = cy * polyFit.scale + polyFit.offsetY;
+                return (
+                  <>
+                    <text
+                      x={sx}
+                      y={sy - 6}
+                      textAnchor="middle"
+                      fill="#f4f1ea"
+                      fontFamily="Archivo Black, sans-serif"
+                      fontSize="20"
+                      pointerEvents="none"
+                    >
+                      {area.toLocaleString(undefined, { maximumFractionDigits: 1 })} ft²
+                    </text>
+                    <text
+                      x={sx}
+                      y={sy + 14}
+                      textAnchor="middle"
+                      fill="#76726a"
+                      fontFamily="JetBrains Mono, monospace"
+                      fontSize="11"
+                      letterSpacing="0.1em"
+                      pointerEvents="none"
+                    >
+                      AREA
+                    </text>
+                  </>
+                );
+              })()}
+              {/* Vertex handles + × delete buttons */}
+              {poly.map((p, i) => {
+                const sx = p.x * polyFit.scale + polyFit.offsetX;
+                const sy = p.y * polyFit.scale + polyFit.offsetY;
+                return (
+                  <g key={`v-${i}`}>
+                    <circle
+                      cx={sx}
+                      cy={sy}
+                      r={9}
+                      className="sketcher-handle"
+                      style={{ cursor: 'move' }}
+                      onMouseDown={e => {
+                        e.preventDefault();
+                        startPolyDrag(i, e.clientX, e.clientY);
+                      }}
+                      onTouchStart={e => {
+                        const t = e.touches[0];
+                        startPolyDrag(i, t.clientX, t.clientY);
+                      }}
+                    />
+                    {poly.length > 3 && (
+                      <g
+                        transform={`translate(${sx + 14},${sy - 14})`}
+                        style={{ cursor: 'pointer' }}
+                        onClick={e => { e.stopPropagation(); removeVertex(i); }}
+                      >
+                        <circle cx={0} cy={0} r={7} fill="#0e0e0c" stroke="#c74848" strokeWidth={1.5} />
+                        <text
+                          x={0}
+                          y={3.5}
+                          textAnchor="middle"
+                          fill="#c74848"
+                          fontFamily="JetBrains Mono, monospace"
+                          fontSize="11"
+                          fontWeight="700"
+                          pointerEvents="none"
+                        >
+                          ×
+                        </text>
+                      </g>
+                    )}
+                  </g>
                 );
               })}
             </>
@@ -447,48 +701,89 @@ export default function RoomSketcher() {
           />
           L-shape
         </label>
+        <label className={`mode-pill${mode === 'custom' ? ' is-active' : ''}`}>
+          <input
+            type="radio"
+            name="sketch-mode"
+            value="custom"
+            checked={mode === 'custom'}
+            onChange={() => setMode('custom')}
+          />
+          Custom shape
+        </label>
       </div>
 
-      <div className="sketcher-inputs">
-        <div className="input-group">
-          <label>Length</label>
-          <div className="input-row">
-            <input
-              type="number"
-              inputMode="decimal"
-              value={L === '' ? '' : L}
-              step={0.5}
-              placeholder="e.g. 12"
-              onChange={e => setL(e.target.value === '' ? '' : parseFloat(e.target.value))}
-            />
-            <div className="unit">ft</div>
+      {mode !== 'custom' && (
+        <div className="sketcher-inputs">
+          <div className="input-group">
+            <label>Length</label>
+            <div className="input-row">
+              <input
+                type="number"
+                inputMode="decimal"
+                value={L === '' ? '' : L}
+                step={0.5}
+                placeholder="e.g. 12"
+                onChange={e => setL(e.target.value === '' ? '' : parseFloat(e.target.value))}
+              />
+              <div className="unit">ft</div>
+            </div>
+          </div>
+          <div className="input-group">
+            <label>Width</label>
+            <div className="input-row">
+              <input
+                type="number"
+                inputMode="decimal"
+                value={W === '' ? '' : W}
+                step={0.5}
+                placeholder="e.g. 10"
+                onChange={e => setW(e.target.value === '' ? '' : parseFloat(e.target.value))}
+              />
+              <div className="unit">ft</div>
+            </div>
+          </div>
+          <div className="sketcher-readout">
+            <div className="readout-row">
+              <span className="readout-key">Area</span>
+              <span className="readout-val">{valid ? `${area.toLocaleString()} ft²` : '—'}</span>
+            </div>
+            <div className="readout-row">
+              <span className="readout-key">Perimeter</span>
+              <span className="readout-val">{baseValid ? `${perimeter.toLocaleString()} ft` : '—'}</span>
+            </div>
           </div>
         </div>
-        <div className="input-group">
-          <label>Width</label>
-          <div className="input-row">
-            <input
-              type="number"
-              inputMode="decimal"
-              value={W === '' ? '' : W}
-              step={0.5}
-              placeholder="e.g. 10"
-              onChange={e => setW(e.target.value === '' ? '' : parseFloat(e.target.value))}
-            />
-            <div className="unit">ft</div>
+      )}
+
+      {mode === 'custom' && (
+        <div className="sketcher-custom-controls">
+          <div className="custom-hint">
+            Drag any point to reshape. Tap <strong>+</strong> on an edge to add a
+            point. Tap <strong>×</strong> next to a point to remove it (3 point
+            minimum).
+          </div>
+          <div className="custom-actions">
+            <button type="button" className="btn" onClick={resetPoly}>
+              Reset to square
+            </button>
+            <div className="sketcher-readout">
+              <div className="readout-row">
+                <span className="readout-key">Area</span>
+                <span className="readout-val">{valid ? `${area.toLocaleString(undefined, { maximumFractionDigits: 1 })} ft²` : '—'}</span>
+              </div>
+              <div className="readout-row">
+                <span className="readout-key">Perimeter</span>
+                <span className="readout-val">{valid ? `${perimeter.toLocaleString(undefined, { maximumFractionDigits: 1 })} ft` : '—'}</span>
+              </div>
+              <div className="readout-row">
+                <span className="readout-key">Points</span>
+                <span className="readout-val">{poly.length}</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="sketcher-readout">
-          <div className="readout-row">
-            <span className="readout-key">Area</span>
-            <span className="readout-val">{valid ? `${area.toLocaleString()} ft²` : '—'}</span>
-          </div>
-          <div className="readout-row">
-            <span className="readout-key">Perimeter</span>
-            <span className="readout-val">{baseValid ? `${perimeter.toLocaleString()} ft` : '—'}</span>
-          </div>
-        </div>
-      </div>
+      )}
 
       {mode === 'lshape' && (
         <div className="sketcher-cutout">
@@ -568,12 +863,19 @@ export default function RoomSketcher() {
           <div className="launcher-hint">
             {mode === 'lshape'
               ? 'Enter valid bounding and cutout dimensions to enable launchers.'
+              : mode === 'custom'
+              ? 'Draw a shape with at least 3 points to enable launchers.'
               : 'Enter length and width to enable launcher buttons.'}
           </div>
         )}
         {mode === 'lshape' && valid && (
           <div className="launcher-hint">
             L-shape mode: each launcher passes the bounding length, width, and cutout dimensions through to the calculator. The calc page shows the L-shape with a Shape: L-shape toggle and computes the net area exactly.
+          </div>
+        )}
+        {mode === 'custom' && valid && (
+          <div className="launcher-hint">
+            Custom-shape mode: launchers pass the polygon&apos;s exact area and perimeter through to each calculator. The calc page opens with Shape set to &ldquo;Custom&rdquo; — you can still switch back to Rectangle there if you want a quick re-estimate.
           </div>
         )}
       </div>

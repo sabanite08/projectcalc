@@ -29,10 +29,9 @@ export const calculators: Calculator[] = [
         options: [['4x8','4×8 (32 ft²)'],['4x12','4×12 (48 ft²)']] }
     ],
     calc: (data) => {
-      const L = +data.L, W = +data.W, H = +data.H, ceil = data.ceil as string, sheet = data.sheet as string;
+      const H = +data.H, ceil = data.ceil as string, sheet = data.sheet as string;
       const s = extractShape(data);
-      // L-shape's wall perimeter equals the bounding rectangle's perimeter
-      const wallArea = 2 * (L + W) * H;
+      const wallArea = s.wallPerimeter * H;
       const ceilArea = ceil === 'yes' ? s.net : 0;
       const total = wallArea + ceilArea;
       const sheetArea = sheet === '4x12' ? 48 : 32;
@@ -69,14 +68,16 @@ export const calculators: Calculator[] = [
     inputs: [
       { id: 'L', label: 'Room length', unit: 'ft', default: 12, step: 0.5 },
       { id: 'W', label: 'Room width', unit: 'ft', default: 10, step: 0.5 },
+      ...SHAPE_INPUTS,
       { id: 'H', label: 'Ceiling height', unit: 'ft', default: 8, step: 0.5 },
       { id: 'coats', label: 'Number of coats', unit: '', default: 2, step: 1 },
       { id: 'surface', label: 'Surface', unit: '', type: 'select', default: 'smooth',
         options: [['smooth','Smooth (350 ft²/gal)'],['rough','Rough/textured (275 ft²/gal)']] }
     ],
     calc: (data) => {
-      const L=+data.L, W=+data.W, H=+data.H, coats=+data.coats, surface=data.surface as string;
-      const wallArea = 2 * (L + W) * H;
+      const H=+data.H, coats=+data.coats, surface=data.surface as string;
+      const s = extractShape(data);
+      const wallArea = s.wallPerimeter * H;
       const coverage = surface === 'smooth' ? 350 : 275;
       const gallons = (wallArea * coats) / coverage;
       return {

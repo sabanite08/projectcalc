@@ -1547,6 +1547,41 @@ footer.site-footer a:hover { color: var(--hi-vis); }
   margin-top: 24px;
 }
 
+.sketcher-custom-controls {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.custom-hint {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--hi-vis);
+  border-radius: 4px;
+  padding: 10px 14px;
+}
+
+.custom-hint strong {
+  color: var(--hi-vis);
+}
+
+.custom-actions {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (max-width: 600px) {
+  .custom-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
 .launcher-group {
   margin-bottom: 18px;
 }

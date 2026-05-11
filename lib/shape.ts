@@ -14,6 +14,7 @@ export const SHAPE_INPUTS: CalcInput[] = [
     options: [
       ['rectangle', 'Rectangle'],
       ['lshape', 'L-shape (with cutout)'],
+      ['custom', 'Custom (from sketch)'],
     ],
   },
   {
@@ -46,6 +47,22 @@ export const SHAPE_INPUTS: CalcInput[] = [
     ],
     visibleWhen: d => d.shape === 'lshape',
   },
+  {
+    id: 'customArea',
+    label: 'Sketched area',
+    unit: 'ft²',
+    default: 0,
+    step: 1,
+    visibleWhen: d => d.shape === 'custom',
+  },
+  {
+    id: 'customPerimeter',
+    label: 'Sketched perimeter',
+    unit: 'ft',
+    default: 0,
+    step: 1,
+    visibleWhen: d => d.shape === 'custom',
+  },
 ];
 
 export interface ShapeArea {
@@ -53,21 +70,48 @@ export interface ShapeArea {
   cutout: number;
   net: number;
   isLShape: boolean;
+  isCustom: boolean;
+  /** Wall perimeter for walls-based calcs (drywall, paint). For rect/L it
+   *  uses the bounding rectangle; for custom it is the true polygon
+   *  perimeter passed in via `customPerimeter`. */
+  wallPerimeter: number;
 }
 
 export function extractShape(data: Record<string, string | number>): ShapeArea {
   const L = +data.L || 0;
   const W = +data.W || 0;
   const gross = L * W;
+  const isCustom = data.shape === 'custom';
   const isLShape = data.shape === 'lshape';
-  if (!isLShape) return { gross, cutout: 0, net: gross, isLShape: false };
+  if (isCustom) {
+    const a = +data.customArea || 0;
+    const p = +data.customPerimeter || 0;
+    return { gross: a, cutout: 0, net: a, isLShape: false, isCustom: true, wallPerimeter: p };
+  }
+  const rectPerimeter = 2 * (L + W);
+  if (!isLShape) {
+    return { gross, cutout: 0, net: gross, isLShape: false, isCustom: false, wallPerimeter: rectPerimeter };
+  }
   const cL = +data.cutoutL || 0;
   const cW = +data.cutoutW || 0;
   const cutout = cL * cW;
-  return { gross, cutout, net: Math.max(0, gross - cutout), isLShape: true };
+  return {
+    gross,
+    cutout,
+    net: Math.max(0, gross - cutout),
+    isLShape: true,
+    isCustom: false,
+    wallPerimeter: rectPerimeter,
+  };
 }
 
 export function shapeDetailRows(s: ShapeArea): [string, string][] {
+  if (s.isCustom) {
+    return [
+      ['Custom-shape area', s.net.toFixed(0) + ' ft²'],
+      ['Custom-shape perimeter', s.wallPerimeter.toFixed(0) + ' ft'],
+    ];
+  }
   if (!s.isLShape || s.cutout === 0) {
     return [['Floor area', s.net.toFixed(0) + ' ft²']];
   }
