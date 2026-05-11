@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { track } from '@vercel/analytics';
+import PdfPickerModal from './PdfPickerModal';
+import type { SketchSnapshot } from '@/lib/pdf-calc';
 
 const COMPATIBLE_CALCS: { slug: string; name: string; group: string }[] = [
   { slug: 'drywall-calculator', name: 'Drywall', group: 'Walls & Ceilings' },
@@ -156,6 +159,8 @@ export default function RoomSketcher() {
   const [cW, setCW] = useState<number | ''>(3);
   const [corner, setCorner] = useState<Corner>('tr');
   const [poly, setPoly] = useState<Pt[]>(DEFAULT_POLY);
+  const [pdfOpen, setPdfOpen] = useState(false);
+  const pdfImpressionTracked = useRef(false);
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   // rectangle/L-shape drag (resize corners of bounding rect)
@@ -324,6 +329,24 @@ export default function RoomSketcher() {
   // For custom mode the bounding box L/W is the polygon's box in feet
   const bboxL = polyFit ? polyFit.w : 0;
   const bboxW = polyFit ? polyFit.h : 0;
+
+  const sketchSnapshot: SketchSnapshot = {
+    mode,
+    L: mode === 'custom' ? bboxL : Lnum,
+    W: mode === 'custom' ? bboxW : Wnum,
+    cL: mode === 'lshape' ? cLnum : undefined,
+    cW: mode === 'lshape' ? cWnum : undefined,
+    corner: mode === 'lshape' ? corner : undefined,
+    area,
+    perimeter,
+  };
+
+  useEffect(() => {
+    if (valid && !pdfImpressionTracked.current) {
+      pdfImpressionTracked.current = true;
+      track('sketch_pdf_button_viewed', { sketch_mode: mode });
+    }
+  }, [valid, mode]);
 
   const buildUrl = (slug: string) => {
     // Insulation: L is wall length (total perimeter)
@@ -879,6 +902,39 @@ export default function RoomSketcher() {
           </div>
         )}
       </div>
+
+      {valid && (
+        <div className="sketcher-pdf-cta">
+          <div>
+            <div className="pdf-cta-eyebrow">PROJECT DOCUMENT</div>
+            <div className="pdf-cta-headline">Download a PDF with your sketch and material calcs</div>
+            <div className="pdf-cta-sub">
+              Pick the calculators you want included — get one document with
+              the sketch, area, perimeter, and headline material counts to
+              take to the lumberyard.
+            </div>
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary pdf-cta-btn"
+            onClick={() => {
+              track('sketch_pdf_modal_opened', { sketch_mode: mode });
+              setPdfOpen(true);
+            }}
+          >
+            Download project PDF
+          </button>
+        </div>
+      )}
+
+      <PdfPickerModal
+        open={pdfOpen}
+        onClose={() => setPdfOpen(false)}
+        sketch={sketchSnapshot}
+        polygon={mode === 'custom' ? poly : undefined}
+        calcs={COMPATIBLE_CALCS}
+        groups={GROUPS}
+      />
     </div>
   );
 }
