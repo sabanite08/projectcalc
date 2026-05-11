@@ -109,10 +109,11 @@ Copy what you need; keep variants consistent.
 
 ## Honest "what's not working yet" (for IH-style transparent posts)
 
-- Google AdSense rejected the site for "low value content" at day 8 — calc pages have since been expanded with substantial prose; reapplying in 2-4 weeks
-- impact.com Marketplace declined affiliate application (likely traffic/age)
-- Direct Home Depot affiliate also declined
-- Google Search Console shows ~94 of ~140 pages "Crawled - currently not indexed" — site age + zero backlinks; expected to clear over 6-12 weeks
+- Google AdSense rejected the site for "low value content" at day 8 — calc pages have since been expanded with substantial prose (800–1,200 words each); reapply once Google re-crawls
+- Google Ads account also rejected (same week)
+- impact.com Marketplace + direct Home Depot affiliate both declined (likely traffic/age) — Amazon Associates is live; CJ/ShareASale/FlexOffers/Rakuten queued
+- Google Search Console (2026-05-11): 1 page indexed, 121 "Crawled - currently not indexed" (validation failed), 38 "Discovered - currently not indexed", 2 "Page with redirect". No technical errors — no 404s, no soft-404s, no canonical/robots issues. The not-indexed pages are a domain-trust / content-quality verdict, not a bug; expected to clear over 6–12 weeks with backlinks + age
+- IndexNow is wired up (`npm run indexnow` pings Bing/Yandex with the full sitemap); Bing Webmaster Tools is set up
 
 ---
 
@@ -161,4 +162,4 @@ When listing on a new directory, you'll typically need:
 
 ---
 
-*Last updated: 2026-05-07*
+*Last updated: 2026-05-11*
