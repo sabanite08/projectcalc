@@ -1119,9 +1119,26 @@ footer.site-footer a:hover { color: var(--hi-vis); }
 }
 
 @media (max-width: 760px) {
-  .calc-search { max-width: none; }
+  header.site-header {
+    flex-wrap: wrap;
+    row-gap: 10px;
+    padding: 12px 16px;
+  }
+  .logo { flex-shrink: 0; }
+  .calc-search { max-width: none; flex: 1 1 180px; }
   .calc-search-hint { display: none; }
-  .header-nav { display: none; }
+  .header-nav {
+    order: 3;
+    flex-basis: 100%;
+    width: 100%;
+    gap: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .header-nav::-webkit-scrollbar { display: none; }
+  .header-nav a { white-space: nowrap; flex-shrink: 0; }
 }
 
 /* ─── TOOLKIT CTA ─── */
