@@ -164,8 +164,10 @@ const styles = StyleSheet.create({
 // Render the sketch as native PDF vector shapes
 function SketchSvg({ sketch, polygon }: { sketch: SketchSnapshot; polygon?: { x: number; y: number }[] }) {
   const W = 480;
-  const H = 220;
-  const PAD = 24;
+  const H = 240;
+  const PAD = 44; // room for dimension labels around the shape
+
+  const labelStyle = { fontFamily: 'Helvetica-Bold', fontSize: 10 } as const;
 
   if (sketch.mode === 'custom' && polygon && polygon.length >= 3) {
     const xs = polygon.map(p => p.x);
@@ -181,6 +183,38 @@ function SketchSvg({ sketch, polygon }: { sketch: SketchSnapshot; polygon?: { x:
     return (
       <Svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
         <Polygon points={pts} fill={COLORS.hiVis} fillOpacity={0.10} stroke={COLORS.hiVis} strokeWidth={2} />
+        {/* Per-edge length labels at midpoints */}
+        {polygon.map((p, i) => {
+          const q = polygon[(i + 1) % polygon.length];
+          const len = Math.sqrt(Math.pow(q.x - p.x, 2) + Math.pow(q.y - p.y, 2));
+          // Midpoint, nudged outward along the edge normal
+          const mx = (p.x + q.x) / 2 * scale + ox;
+          const my = (p.y + q.y) / 2 * scale + oy;
+          const dx = (q.x - p.x), dy = (q.y - p.y);
+          const elen = Math.sqrt(dx * dx + dy * dy) || 1;
+          // Outward normal: rotate edge vector 90deg
+          let nx = -dy / elen;
+          let ny = dx / elen;
+          // Make sure normal points outward from polygon centroid
+          const cx = polygon.reduce((s, pt) => s + pt.x, 0) / polygon.length;
+          const cy = polygon.reduce((s, pt) => s + pt.y, 0) / polygon.length;
+          const midFx = (p.x + q.x) / 2, midFy = (p.y + q.y) / 2;
+          if ((midFx - cx) * nx + (midFy - cy) * ny < 0) { nx = -nx; ny = -ny; }
+          const lx = mx + nx * 12;
+          const ly = my + ny * 12 + 3; // +3 baseline nudge
+          return (
+            <Text
+              key={`edge-${i}`}
+              x={lx}
+              y={ly}
+              textAnchor="middle"
+              fill={COLORS.hiVis}
+              style={labelStyle}
+            >
+              {`${len.toFixed(1)} ft`}
+            </Text>
+          );
+        })}
       </Svg>
     );
   }
@@ -210,6 +244,21 @@ function SketchSvg({ sketch, polygon }: { sketch: SketchSnapshot; polygon?: { x:
     return (
       <Svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
         <Polygon points={polyPts} fill={COLORS.hiVis} fillOpacity={0.10} stroke={COLORS.hiVis} strokeWidth={2} />
+        {/* Bounding L (top) */}
+        <Text x={rx + rectW / 2} y={ry - 10} textAnchor="middle" fill={COLORS.hiVis} style={labelStyle}>
+          {`${L.toFixed(1)} ft`}
+        </Text>
+        {/* Bounding W (left, rotated) */}
+        <Text
+          x={rx - 12}
+          y={ry + rectH / 2}
+          textAnchor="middle"
+          fill={COLORS.hiVis}
+          style={labelStyle}
+          transform={`rotate(-90 ${rx - 12} ${ry + rectH / 2})`}
+        >
+          {`${Wf.toFixed(1)} ft`}
+        </Text>
       </Svg>
     );
   }
@@ -217,9 +266,24 @@ function SketchSvg({ sketch, polygon }: { sketch: SketchSnapshot; polygon?: { x:
   return (
     <Svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
       <Rect x={rx} y={ry} width={rectW} height={rectH} fill={COLORS.hiVis} fillOpacity={0.10} stroke={COLORS.hiVis} strokeWidth={2} />
-      {/* dimension lines */}
-      <Line x1={rx} y1={ry - 8} x2={rx + rectW} y2={ry - 8} stroke={COLORS.ink3} strokeWidth={0.5} />
-      <Line x1={rx - 8} y1={ry} x2={rx - 8} y2={ry + rectH} stroke={COLORS.ink3} strokeWidth={0.5} />
+      {/* tick marks just outside the shape */}
+      <Line x1={rx} y1={ry - 6} x2={rx + rectW} y2={ry - 6} stroke={COLORS.ink3} strokeWidth={0.5} />
+      <Line x1={rx - 6} y1={ry} x2={rx - 6} y2={ry + rectH} stroke={COLORS.ink3} strokeWidth={0.5} />
+      {/* Length label on top */}
+      <Text x={rx + rectW / 2} y={ry - 14} textAnchor="middle" fill={COLORS.hiVis} style={labelStyle}>
+        {`${L.toFixed(1)} ft`}
+      </Text>
+      {/* Width label on left, rotated to read bottom-up */}
+      <Text
+        x={rx - 16}
+        y={ry + rectH / 2}
+        textAnchor="middle"
+        fill={COLORS.hiVis}
+        style={labelStyle}
+        transform={`rotate(-90 ${rx - 16} ${ry + rectH / 2})`}
+      >
+        {`${Wf.toFixed(1)} ft`}
+      </Text>
     </Svg>
   );
 }
