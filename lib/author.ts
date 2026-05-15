@@ -65,3 +65,17 @@ export const authorPersonSchema = {
   url: author.url,
   sameAs: author.sameAs,
 } as const;
+
+/**
+ * Site-wide "last reviewed" date — bump whenever the site has been audited
+ * end-to-end (calc formulas, code references, schema). Used as `dateModified`
+ * in JSON-LD and as a visible "REVIEWED [LABEL]" line in the meta of every
+ * blog and calc page.
+ *
+ * Important: Google's `dateModified` field is what Google actually reads for
+ * freshness. Without it the site looks stale even when content is current.
+ *
+ * Update both fields together. Format: ISO date + human-readable month/year.
+ */
+export const LAST_REVIEWED = '2026-05-15';
+export const LAST_REVIEWED_LABEL = 'MAY 2026';

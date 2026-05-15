@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { posts, getPost, getRelatedPosts } from '@/lib/posts';
 import { getCalculator } from '@/lib/calculators';
-import { author, authorPersonSchema } from '@/lib/author';
+import { author, authorPersonSchema, LAST_REVIEWED, LAST_REVIEWED_LABEL } from '@/lib/author';
 
 export async function generateStaticParams() {
   return posts.map(p => ({ slug: p.slug }));
@@ -45,18 +45,30 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
   const ldJson = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    description: post.metaDesc,
-    datePublished: post.date,
-    dateModified: post.date,
-    author: authorPersonSchema,
-    publisher: {
-      '@type': 'Organization',
-      name: 'ProjectCalc',
-      url: 'https://projectcalc.app',
-    },
-    mainEntityOfPage: `https://projectcalc.app/blog/${post.slug}`,
+    '@graph': [
+      {
+        '@type': 'Article',
+        headline: post.title,
+        description: post.metaDesc,
+        datePublished: post.date,
+        dateModified: LAST_REVIEWED,
+        author: authorPersonSchema,
+        publisher: {
+          '@type': 'Organization',
+          name: 'ProjectCalc',
+          url: 'https://projectcalc.app',
+        },
+        mainEntityOfPage: `https://projectcalc.app/blog/${post.slug}`,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'ProjectCalc', item: 'https://projectcalc.app' },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://projectcalc.app/blog' },
+          { '@type': 'ListItem', position: 3, name: post.title },
+        ],
+      },
+    ],
   };
 
   const Body = post.Body;
@@ -81,6 +93,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <span>{post.date}</span>
             <span>·</span>
             <span>BY <Link href="/about" style={{ color: 'inherit', textDecoration: 'underline' }}>{author.firstName.toUpperCase()}</Link></span>
+            <span>·</span>
+            <span>REVIEWED {LAST_REVIEWED_LABEL}</span>
           </div>
           <h1 className="article-title">{post.title}</h1>
         </div>

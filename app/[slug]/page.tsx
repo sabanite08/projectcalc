@@ -9,7 +9,7 @@ import ToolkitCTA from '@/components/ToolkitCTA';
 import { getToolkitForCalc } from '@/lib/toolkits';
 import { renderInline, stripInlineLinks } from '@/lib/render';
 import { getToolsCategoryForCalc } from '@/lib/tools';
-import { authorPersonSchema } from '@/lib/author';
+import { authorPersonSchema, LAST_REVIEWED, LAST_REVIEWED_LABEL } from '@/lib/author';
 
 const categoryLabels: Record<string, string> = {
   construction: 'TRADES',
@@ -65,6 +65,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
       applicationCategory: 'UtilitiesApplication',
       operatingSystem: 'Web',
       url: `https://projectcalc.app/${calc.slug}`,
+      dateModified: LAST_REVIEWED,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       author: authorPersonSchema,
       publisher: { '@type': 'Organization', name: 'ProjectCalc', url: 'https://projectcalc.app' },
@@ -80,6 +81,23 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
       })),
     });
   }
+  // BreadcrumbList — Home / Category / [Hub] / Calc
+  const breadcrumbItems: object[] = [
+    { '@type': 'ListItem', position: 1, name: 'ProjectCalc', item: 'https://projectcalc.app' },
+    { '@type': 'ListItem', position: 2, name: categoryLabels[calc.category], item: `https://projectcalc.app/#${calc.category}` },
+  ];
+  if (toolsCategory) {
+    breadcrumbItems.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: toolsCategory.shortName,
+      item: `https://projectcalc.app/tools/${toolsCategory.slug}`,
+    });
+    breadcrumbItems.push({ '@type': 'ListItem', position: 4, name: calc.title });
+  } else {
+    breadcrumbItems.push({ '@type': 'ListItem', position: 3, name: calc.title });
+  }
+  ldGraph.push({ '@type': 'BreadcrumbList', itemListElement: breadcrumbItems });
   const ldJson = { '@context': 'https://schema.org', '@graph': ldGraph };
 
   return (
@@ -101,7 +119,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
 
         <div className="calc-header">
           <div>
-            <div className="calc-formula">{calc.name.toUpperCase()}</div>
+            <div className="calc-formula">{calc.name.toUpperCase()} · REVIEWED {LAST_REVIEWED_LABEL}</div>
             <h1 className="calc-title">{calc.title}</h1>
           </div>
           <div className="calc-formula">{calc.formula}</div>

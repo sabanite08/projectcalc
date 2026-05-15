@@ -31,9 +31,23 @@ export default async function ToolsCategory({ params }: { params: Promise<{ cate
 
   const others = toolCategories.filter(c => c.slug !== cat.slug);
 
+  const ldJson = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ProjectCalc', item: 'https://projectcalc.app' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://projectcalc.app/tools' },
+      { '@type': 'ListItem', position: 3, name: cat.shortName },
+    ],
+  };
+
   return (
     <main>
       <section className="calc-wrap">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+        />
         <nav className="breadcrumb">
           <Link href="/">ProjectCalc</Link>
           <span className="sep">/</span>
