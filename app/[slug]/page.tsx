@@ -152,6 +152,14 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
 
         <div className="seo-block">
           <h2>About this calculator</h2>
+          {calc.diagram && (
+            <figure
+              className="calc-diagram"
+              dangerouslySetInnerHTML={{
+                __html: calc.diagram.svg + `<figcaption>${calc.diagram.alt}</figcaption>`,
+              }}
+            />
+          )}
           {calc.seoIntro.split('\n\n').map((p, i) => <p key={i}>{renderInline(p)}</p>)}
 
           {calc.howToUse && (

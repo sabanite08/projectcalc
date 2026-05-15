@@ -670,6 +670,29 @@ header.site-header {
   margin-bottom: 6px;
 }
 
+.calc-diagram {
+  margin: 6px 0 22px;
+  padding: 18px 18px 14px;
+  background: #fdfdf8;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.calc-diagram svg {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 0 auto;
+}
+.calc-diagram figcaption {
+  font-size: 12px;
+  color: #6a6a60;
+  text-align: center;
+  margin-top: 10px;
+  font-style: italic;
+  padding: 0 8px;
+}
+
 .seo-block p {
   font-size: 15px;
   line-height: 1.65;

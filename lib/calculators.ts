@@ -1,4 +1,16 @@
 import type { Calculator } from './types';
+import {
+  beamSpanDiagram,
+  concreteDiagram,
+  drywallDiagram,
+  manualJDiagram,
+  mortgageDiagram,
+  paintDiagram,
+  roofingDiagram,
+  stairStringerDiagram,
+  voltageDropDiagram,
+  waterSupplyDiagram
+} from './diagrams';
 import { SHAPE_INPUTS, extractShape, shapeDetailRows } from './shape';
 
 export const calculators: Calculator[] = [
@@ -48,7 +60,8 @@ export const calculators: Calculator[] = [
           ['Sheet coverage', sheetArea + ' ft²']
         ]
       };
-    }
+    },
+    diagram: drywallDiagram,
   },
   {
     slug: 'paint-calculator',
@@ -89,7 +102,8 @@ export const calculators: Calculator[] = [
           ['Coverage / gal', coverage + ' ft²']
         ]
       };
-    }
+    },
+    diagram: paintDiagram,
   },
   {
     slug: 'concrete-calculator',
@@ -130,7 +144,8 @@ export const calculators: Calculator[] = [
           ['80lb bags needed', bags80.toLocaleString()]
         ]
       };
-    }
+    },
+    diagram: concreteDiagram,
   },
   {
     slug: 'roofing-calculator',
@@ -169,7 +184,8 @@ export const calculators: Calculator[] = [
           ['Squares (w/ 10%)', squaresWithWaste.toFixed(2)]
         ]
       };
-    }
+    },
+    diagram: roofingDiagram,
   },
   {
     slug: 'hardwood-calculator',
@@ -1098,7 +1114,8 @@ export const calculators: Calculator[] = [
           ['Status', status]
         ]
       };
-    }
+    },
+    diagram: voltageDropDiagram,
   },
   {
     slug: 'btu-calculator',
@@ -1683,7 +1700,8 @@ export const calculators: Calculator[] = [
           ['Disclaimer', 'Estimate only — verify with licensed plumber and local code']
         ]
       };
-    }
+    },
+    diagram: waterSupplyDiagram,
   },
   {
     slug: 'drain-pipe-size-calculator',
@@ -2354,7 +2372,8 @@ export const calculators: Calculator[] = [
           ['Disclaimer', 'Estimate only — full Manual J required before equipment purchase']
         ]
       };
-    }
+    },
+    diagram: manualJDiagram,
   },
   {
     slug: 'refrigerant-charge-calculator',
@@ -2606,7 +2625,8 @@ export const calculators: Calculator[] = [
           ['Term', n + ' months']
         ]
       };
-    }
+    },
+    diagram: mortgageDiagram,
   },
   {
     slug: 'car-payment-calculator',
@@ -2772,7 +2792,8 @@ export const calculators: Calculator[] = [
           ['Disclaimer', 'Estimate only — verify with local code/inspector']
         ]
       };
-    }
+    },
+    diagram: stairStringerDiagram,
   },
   {
     slug: 'beam-span-calculator',
@@ -2834,7 +2855,8 @@ export const calculators: Calculator[] = [
           ['Disclaimer', 'Estimate only — engineer must verify']
         ]
       };
-    }
+    },
+    diagram: beamSpanDiagram,
   },
   {
     slug: 'plywood-sheets-calculator',

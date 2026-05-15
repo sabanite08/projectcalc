@@ -59,4 +59,5 @@ export interface Calculator {
   inputs: CalcInput[];
   calc: (data: Record<string, string | number>) => CalcResult;
   faq?: FAQItem[];
+  diagram?: { svg: string; alt: string };
 }
