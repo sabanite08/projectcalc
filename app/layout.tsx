@@ -71,6 +71,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </header>
         {children}
         <footer className="site-footer">
+          <div className="footer-links" aria-label="Tool categories">
+            <span style={{ opacity: 0.6, fontSize: '0.9em', marginRight: 8 }}>TOOLS BY TRADE:</span>
+            <Link href="/tools/carpentry">Carpentry</Link>
+            <Link href="/tools/masonry">Masonry</Link>
+            <Link href="/tools/electrical">Electrical</Link>
+            <Link href="/tools/plumbing">Plumbing</Link>
+            <Link href="/tools/hvac">HVAC</Link>
+            <Link href="/tools/home">Home &amp; DIY</Link>
+          </div>
           <div>© PROJECTCALC — BUILT FOR ANY PROJECT</div>
           <div className="footer-sister">
             Sister project: <a href="https://operaite.net">Operaite</a> — AI tools for small business owners

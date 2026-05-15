@@ -89,6 +89,12 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
           <Link href="/">ProjectCalc</Link>
           <span className="sep">/</span>
           <Link href={`/#${calc.category}`}>{categoryLabels[calc.category]}</Link>
+          {toolsCategory && (
+            <>
+              <span className="sep">/</span>
+              <Link href={`/tools/${toolsCategory.slug}`}>{toolsCategory.shortName}</Link>
+            </>
+          )}
           <span className="sep">/</span>
           <span>{calc.title}</span>
         </nav>
