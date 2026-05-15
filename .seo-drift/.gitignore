@@ -1,0 +1,2 @@
+# Baselines are reproducible from live URLs; don't commit them.
+*.json

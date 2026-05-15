@@ -152,13 +152,13 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
 
         <div className="seo-block">
           <h2>About this calculator</h2>
-          {calc.seoIntro.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+          {calc.seoIntro.split('\n\n').map((p, i) => <p key={i}>{renderInline(p)}</p>)}
 
           {calc.howToUse && (
             <details className="prose-section" open>
               <summary>How to use this calculator</summary>
               <div className="prose-content">
-                {calc.howToUse.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                {calc.howToUse.split('\n\n').map((p, i) => <p key={i}>{renderInline(p)}</p>)}
               </div>
             </details>
           )}
@@ -167,7 +167,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
             <details className="prose-section">
               <summary>Worked example</summary>
               <div className="prose-content">
-                {calc.workedExample.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                {calc.workedExample.split('\n\n').map((p, i) => <p key={i}>{renderInline(p)}</p>)}
               </div>
             </details>
           )}
@@ -176,7 +176,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
             <details className="prose-section">
               <summary>Common mistakes &amp; waste factors</summary>
               <div className="prose-content">
-                {calc.commonMistakes.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                {calc.commonMistakes.split('\n\n').map((p, i) => <p key={i}>{renderInline(p)}</p>)}
               </div>
             </details>
           )}
@@ -185,7 +185,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
             <details className="prose-section">
               <summary>Rules of thumb</summary>
               <div className="prose-content">
-                {calc.rulesOfThumb.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                {calc.rulesOfThumb.split('\n\n').map((p, i) => <p key={i}>{renderInline(p)}</p>)}
               </div>
             </details>
           )}
