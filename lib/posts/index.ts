@@ -126,8 +126,14 @@ export const posts: BlogPost[] = [
 export const getPost = (slug: string): BlogPost | undefined =>
   posts.find(p => p.slug === slug);
 
-export const getRelatedPosts = (slug: string, limit = 3): BlogPost[] =>
-  posts.filter(p => p.slug !== slug).slice(0, limit);
+export const getRelatedPosts = (slug: string, limit = 3): BlogPost[] => {
+  const current = getPost(slug);
+  if (!current) return posts.filter(p => p.slug !== slug).slice(0, limit);
+  const sameCategory = posts.filter(p => p.slug !== slug && p.category === current.category);
+  if (sameCategory.length >= limit) return sameCategory.slice(0, limit);
+  const others = posts.filter(p => p.slug !== slug && p.category !== current.category);
+  return [...sameCategory, ...others].slice(0, limit);
+};
 
 export const getPostsForCalc = (calcSlug: string): BlogPost[] =>
   posts.filter(p => p.relatedCalcs.includes(calcSlug));

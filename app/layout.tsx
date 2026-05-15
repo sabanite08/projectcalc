@@ -55,12 +55,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
           rel="stylesheet"
         />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8486020460628459"
-          crossOrigin="anonymous"
-        ></script>
-        <meta name="google-adsense-account" content="ca-pub-8486020460628459" />
       </head>
       <body>
         <header className="site-header">

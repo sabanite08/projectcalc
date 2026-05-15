@@ -4,7 +4,7 @@ import { posts } from '@/lib/posts';
 
 export const metadata: Metadata = {
   title: 'Blog — Honest Project Guides',
-  description: 'Practical guides on construction, home improvement, and project finance. Honest, no-fluff articles by the ProjectCalc team.',
+  description: 'Practical guides on construction, home improvement, and project finance. Honest, no-fluff articles for trades and homeowners.',
   alternates: { canonical: 'https://projectcalc.app/blog' },
   openGraph: {
     title: 'ProjectCalc Blog — Honest Project Guides',
