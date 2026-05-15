@@ -156,9 +156,10 @@ export default function About() {
 
           <h2 style={{ marginTop: 32 }}>Who runs it</h2>
           <p>
-            ProjectCalc is an independent site run by a solo developer based in
-            the United States. It is funded by affiliate commissions — no
-            subscriptions, no paywalls, no account required.
+            ProjectCalc is an independent site built and maintained by{' '}
+            <strong>Brent J.</strong>, a solo developer based in the United
+            States. It is funded by affiliate commissions — no subscriptions,
+            no paywalls, no account required.
             Inputs to every calculator stay in your browser; nothing is sent
             to a server.
           </p>

@@ -9,6 +9,7 @@ import ToolkitCTA from '@/components/ToolkitCTA';
 import { getToolkitForCalc } from '@/lib/toolkits';
 import { renderInline, stripInlineLinks } from '@/lib/render';
 import { getToolsCategoryForCalc } from '@/lib/tools';
+import { authorPersonSchema } from '@/lib/author';
 
 const categoryLabels: Record<string, string> = {
   construction: 'TRADES',
@@ -65,6 +66,8 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
       operatingSystem: 'Web',
       url: `https://projectcalc.app/${calc.slug}`,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      author: authorPersonSchema,
+      publisher: { '@type': 'Organization', name: 'ProjectCalc', url: 'https://projectcalc.app' },
     },
   ];
   if (faq.length > 0) {

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { posts, getPost, getRelatedPosts } from '@/lib/posts';
 import { getCalculator } from '@/lib/calculators';
+import { author, authorPersonSchema } from '@/lib/author';
 
 export async function generateStaticParams() {
   return posts.map(p => ({ slug: p.slug }));
@@ -49,7 +50,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     description: post.metaDesc,
     datePublished: post.date,
     dateModified: post.date,
-    author: { '@type': 'Organization', name: 'ProjectCalc', url: 'https://projectcalc.app' },
+    author: authorPersonSchema,
     publisher: {
       '@type': 'Organization',
       name: 'ProjectCalc',
@@ -78,6 +79,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <span>{post.readTime} MIN READ</span>
             <span>·</span>
             <span>{post.date}</span>
+            <span>·</span>
+            <span>BY <Link href="/about" style={{ color: 'inherit', textDecoration: 'underline' }}>{author.firstName.toUpperCase()}</Link></span>
           </div>
           <h1 className="article-title">{post.title}</h1>
         </div>
