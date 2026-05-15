@@ -8,10 +8,23 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://projectcalc.app/tools' },
 };
 
+const toolsLdJson = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ProjectCalc', item: 'https://projectcalc.app' },
+    { '@type': 'ListItem', position: 2, name: 'Tools' },
+  ],
+};
+
 export default function ToolsHub() {
   return (
     <main>
       <section className="calc-wrap">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolsLdJson) }}
+        />
         <nav className="breadcrumb">
           <Link href="/">ProjectCalc</Link>
           <span className="sep">/</span>

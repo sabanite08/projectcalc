@@ -20,9 +20,22 @@ const categoryLabels: Record<string, string> = {
   finance: 'FINANCE',
 };
 
+const blogLdJson = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ProjectCalc', item: 'https://projectcalc.app' },
+    { '@type': 'ListItem', position: 2, name: 'Blog' },
+  ],
+};
+
 export default function BlogIndex() {
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogLdJson) }}
+      />
       <section className="hero">
         <div className="hero-tag">FIELD GUIDES</div>
         <h1>Project<br /><span className="accent">guides.</span></h1>

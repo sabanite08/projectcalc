@@ -7,10 +7,23 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://projectcalc.app/about' },
 };
 
+const aboutLdJson = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ProjectCalc', item: 'https://projectcalc.app' },
+    { '@type': 'ListItem', position: 2, name: 'About' },
+  ],
+};
+
 export default function About() {
   return (
     <main>
       <section className="calc-wrap">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutLdJson) }}
+        />
         <nav className="breadcrumb">
           <Link href="/">ProjectCalc</Link>
           <span className="sep">/</span>
