@@ -1,13 +1,23 @@
 import type { Calculator } from './types';
 import {
+  acTonnageDiagram,
   beamSpanDiagram,
+  btuDiagram,
   concreteDiagram,
+  conduitFillDiagram,
+  deckStainDiagram,
   drywallDiagram,
+  hardwoodDiagram,
+  headerSizeDiagram,
   manualJDiagram,
   mortgageDiagram,
   paintDiagram,
+  paverDiagram,
+  rafterLengthDiagram,
+  retainingWallDiagram,
   roofingDiagram,
   stairStringerDiagram,
+  tileDiagram,
   voltageDropDiagram,
   waterSupplyDiagram
 } from './diagrams';
@@ -233,7 +243,8 @@ export const calculators: Calculator[] = [
           ['~Boxes (@ 22 sf)', boxes]
         ]
       };
-    }
+    },
+    diagram: hardwoodDiagram,
   },
   {
     slug: 'carpet-calculator',
@@ -371,7 +382,8 @@ export const calculators: Calculator[] = [
           ['Waste factor', ((waste-1)*100).toFixed(0) + '%']
         ]
       };
-    }
+    },
+    diagram: tileDiagram,
   },
   {
     slug: 'mulch-calculator',
@@ -526,7 +538,8 @@ export const calculators: Calculator[] = [
           ['Coverage / gal', coverage + ' ft²']
         ]
       };
-    }
+    },
+    diagram: deckStainDiagram,
   },
   {
     slug: 'insulation-calculator',
@@ -1156,7 +1169,8 @@ export const calculators: Calculator[] = [
           ['Suggested unit', tons < 1 ? '0.75 ton' : tons < 1.5 ? '1.0 ton' : tons < 2 ? '1.5 ton' : tons < 2.5 ? '2.0 ton' : tons < 3 ? '2.5 ton' : tons < 3.5 ? '3.0 ton' : '3.5+ ton']
         ]
       };
-    }
+    },
+    diagram: btuDiagram,
   },
   {
     slug: 'pipe-volume-calculator',
@@ -1297,7 +1311,8 @@ export const calculators: Calculator[] = [
           ['Headroom', (limit - pct).toFixed(1) + '%']
         ]
       };
-    }
+    },
+    diagram: conduitFillDiagram,
   },
   {
     slug: 'wire-gauge-calculator',
@@ -2950,7 +2965,8 @@ export const calculators: Calculator[] = [
           ['Disclaimer', 'Estimate — subtract ½ ridge for cut; verify size']
         ]
       };
-    }
+    },
+    diagram: rafterLengthDiagram,
   },
   {
     slug: 'header-size-calculator',
@@ -3030,7 +3046,8 @@ export const calculators: Calculator[] = [
           ['Disclaimer', 'Estimate only — engineer/inspector required']
         ]
       };
-    }
+    },
+    diagram: headerSizeDiagram,
   },
   {
     slug: 'paver-calculator',
@@ -3092,7 +3109,8 @@ export const calculators: Calculator[] = [
           ['Pavers (rounded up)', pavers.toLocaleString()]
         ]
       };
-    }
+    },
+    diagram: paverDiagram,
   },
   {
     slug: 'paver-sand-calculator',
@@ -3200,7 +3218,8 @@ export const calculators: Calculator[] = [
           ['Disclaimer', 'Estimate only — verify local code']
         ]
       };
-    }
+    },
+    diagram: retainingWallDiagram,
   },
   {
     slug: 'roof-pitch-calculator',
@@ -3520,7 +3539,8 @@ export const calculators: Calculator[] = [
           ['Standard sizes', '1.5 / 2.0 / 2.5 / 3.0 / 3.5 / 4.0 / 5.0 ton']
         ]
       };
-    }
+    },
+    diagram: acTonnageDiagram,
   },
   {
     slug: 'furnace-size-calculator',

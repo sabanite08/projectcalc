@@ -269,6 +269,346 @@ export const mortgageDiagram = {
   </svg>`,
 };
 
+// 11. HARDWOOD — plank layout in a room (top-down)
+export const hardwoodDiagram = {
+  alt: "Top-down view of a room with hardwood planks laid in parallel courses, dimensions of plank length and width labeled",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hardwood plank layout in a room">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">Room area ÷ plank coverage + waste = box count</text>
+    <rect x="80" y="60" width="320" height="160" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <!-- planks: 6 rows, staggered seams -->
+    <line x1="80" y1="86" x2="400" y2="86" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="80" y1="112" x2="400" y2="112" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="80" y1="138" x2="400" y2="138" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="80" y1="164" x2="400" y2="164" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="80" y1="190" x2="400" y2="190" stroke="${STROKE}" stroke-width="1"/>
+    <!-- staggered seams -->
+    <line x1="160" y1="60" x2="160" y2="86" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="260" y1="60" x2="260" y2="86" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="340" y1="60" x2="340" y2="86" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="130" y1="86" x2="130" y2="112" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="230" y1="86" x2="230" y2="112" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="320" y1="86" x2="320" y2="112" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="180" y1="112" x2="180" y2="138" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="280" y1="112" x2="280" y2="138" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="370" y1="112" x2="370" y2="138" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="150" y1="138" x2="150" y2="164" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="250" y1="138" x2="250" y2="164" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="350" y1="138" x2="350" y2="164" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="200" y1="164" x2="200" y2="190" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="300" y1="164" x2="300" y2="190" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="140" y1="190" x2="140" y2="220" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="240" y1="190" x2="240" y2="220" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="340" y1="190" x2="340" y2="220" stroke="${STROKE}" stroke-width="1"/>
+    <!-- callout: plank length -->
+    <line x1="160" y1="50" x2="260" y2="50" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="160" y1="45" x2="160" y2="55" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="260" y1="45" x2="260" y2="55" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="210" y="44" ${FONT} text-anchor="middle" fill="${STROKE}">plank length</text>
+    <!-- callout: plank width -->
+    <line x1="60" y1="86" x2="60" y2="112" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="55" y1="86" x2="65" y2="86" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="55" y1="112" x2="65" y2="112" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="50" y="105" ${FONT} text-anchor="end" fill="${STROKE}">w</text>
+    <!-- waste callout -->
+    <text x="240" y="245" ${FONT} text-anchor="middle" fill="${STROKE}">+10% straight · +12% offset · +15% diagonal</text>
+  </svg>`,
+};
+
+// 12. TILE — 12×12 tiles in grout grid
+export const tileDiagram = {
+  alt: "Top-down view of a tile layout with consistent grout joints, single tile dimensions labeled",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tile grid with grout joints">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">Area ÷ tile area + waste = tile count</text>
+    <!-- 5 cols × 3 rows of tiles with grout between -->
+    ${(() => {
+      const tiles = [];
+      const tileW = 50, tileH = 50, gap = 6;
+      const xStart = 90, yStart = 70;
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 5; col++) {
+          const x = xStart + col * (tileW + gap);
+          const y = yStart + row * (tileH + gap);
+          tiles.push(`<rect x="${x}" y="${y}" width="${tileW}" height="${tileH}" fill="${FILL}" stroke="${STROKE}" stroke-width="1.5"/>`);
+        }
+      }
+      return tiles.join('');
+    })()}
+    <!-- highlight one tile + label -->
+    <rect x="146" y="70" width="50" height="50" fill="none" stroke="${STROKE}" stroke-width="2.5"/>
+    <line x1="171" y1="60" x2="146" y2="60" stroke="${STROKE}" stroke-width="1"/>
+    <text x="225" y="65" ${FONT} fill="${STROKE}">1 tile (e.g. 12×12 in)</text>
+    <!-- grout label -->
+    <line x1="280" y1="120" x2="320" y2="135" stroke="${STROKE}" stroke-width="1"/>
+    <text x="325" y="140" ${FONT} fill="${STROKE}">grout joint</text>
+    <!-- overall area label -->
+    <text x="240" y="240" ${FONT} text-anchor="middle" fill="${STROKE}">+10% straight · +15% diagonal · +20% herringbone</text>
+  </svg>`,
+};
+
+// 13. PAVER — herringbone pattern
+export const paverDiagram = {
+  alt: "Top-down view of pavers in herringbone pattern with patio area boundary marked",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paver patio in herringbone pattern">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">Area ÷ paver area = paver count + cuts</text>
+    <!-- patio boundary -->
+    <rect x="80" y="60" width="320" height="160" fill="#fff" stroke="${STROKE}" stroke-width="2"/>
+    <!-- herringbone units (L-shaped: 60w × 30h horizontal + 30w × 60h vertical) -->
+    <g stroke="${STROKE}" stroke-width="1" fill="${FILL}">
+    ${(() => {
+      const out = [];
+      // simple ladder of brick-like pavers, alternating long/short
+      const cols = 8, rows = 6;
+      const w = 38, h = 24;
+      for (let r = 0; r < rows; r++) {
+        const offset = (r % 2 === 0) ? 0 : 19;
+        for (let c = 0; c < cols; c++) {
+          const x = 84 + c * w + offset;
+          const y = 64 + r * h;
+          if (x + w < 396 && y + h < 218) {
+            out.push(`<rect x="${x}" y="${y}" width="${w-2}" height="${h-2}"/>`);
+          }
+        }
+      }
+      return out.join('');
+    })()}
+    </g>
+    <!-- dim labels -->
+    <line x1="80" y1="240" x2="400" y2="240" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="80" y1="235" x2="80" y2="245" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="400" y1="235" x2="400" y2="245" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="240" y="258" ${FONT} text-anchor="middle" fill="${STROKE}">patio L × W (ft)</text>
+  </svg>`,
+};
+
+// 14. RETAINING-WALL — cross-section with backfill + drainage
+export const retainingWallDiagram = {
+  alt: "Cross-section of a retaining wall with backfill, drainage gravel behind, and weep holes at the base",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Retaining wall cross-section">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">Length × height = wall face area; height drives block course count</text>
+    <!-- ground line -->
+    <line x1="40" y1="220" x2="440" y2="220" stroke="${STROKE}" stroke-width="2"/>
+    <!-- wall (yellow block stack) -->
+    ${(() => {
+      const courses = 6;
+      const out = [];
+      for (let i = 0; i < courses; i++) {
+        const y = 220 - (i + 1) * 22;
+        out.push(`<rect x="170" y="${y}" width="80" height="22" fill="${FILL}" stroke="${STROKE}" stroke-width="1.5"/>`);
+      }
+      return out.join('');
+    })()}
+    <!-- footing -->
+    <rect x="150" y="220" width="120" height="14" fill="${FILL_DARK}" stroke="${STROKE}" stroke-width="1.5"/>
+    <!-- backfill on uphill (right) side -->
+    <path d="M 250 88 L 440 88 L 440 220 L 250 220 Z" fill="#e8d7a5" stroke="${STROKE}" stroke-width="1"/>
+    <!-- drainage gravel column behind wall -->
+    <rect x="250" y="88" width="22" height="132" fill="#bbbbbb" stroke="${STROKE}" stroke-width="1"/>
+    <text x="335" y="155" ${FONT} fill="${STROKE}">backfill</text>
+    <text x="275" y="100" ${FONT} fill="${STROKE}">↑ drain gravel</text>
+    <!-- weep hole -->
+    <circle cx="240" cy="208" r="3" fill="#fff" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="180" y="215" ${FONT} text-anchor="end" fill="${STROKE}">weep →</text>
+    <!-- height label -->
+    <line x1="140" y1="88" x2="140" y2="220" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="135" y1="88" x2="145" y2="88" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="135" y1="220" x2="145" y2="220" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="130" y="155" ${FONT} text-anchor="end" fill="${STROKE}">height</text>
+  </svg>`,
+};
+
+// 15. DECK-STAIN — top-down deck with railing
+export const deckStainDiagram = {
+  alt: "Top-down view of a wood deck with railing on three sides, deck area and railing linear feet labeled",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Deck top-down with railing">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">Deck area + railing LF = stain gallons</text>
+    <!-- deck planks (vertical) -->
+    <g stroke="${STROKE}" stroke-width="1.5">
+    ${(() => {
+      const out = [];
+      for (let i = 0; i < 16; i++) {
+        const x = 80 + i * 20;
+        out.push(`<rect x="${x}" y="80" width="18" height="140" fill="${FILL}"/>`);
+      }
+      return out.join('');
+    })()}
+    </g>
+    <!-- railing on left, top, right (NOT bottom — house side) -->
+    <line x1="80" y1="80" x2="80" y2="220" stroke="${STROKE}" stroke-width="4"/>
+    <line x1="400" y1="80" x2="400" y2="220" stroke="${STROKE}" stroke-width="4"/>
+    <line x1="80" y1="80" x2="400" y2="80" stroke="${STROKE}" stroke-width="4"/>
+    <!-- balusters as ticks -->
+    ${(() => {
+      const out = [];
+      for (let i = 0; i < 12; i++) {
+        const x = 90 + i * 28;
+        out.push(`<line x1="${x}" y1="72" x2="${x}" y2="80" stroke="${STROKE}" stroke-width="2"/>`);
+      }
+      return out.join('');
+    })()}
+    <!-- house side -->
+    <rect x="60" y="220" width="360" height="14" fill="${FILL_DARK}" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="240" y="232" ${FONT} text-anchor="middle" fill="${STROKE}">house wall (no railing)</text>
+    <!-- area label -->
+    <text x="240" y="160" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">deck area</text>
+    <!-- LF label -->
+    <text x="50" y="155" ${FONT} text-anchor="end" fill="${STROKE}">+ railing</text>
+    <text x="50" y="170" ${FONT} text-anchor="end" fill="${STROKE}">LF</text>
+  </svg>`,
+};
+
+// 16. HEADER-SIZE — wall framing with header over opening
+export const headerSizeDiagram = {
+  alt: "Wall framing cross-section with header beam spanning a rough opening, king studs and jack studs labeled",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Header above rough opening with king and jack studs">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">Opening span + load → header depth</text>
+    <!-- top plate -->
+    <rect x="60" y="60" width="360" height="12" fill="${FILL_DARK}" stroke="${STROKE}" stroke-width="1.5"/>
+    <!-- bottom plate -->
+    <rect x="60" y="230" width="360" height="12" fill="${FILL_DARK}" stroke="${STROKE}" stroke-width="1.5"/>
+    <!-- king studs (full height) -->
+    <rect x="80" y="72" width="14" height="158" fill="${FILL}" stroke="${STROKE}" stroke-width="1.5"/>
+    <rect x="386" y="72" width="14" height="158" fill="${FILL}" stroke="${STROKE}" stroke-width="1.5"/>
+    <!-- jack studs (under header) -->
+    <rect x="94" y="100" width="14" height="130" fill="${FILL}" stroke="${STROKE}" stroke-width="1.5"/>
+    <rect x="372" y="100" width="14" height="130" fill="${FILL}" stroke="${STROKE}" stroke-width="1.5"/>
+    <!-- header (the highlighted piece) -->
+    <rect x="108" y="100" width="264" height="32" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>
+    <text x="240" y="121" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">HEADER</text>
+    <!-- cripples above header -->
+    <rect x="160" y="72" width="14" height="28" fill="${FILL}" stroke="${STROKE}" stroke-width="1"/>
+    <rect x="240" y="72" width="14" height="28" fill="${FILL}" stroke="${STROKE}" stroke-width="1"/>
+    <rect x="320" y="72" width="14" height="28" fill="${FILL}" stroke="${STROKE}" stroke-width="1"/>
+    <!-- opening (white) -->
+    <rect x="108" y="132" width="264" height="98" fill="#fff" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="240" y="190" ${FONT} text-anchor="middle" fill="${STROKE}">rough opening</text>
+    <!-- span dimension -->
+    <line x1="108" y1="250" x2="372" y2="250" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="108" y1="245" x2="108" y2="255" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="372" y1="245" x2="372" y2="255" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="240" y="262" ${FONT} text-anchor="middle" fill="${STROKE}">opening span (ft)</text>
+    <!-- callouts -->
+    <text x="80" y="80" ${FONT} fill="${STROKE}">king</text>
+    <text x="94" y="245" ${FONT} fill="${STROKE}">jack</text>
+  </svg>`,
+};
+
+// 17. RAFTER-LENGTH — right triangle with run, rise, rafter
+export const rafterLengthDiagram = {
+  alt: "Right triangle showing the rafter as the hypotenuse, run on the horizontal leg, and rise on the vertical leg; angle equals roof pitch",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rafter as hypotenuse with run and rise legs">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">rafter² = run² + rise²</text>
+    <!-- right triangle -->
+    <polygon points="80,210 360,210 360,90" fill="${FILL}" stroke="${STROKE}" stroke-width="2.5"/>
+    <!-- right angle indicator -->
+    <polyline points="340,210 340,194 360,194" fill="none" stroke="${STROKE}" stroke-width="1.5"/>
+    <!-- run label -->
+    <line x1="80" y1="230" x2="360" y2="230" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="80" y1="225" x2="80" y2="235" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="360" y1="225" x2="360" y2="235" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="220" y="248" ${FONT} text-anchor="middle" fill="${STROKE}">run (horizontal)</text>
+    <!-- rise label -->
+    <line x1="380" y1="90" x2="380" y2="210" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="375" y1="90" x2="385" y2="90" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="375" y1="210" x2="385" y2="210" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="395" y="155" ${FONT} fill="${STROKE}">rise</text>
+    <!-- rafter label on hypotenuse -->
+    <text x="195" y="135" ${FONT_TITLE} fill="${STROKE}" transform="rotate(-23 195 135)">rafter (hypotenuse)</text>
+    <!-- pitch arc -->
+    <path d="M 130 210 A 50 50 0 0 0 105 184" fill="none" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="130" y="200" ${FONT} fill="${STROKE}">pitch</text>
+  </svg>`,
+};
+
+// 18. BTU — room with thermometer & area
+export const btuDiagram = {
+  alt: "Room interior cube with a thermometer indicator showing required BTU per square foot for cooling load",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BTU load per room square footage">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">~20 BTU/hr per ft² (rule of thumb)</text>
+    <!-- room -->
+    <rect x="80" y="80" width="220" height="140" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <!-- window -->
+    <rect x="120" y="120" width="50" height="50" fill="#fff" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="145" y1="120" x2="145" y2="170" stroke="${STROKE}" stroke-width="1"/>
+    <line x1="120" y1="145" x2="170" y2="145" stroke="${STROKE}" stroke-width="1"/>
+    <!-- sun (heat gain hint) -->
+    <circle cx="65" cy="65" r="14" fill="#ffd400" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="65" y1="38" x2="65" y2="50" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="42" y1="60" x2="52" y2="65" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="42" y1="80" x2="52" y2="75" stroke="${STROKE}" stroke-width="1.5"/>
+    <line x1="78" y1="58" x2="88" y2="50" stroke="${STROKE}" stroke-width="1.5"/>
+    <!-- area label -->
+    <text x="240" y="155" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">L × W = ft²</text>
+    <!-- thermometer -->
+    <rect x="350" y="85" width="22" height="120" fill="#fff" stroke="${STROKE}" stroke-width="2" rx="11"/>
+    <rect x="354" y="155" width="14" height="50" fill="#ef4444" stroke="none"/>
+    <circle cx="361" cy="220" r="14" fill="#ef4444" stroke="${STROKE}" stroke-width="2"/>
+    <text x="395" y="120" ${FONT} fill="${STROKE}">heat</text>
+    <text x="395" y="135" ${FONT} fill="${STROKE}">load</text>
+    <!-- dim labels -->
+    <line x1="80" y1="240" x2="300" y2="240" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="190" y="255" ${FONT} text-anchor="middle" fill="${STROKE}">L (ft)</text>
+  </svg>`,
+};
+
+// 19. AC-TONNAGE — outdoor condenser + house, tons → BTU
+export const acTonnageDiagram = {
+  alt: "House with outdoor AC condenser unit labeled tonnage; 12,000 BTU per hour equals one ton of cooling",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AC tonnage to BTU conversion">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">12,000 BTU/hr = 1 ton</text>
+    <!-- house -->
+    <polygon points="60,200 240,200 240,120 150,80 60,120" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <rect x="60" y="200" width="180" height="20" fill="${FILL_DARK}" stroke="${STROKE}" stroke-width="2"/>
+    <!-- house door -->
+    <rect x="135" y="150" width="30" height="50" fill="#fff" stroke="${STROKE}" stroke-width="1.5"/>
+    <!-- AC condenser -->
+    <rect x="320" y="140" width="100" height="80" fill="#fff" stroke="${STROKE}" stroke-width="2"/>
+    <circle cx="370" cy="180" r="22" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <!-- fan blades -->
+    <line x1="370" y1="160" x2="370" y2="200" stroke="${STROKE}" stroke-width="2"/>
+    <line x1="350" y1="180" x2="390" y2="180" stroke="${STROKE}" stroke-width="2"/>
+    <line x1="355" y1="165" x2="385" y2="195" stroke="${STROKE}" stroke-width="2"/>
+    <line x1="355" y1="195" x2="385" y2="165" stroke="${STROKE}" stroke-width="2"/>
+    <!-- connecting line set -->
+    <line x1="240" y1="195" x2="320" y2="195" stroke="${STROKE}" stroke-width="2.5"/>
+    <line x1="240" y1="205" x2="320" y2="205" stroke="${STROKE}" stroke-width="2.5"/>
+    <text x="280" y="190" ${FONT} text-anchor="middle" fill="${STROKE}">line set</text>
+    <!-- callouts -->
+    <text x="150" y="155" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">cooled</text>
+    <text x="150" y="170" ${FONT} text-anchor="middle" fill="${STROKE}">space (ft²)</text>
+    <text x="370" y="155" ${FONT} text-anchor="middle" fill="${STROKE}">3 ton</text>
+    <text x="370" y="232" ${FONT} text-anchor="middle" fill="${STROKE}">= 36,000 BTU/hr</text>
+  </svg>`,
+};
+
+// 20. CONDUIT-FILL — circle cross-section with wires inside
+export const conduitFillDiagram = {
+  alt: "Cross-section of an electrical conduit showing several conductors as smaller circles inside the conduit area, with NEC fill percentage limits noted",
+  svg: `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Conduit cross-section with multiple wires and NEC fill percentage">
+    <text x="240" y="32" ${FONT_TITLE} text-anchor="middle" fill="${STROKE}">Σ wire area ÷ conduit area ≤ NEC fill limit</text>
+    <!-- conduit outer circle -->
+    <circle cx="180" cy="150" r="84" fill="#fff" stroke="${STROKE}" stroke-width="3"/>
+    <!-- wires inside (5 wires: 3 phase + N + G typical) -->
+    <circle cx="160" cy="120" r="20" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <circle cx="200" cy="120" r="20" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <circle cx="135" cy="160" r="20" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <circle cx="180" cy="172" r="20" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <circle cx="225" cy="160" r="20" fill="${FILL}" stroke="${STROKE}" stroke-width="2"/>
+    <!-- conduit label -->
+    <line x1="245" y1="90" x2="290" y2="65" stroke="${STROKE}" stroke-width="1.5"/>
+    <text x="295" y="65" ${FONT} fill="${STROKE}">EMT / conduit</text>
+    <text x="295" y="80" ${FONT} fill="${STROKE}">(e.g. 3/4" trade size)</text>
+    <!-- wire label -->
+    <line x1="180" y1="172" x2="295" y2="172" stroke="${STROKE}" stroke-width="1.5" stroke-dasharray="3 2"/>
+    <text x="300" y="170" ${FONT} fill="${STROKE}">conductors</text>
+    <text x="300" y="185" ${FONT} fill="${STROKE}">(THHN/THWN-2)</text>
+    <!-- NEC fill limits cheat sheet -->
+    <text x="300" y="210" ${FONT_TITLE} fill="${STROKE}">NEC fill caps:</text>
+    <text x="300" y="226" ${FONT} fill="${STROKE}">1 wire → 53%</text>
+    <text x="300" y="240" ${FONT} fill="${STROKE}">2 wires → 31%</text>
+    <text x="300" y="254" ${FONT} fill="${STROKE}">3+ wires → 40%</text>
+  </svg>`,
+};
+
 // 10. STAIR-STRINGER — side profile of stair with rise + run
 export const stairStringerDiagram = {
   alt: "Side profile of a staircase stringer with rise and run dimensions labeled on individual treads",
