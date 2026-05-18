@@ -128,6 +128,71 @@ export const toolkits: Toolkit[] = [
     url: 'https://www.etsy.com/listing/4496467247/concrete-estimate-spreadsheet-excel',
     calcSlugs: ['concrete-calculator'],
   },
+  {
+    id: 'painting-pro',
+    name: 'Painting Pro Toolkit',
+    price: '$39',
+    pitch:
+      'Excel workbook that turns a room takeoff into net paintable area, gallons of primer + topcoat by coverage rate, prep + paint labor hours, and a print-ready customer quote.',
+    bullets: [
+      'Net wall + ceiling sq ft per room (gross minus 21 sf doors, 15 sf windows)',
+      'Gallons by surface with texture factor (smooth 1.00x → popcorn 1.50x)',
+      'Prep-level multiplier (1.0x light → 3.0x lead-safe RRP) on labor hours',
+    ],
+    url: 'https://www.etsy.com/listing/4507382226/painting-estimate-spreadsheet-excel',
+    calcSlugs: ['paint-calculator'],
+  },
+  {
+    id: 'drywall-pro',
+    name: 'Drywall Pro Toolkit',
+    price: '$39',
+    pitch:
+      'Excel workbook that turns a room takeoff into 1/2" and 5/8" type X sheets, joint compound, tape, screws, and a GA-214 finish-level scaled labor + quote.',
+    bullets: [
+      'Sheets by 1/2" vs 5/8" type X with waste factor (residential / fire-rated split)',
+      'Mud + tape + screws + corner bead, scaled by GA-214 finish level (L1-L5)',
+      'Hang + tape/mud + sand + corner-bead hours with RSMeans-aligned rates',
+    ],
+    url: 'https://www.etsy.com/listing/4507382346/drywall-estimate-spreadsheet-excel',
+    calcSlugs: ['drywall-calculator'],
+  },
+  {
+    id: 'deck-pro',
+    name: 'Deck Pro Toolkit',
+    price: '$39',
+    pitch:
+      'Excel workbook that turns a deck footprint into joist + beam + post + footing counts, decking boards, IRC R312 balusters, fasteners, and a print-ready quote.',
+    bullets: [
+      'Joist count + length, beam LF, post LF, footing concrete CY with 10% waste',
+      'Decking boards by material (PT / Composite / Hardwood) with auto-pricing',
+      'Railing balusters at 4" max sphere passage (IRC R312.1.3) + stair stringers',
+    ],
+    url: 'https://www.etsy.com/listing/4507376527/deck-estimate-spreadsheet-excel-joists',
+    calcSlugs: [
+      'deck-stain-calculator',
+      'floor-joist-span-calculator',
+      'beam-span-calculator',
+    ],
+  },
+  {
+    id: 'flooring-pro',
+    name: 'Flooring Pro Toolkit',
+    price: '$39',
+    pitch:
+      'Excel workbook with a material switcher (LVP / Tile / Hardwood / Carpet / Vinyl) that returns boxes, supplementals (thinset, grout, adhesive, pad), tear-out + install hours, and a print-ready quote.',
+    bullets: [
+      'Material switcher pulls per-sf pricing, install rate, and supplemental list',
+      'Boxes with waste factor (8-15% by material) + transitions LF',
+      'Thinset/grout for tile, pad for carpet, cleats for hardwood — auto-included',
+    ],
+    url: 'https://www.etsy.com/listing/4507376639/flooring-estimate-spreadsheet-excel-lvp',
+    calcSlugs: [
+      'hardwood-calculator',
+      'carpet-calculator',
+      'vinyl-calculator',
+      'tile-calculator',
+    ],
+  },
 ];
 
 export function getToolkitForCalc(calcSlug: string): Toolkit | null {
