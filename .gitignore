@@ -25,3 +25,8 @@ build/
 
 # Vercel
 .vercel
+
+# Python (toolkit build scripts)
+__pycache__/
+*.pyc
+*.pyo
