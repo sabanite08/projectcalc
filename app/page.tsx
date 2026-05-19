@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { calculators, getCategories } from '@/lib/calculators';
+import { bundles } from '@/lib/toolkits';
+import BundlesSection from '@/components/BundlesSection';
 import type { Trade } from '@/lib/types';
 
 const categoryLabels: Record<string, string> = {
@@ -146,6 +148,10 @@ export default function Home() {
             </div>
           );
         })}
+      </section>
+
+      <section className="grid-section">
+        <BundlesSection bundles={bundles} />
       </section>
 
       <section className="grid-section">

@@ -200,3 +200,36 @@ export function getToolkitForCalc(calcSlug: string): Toolkit | null {
   if (!hit || !hit.url) return null;
   return hit;
 }
+
+// Shop-wide bundles surfaced on the homepage (not tied to a specific calc).
+// calcSlugs stays empty — these don't drive per-calc CTAs.
+export const bundles: Toolkit[] = [
+  {
+    id: 'mega-bundle',
+    name: 'Contractor Estimating Mega Bundle',
+    price: '$97',
+    pitch:
+      'All 6 trade toolkits in one Excel bundle — Roofing, Plumbing, Electrical, HVAC, Concrete, Framing. Every estimate, takeoff, and quote sheet across the trades.',
+    bullets: [
+      'Save $137 vs. buying all 6 toolkits separately ($234 → $97)',
+      'Single .zip with 6 fully-formatted .xlsx workbooks',
+      'Works in Excel, Google Sheets, LibreOffice, Apple Numbers',
+    ],
+    url: 'https://www.etsy.com/listing/4507215078/contractor-estimating-mega-bundle-6',
+    calcSlugs: [],
+  },
+  {
+    id: 'garage-vault',
+    name: 'Garage Ledger Vault',
+    price: '$129',
+    pitch:
+      'All 6 project-car build trackers — Pro + LS Swap, Cummins Swap, Overland, Restomod, Track Build. Spend log + parts inventory + dashboard + ROI for every kind of build.',
+    bullets: [
+      'Save $205 vs. buying all 6 separately ($334 → $129)',
+      '5 build-type variants with pre-filled categories + milestone phases',
+      'DIY hours × your shop rate baked into the ROI sale-comp sheet',
+    ],
+    url: 'https://www.etsy.com/listing/4507409407/garage-ledger-vault-6-excel-project-car',
+    calcSlugs: [],
+  },
+];

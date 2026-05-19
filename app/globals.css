@@ -1283,6 +1283,125 @@ footer.site-footer a:hover { color: var(--hi-vis); }
   .toolkit-cta { display: none !important; }
 }
 
+/* ─── HOMEPAGE BUNDLES ─── */
+.bundles-section {
+  margin-top: 40px;
+}
+
+.bundles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 20px;
+  margin-top: 12px;
+}
+
+.bundle-card {
+  display: block;
+  padding: 24px 26px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--hi-vis);
+  border-radius: 4px;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s, transform 0.05s;
+}
+
+.bundle-card:hover {
+  background: var(--bg-3);
+  border-color: var(--hi-vis);
+}
+
+.bundle-card:active { transform: translateY(1px); }
+
+.bundle-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.bundle-card-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--bg);
+  background: var(--hi-vis);
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.bundle-card-price {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 26px;
+  color: var(--hi-vis);
+  letter-spacing: -0.01em;
+}
+
+.bundle-card-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 20px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  line-height: 1.15;
+}
+
+.bundle-card-pitch {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.bundle-card-bullets {
+  list-style: none;
+  margin: 0 0 18px 0;
+  padding: 0;
+}
+
+.bundle-card-bullets li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-2);
+  letter-spacing: 0.02em;
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+
+.bundle-card-bullets li::before {
+  content: '◆';
+  color: var(--hi-vis);
+  position: absolute;
+  left: 0;
+  font-size: 9px;
+  top: 7px;
+}
+
+.bundle-card-cta {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hi-vis);
+  font-weight: 700;
+}
+
+.bundle-card:hover .bundle-card-cta { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .bundle-card { padding: 20px 18px; }
+  .bundle-card-name { font-size: 18px; }
+  .bundle-card-price { font-size: 22px; }
+}
+
+@media print {
+  .bundles-section { display: none !important; }
+}
+
 /* ─── OFFLINE ─── */
 .offline-wrap .hero {
   border-bottom: none;
