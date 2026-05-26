@@ -9,7 +9,7 @@ import ToolkitCTA from '@/components/ToolkitCTA';
 import { getToolkitForCalc } from '@/lib/toolkits';
 import { renderInline, stripInlineLinks } from '@/lib/render';
 import { getToolsCategoryForCalc } from '@/lib/tools';
-import { authorPersonSchema, LAST_REVIEWED, LAST_REVIEWED_LABEL } from '@/lib/author';
+import { author, authorPersonSchema, LAST_REVIEWED, LAST_REVIEWED_LABEL } from '@/lib/author';
 
 const categoryLabels: Record<string, string> = {
   construction: 'TRADES',
@@ -119,7 +119,12 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
 
         <div className="calc-header">
           <div>
-            <div className="calc-formula">{calc.name.toUpperCase()} · REVIEWED {LAST_REVIEWED_LABEL}</div>
+            <div className="calc-formula">
+              {calc.name.toUpperCase()} · REVIEWED {LAST_REVIEWED_LABEL} · BY{' '}
+              <Link href="/about" style={{ color: 'inherit', textDecoration: 'underline' }}>
+                {author.firstName.toUpperCase()}
+              </Link>
+            </div>
             <h1 className="calc-title">{calc.title}</h1>
           </div>
           <div className="calc-formula">{calc.formula}</div>

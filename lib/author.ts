@@ -77,5 +77,5 @@ export const authorPersonSchema = {
  *
  * Update both fields together. Format: ISO date + human-readable month/year.
  */
-export const LAST_REVIEWED = '2026-05-15';
+export const LAST_REVIEWED = '2026-05-26';
 export const LAST_REVIEWED_LABEL = 'MAY 2026';

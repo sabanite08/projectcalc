@@ -1,18 +1,18 @@
 import type { MetadataRoute } from 'next';
 import { calculators } from '@/lib/calculators';
 import { posts } from '@/lib/posts';
-import { toolCategories } from '@/lib/tools';
+import { LAST_REVIEWED } from '@/lib/author';
 
-// Hardcoded "page actually changed" dates so Google gets honest lastmod signals.
-// Bump these when the relevant content meaningfully changes (not on every deploy).
+// Calc + utility-page lastmod tracks LAST_REVIEWED so an E-E-A-T pass moves
+// the sitemap signal too. Bumping LAST_REVIEWED in lib/author.ts is the single
+// place to tell Google "everything was re-audited on this date."
 const LAUNCH = '2026-04-26';
-const TOOLS_LAUNCH = '2026-05-03';
 const SKETCH_LAUNCH = '2026-05-04';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = 'https://projectcalc.app';
   const launchDate = new Date(LAUNCH);
-  const toolsDate = new Date(TOOLS_LAUNCH);
+  const reviewedDate = new Date(LAST_REVIEWED);
   const sketchDate = new Date(SKETCH_LAUNCH);
   // Blog index reflects the most recent post date
   const latestPostDate = posts.reduce(
@@ -32,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...calculators.map(c => ({
       url: `${base}/${c.slug}`,
-      lastModified: launchDate,
+      lastModified: reviewedDate,
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     })),
@@ -55,20 +55,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${base}/tools`,
-      lastModified: toolsDate,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    ...toolCategories.map(c => ({
-      url: `${base}/tools/${c.slug}`,
-      lastModified: toolsDate,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    })),
-    {
       url: `${base}/about`,
-      lastModified: sketchDate,
+      lastModified: reviewedDate,
       changeFrequency: 'yearly',
       priority: 0.4,
     },
