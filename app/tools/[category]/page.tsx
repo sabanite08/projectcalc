@@ -15,6 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
     title: { absolute: cat.metaTitle },
     description: cat.metaDesc,
     alternates: { canonical: `https://projectcalc.app/tools/${cat.slug}` },
+    robots: { index: false, follow: true },
     openGraph: {
       title: cat.metaTitle,
       description: cat.metaDesc,
