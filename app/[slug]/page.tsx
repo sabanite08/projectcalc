@@ -6,6 +6,7 @@ import { getFAQ } from '@/lib/faqs';
 import { getPostsForCalc } from '@/lib/posts';
 import CalculatorView from '@/components/CalculatorView';
 import ToolkitCTA from '@/components/ToolkitCTA';
+import OperaiteCTA from '@/components/OperaiteCTA';
 import { getToolkitForCalc } from '@/lib/toolkits';
 import { renderInline, stripInlineLinks } from '@/lib/render';
 import { getToolsCategoryForCalc } from '@/lib/tools';
@@ -53,6 +54,9 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
   const hasAffiliateLink = faq.some(f => /\]\([^)]*amazon\./i.test(f.a));
   const relatedPosts = getPostsForCalc(calc.slug);
   const isFinanceAdvice = calc.category === 'finance' && calc.slug !== 'tip-calculator';
+  // Operaite cross-sell shows on trade/material calcs (everything except finance) —
+  // those visitors are service-business owners. Placed below the SEO content.
+  const showOperaiteCta = calc.category !== 'finance';
   const toolkit = getToolkitForCalc(calc.slug);
   const toolsCategory = getToolsCategoryForCalc(calc.slug, calc.trade, calc.category);
 
@@ -203,6 +207,8 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
             </details>
           )}
         </div>
+
+        {showOperaiteCta && <OperaiteCTA />}
 
         {faq.length > 0 && (
           <div className="faq-block">

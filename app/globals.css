@@ -1283,6 +1283,109 @@ footer.site-footer a:hover { color: var(--hi-vis); }
   .toolkit-cta { display: none !important; }
 }
 
+/* ─── OPERAITE CROSS-SELL CTA (trade calcs) ─── */
+.operaite-cta {
+  --op: #4d9fff;
+  margin: 32px 0;
+  padding: 22px 24px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--op);
+  border-radius: 4px;
+}
+
+.operaite-cta-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.operaite-cta-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--bg);
+  background: var(--op);
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.operaite-cta-by {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+.operaite-cta-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 22px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.operaite-cta-pitch {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.operaite-cta-bullets {
+  list-style: none;
+  margin: 0 0 18px 0;
+  padding: 0;
+}
+
+.operaite-cta-bullets li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-2);
+  letter-spacing: 0.02em;
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+
+.operaite-cta-bullets li::before {
+  content: '✓';
+  color: var(--op);
+  position: absolute;
+  left: 0;
+  font-size: 11px;
+  top: 4px;
+}
+
+.operaite-cta-btn {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--op);
+  padding: 11px 18px;
+  border-radius: 3px;
+  font-weight: 700;
+  transition: filter 0.15s, transform 0.05s;
+}
+
+.operaite-cta-btn:hover { filter: brightness(1.1); }
+.operaite-cta-btn:active { transform: translateY(1px); }
+
+.operaite-cta-foot {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+@media print {
+  .operaite-cta { display: none !important; }
+}
+
 /* ─── HOMEPAGE BUNDLES ─── */
 .bundles-section {
   margin-top: 40px;
