@@ -61,6 +61,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${base}/garage-plans`,
+      lastModified: reviewedDate,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${base}/about`,
       lastModified: reviewedDate,
       changeFrequency: 'yearly',

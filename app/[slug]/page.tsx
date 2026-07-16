@@ -10,6 +10,8 @@ import OperaiteCTA from '@/components/OperaiteCTA';
 import { getToolkitForCalc } from '@/lib/toolkits';
 import { renderInline, stripInlineLinks } from '@/lib/render';
 import { getToolsCategoryForCalc } from '@/lib/tools';
+import { shedRelatedCalcSlugs } from '@/lib/shed-plans';
+import { garageRelatedCalcSlugs } from '@/lib/garage-plans';
 import { author, authorPersonSchema, LAST_REVIEWED, LAST_REVIEWED_LABEL } from '@/lib/author';
 
 const categoryLabels: Record<string, string> = {
@@ -240,6 +242,28 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
                   <div className="cat-desc">{p.readTime} MIN READ</div>
                 </Link>
               ))}
+            </div>
+          </div>
+        )}
+
+        {(shedRelatedCalcSlugs.includes(calc.slug) || garageRelatedCalcSlugs.includes(calc.slug)) && (
+          <div className="related">
+            <div className="section-label">
+              <span>PERMIT-READY BUILDING PLANS</span>
+            </div>
+            <div className="related-list">
+              {shedRelatedCalcSlugs.includes(calc.slug) && (
+                <Link href="/shed-plans">
+                  <div className="cat-name" style={{ fontSize: 14 }}>Shed Plans — 8×8 to 12×20</div>
+                  <div className="cat-desc">Permit-ready 9-sheet sets, drawn by a building official</div>
+                </Link>
+              )}
+              {garageRelatedCalcSlugs.includes(calc.slug) && (
+                <Link href="/garage-plans">
+                  <div className="cat-name" style={{ fontSize: 14 }}>Garage Plans — 1-car to 4-car</div>
+                  <div className="cat-desc">Permit-ready detached garage sets with a CS-PF portal wall</div>
+                </Link>
+              )}
             </div>
           </div>
         )}

@@ -182,6 +182,22 @@ export default function Home() {
             for: how much things cost, how to measure correctly, what to buy at
             Home Depot vs the lumber yard, and the rules of thumb pros use.
           </p>
+          <h2 style={{ marginTop: 32 }}>Permit-ready building plans</h2>
+          <p>
+            Beyond the calculators, ProjectCalc sells complete, permit-ready construction
+            plan sets — each drawn and checked by an ICC-Certified Building Official, with
+            the 2021 IRC cited on every sheet and a full materials list. Instant PDF download.
+          </p>
+        </div>
+        <div className="trade-grid" style={{ marginTop: 16 }}>
+          <Link href="/shed-plans" className="trade-tile">
+            <div className="cat-name">Shed Plans</div>
+            <div className="cat-desc">8×8 to 12×20 · gable &amp; lean-to</div>
+          </Link>
+          <Link href="/garage-plans" className="trade-tile">
+            <div className="cat-name">Garage Plans</div>
+            <div className="cat-desc">1-car to 4-car · detached</div>
+          </Link>
         </div>
       </section>
 

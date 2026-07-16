@@ -258,6 +258,13 @@ export default function ShedPlansHub() {
             wind / snow loads with your building department.
           </p>
         </div>
+
+        <div className="seo-block" style={{ maxWidth: 820, marginTop: 24 }}>
+          <p>
+            Need something bigger? See our{' '}
+            <Link href="/garage-plans">permit-ready garage plans</Link> (1-car to 4-car).
+          </p>
+        </div>
       </section>
     </main>
   );
