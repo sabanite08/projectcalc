@@ -19,6 +19,7 @@ export const GARAGE_PRICE = '$29';
 
 export const garagePlans: GaragePlan[] = [
   { id: 'PF-G001', size: '14×24', w: 14, l: 24, sqft: 336,  cars: '1-Car', style: 'Gable',     doors: 'One 9′ carriage door',   url: 'https://www.etsy.com/listing/4538660719' },
+  { id: 'PF-G002', size: '20×24', w: 20, l: 24, sqft: 480,  cars: '2-Car', style: 'Gable',     doors: 'One 16′ carriage door',  url: 'https://www.etsy.com/listing/4539076117' },
   { id: 'PF-G011', size: '48×28', w: 48, l: 28, sqft: 1344, cars: '4-Car', style: 'Craftsman', doors: 'Four 9′ carriage doors', url: 'https://www.etsy.com/listing/4538593459' },
 ];
 
