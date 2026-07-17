@@ -17,6 +17,18 @@ export const metadata: Metadata = {
       '12 code-cited shed plan sets (8×8–12×20, gable + lean-to) with full materials lists. Instant PDF download.',
     url: 'https://projectcalc.app/shed-plans',
     type: 'website',
+    images: [
+      {
+        url: '/plans/shed-plans-og.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'A 10×12 gable shed with a 5′ double door, drawn permit-ready by a building official',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/plans/shed-plans-og.jpg'],
   },
 };
 
@@ -55,6 +67,20 @@ const breadcrumbLd = {
   ],
 };
 
+const SITE = 'https://projectcalc.app';
+
+/** "An 8×8", "An 11×14", "An 18×20" — "A" otherwise. Capitalised: it only ever starts a sentence.
+ *  Ten of the twelve sheds read fine either way; the three 8-foot-wide ones are why this exists,
+ *  because "A 8×8 gable shed" is what you get without it. Same rule as _article() in
+ *  planforge/marketing.py, which was added for exactly this bug on the listing thumbnails. */
+function article(size: string): string {
+  const first = size.split('×')[0];
+  return first.startsWith('8') || first === '11' || first === '18' ? 'An' : 'A';
+}
+
+// Google will not consider a Product for a rich result without `image`, and `description` + `sku`
+// are what separate twelve entries that otherwise differ only by a pair of numbers. Every value is
+// read off the plan itself via lib/shed-plans — nothing is restated here.
 const itemListLd = {
   '@type': 'ItemList',
   name: 'Permit-Ready Shed Plans',
@@ -64,7 +90,11 @@ const itemListLd = {
     item: {
       '@type': 'Product',
       name: `${p.size} ${p.roof} Shed Plans (permit-ready)`,
+      description: p.blurb,
+      sku: p.id,
+      image: `${SITE}${p.image}`,
       category: 'Building Plans',
+      url: `${SITE}/shed-plans#${p.id.toLowerCase()}`,
       brand: { '@type': 'Brand', name: 'ProjectCalc' },
       offers: {
         '@type': 'Offer',
@@ -134,6 +164,46 @@ export default function ShedPlansHub() {
           </p>
         </div>
 
+        <div className="plan-grid">
+          {shedPlans.map(p => (
+            <article key={p.id} id={p.id.toLowerCase()} className="plan-card">
+              <a className="plan-shot" href={p.url} target="_blank" rel="noopener noreferrer">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={p.image}
+                  alt={`${article(p.size)} ${p.size} ${p.roof === 'Lean-To' ? 'lean-to' : 'gable'} shed with a ${p.door} door — permit-ready plans`}
+                  width={1000}
+                  height={800}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <div className="plan-body">
+                <div className="plan-eyebrow">
+                  {p.sqft} SQ FT · {p.pitch} PITCH
+                </div>
+                {/* Size alone is NOT unique: 8×12 and 10×12 each ship in both a gable and a lean-to.
+                    Heading them by size would put two identical h3s on the page. */}
+                <h3 className="plan-name">
+                  {p.size} {p.roof}
+                </h3>
+                <p className="plan-blurb">{p.blurb}</p>
+                <div className="plan-tags">
+                  <span className="shed-tag">{p.door} door</span>
+                  <span className="shed-tag">{p.rafter} rafters</span>
+                </div>
+                <div className="plan-foot">
+                  <span className="plan-price">{SHED_PRICE}</span>
+                  <a className="shed-buy" href={p.url} target="_blank" rel="noopener noreferrer">
+                    View the {p.size} {p.roof} →
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <h2 className="plan-compare-h">Compare every size</h2>
         <div className="shed-table-wrap" role="region" aria-label="Compare shed plans">
           <table className="shed-table">
             <thead>
@@ -141,8 +211,10 @@ export default function ShedPlansHub() {
                 <th>Plan</th>
                 <th>Sq&nbsp;ft</th>
                 <th>Roof</th>
+                <th>Rafters</th>
                 <th>Door</th>
                 <th>Windows</th>
+                <th>Best&nbsp;for</th>
                 <th>Price</th>
                 <th aria-label="Link" />
               </tr>
@@ -151,7 +223,10 @@ export default function ShedPlansHub() {
               {shedPlans.map(p => (
                 <tr key={p.id}>
                   <td data-label="Plan">
-                    <span className="shed-size">{p.size}</span>
+                    <a className="shed-plan-link" href={`#${p.id.toLowerCase()}`}>
+                      <span className="shed-size">{p.size}</span>
+                      <span className="shed-plan-name">{p.roof}</span>
+                    </a>
                   </td>
                   <td data-label="Sq ft">{p.sqft}</td>
                   <td data-label="Roof">
@@ -159,8 +234,10 @@ export default function ShedPlansHub() {
                       {p.roof} · {p.pitch}
                     </span>
                   </td>
+                  <td data-label="Rafters">{p.rafter}</td>
                   <td data-label="Door">{p.door}</td>
                   <td data-label="Windows">{p.windows}</td>
+                  <td data-label="Best for">{p.bestFor}</td>
                   <td data-label="Price">{SHED_PRICE}</td>
                   <td data-label="">
                     <a className="shed-buy" href={p.url} target="_blank" rel="noopener noreferrer">
@@ -174,7 +251,7 @@ export default function ShedPlansHub() {
         </div>
         <p className="affiliate-note" style={{ marginTop: 14 }}>
           Plans are sold through our Etsy shop (ProjectCalcShop) as instant digital
-          downloads — $19 each. Links open in a new tab.
+          downloads — {SHED_PRICE} each. Links open in a new tab.
         </p>
 
         <div className="seo-block" style={{ maxWidth: 820, marginTop: 44 }}>
