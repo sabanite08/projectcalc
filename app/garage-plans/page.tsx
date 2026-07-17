@@ -18,6 +18,18 @@ export const metadata: Metadata = {
       'Detached garage plan sets (1-car to 4-car) with code-cited framing, a CS-PF portal door wall, and full materials lists. Instant PDF download.',
     url: 'https://projectcalc.app/garage-plans',
     type: 'website',
+    images: [
+      {
+        url: '/plans/garage-plans-og.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'The Caldwell — a 24×24 two-car detached garage with a charcoal carriage door and standing-seam awning',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/plans/garage-plans-og.jpg'],
   },
 };
 
@@ -60,6 +72,11 @@ const breadcrumbLd = {
   ],
 };
 
+const SITE = 'https://projectcalc.app';
+
+// Google will not consider a Product for a rich result without `image`, and `description` + `sku`
+// are what make the four entries distinguishable rather than four near-identical sizes. Every value
+// is read off the plan itself via lib/garage-plans — nothing is restated here.
 const itemListLd = {
   '@type': 'ItemList',
   name: 'Permit-Ready Garage Plans',
@@ -68,8 +85,12 @@ const itemListLd = {
     position: i + 1,
     item: {
       '@type': 'Product',
-      name: `${p.size} ${p.cars} ${p.style} Garage Plans (permit-ready)`,
+      name: `${p.name} — ${p.size} ${p.cars} ${p.style} Garage Plans (permit-ready)`,
+      description: p.blurb,
+      sku: p.id,
+      image: `${SITE}${p.image}`,
       category: 'Building Plans',
+      url: `${SITE}/garage-plans#${p.id.toLowerCase()}`,
       brand: { '@type': 'Brand', name: 'ProjectCalc' },
       offers: {
         '@type': 'Offer',
@@ -141,6 +162,43 @@ export default function GaragePlansHub() {
           </p>
         </div>
 
+        <div className="plan-grid">
+          {garagePlans.map(p => (
+            <article key={p.id} id={p.id.toLowerCase()} className="plan-card">
+              <a className="plan-shot" href={p.url} target="_blank" rel="noopener noreferrer">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={p.image}
+                  alt={`${p.name} — a ${p.size} ${p.cars.toLowerCase()} detached garage, ${p.style} style, with ${p.doors.toLowerCase()}`}
+                  width={1000}
+                  height={800}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <div className="plan-body">
+                <div className="plan-eyebrow">
+                  {p.size} · {p.cars} · {p.style}
+                </div>
+                <h3 className="plan-name">{p.name}</h3>
+                <p className="plan-blurb">{p.blurb}</p>
+                <div className="plan-tags">
+                  <span className="shed-tag">{p.sqft.toLocaleString()} sq ft</span>
+                  <span className="shed-tag">{p.roofFrame}</span>
+                  <span className="shed-tag">CS-PF portal</span>
+                </div>
+                <div className="plan-foot">
+                  <span className="plan-price">{GARAGE_PRICE}</span>
+                  <a className="shed-buy" href={p.url} target="_blank" rel="noopener noreferrer">
+                    View {p.name} →
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <h2 className="plan-compare-h">Compare every size</h2>
         <div className="shed-table-wrap" role="region" aria-label="Compare garage plans">
           <table className="shed-table">
             <thead>
@@ -150,6 +208,8 @@ export default function GaragePlansHub() {
                 <th>Bays</th>
                 <th>Style</th>
                 <th>Overhead&nbsp;doors</th>
+                <th>Roof</th>
+                <th>Notable</th>
                 <th>Price</th>
                 <th aria-label="Link" />
               </tr>
@@ -158,7 +218,10 @@ export default function GaragePlansHub() {
               {garagePlans.map(p => (
                 <tr key={p.id}>
                   <td data-label="Plan">
-                    <span className="shed-size">{p.size}</span>
+                    <a className="shed-plan-link" href={`#${p.id.toLowerCase()}`}>
+                      <span className="shed-size">{p.size}</span>
+                      <span className="shed-plan-name">{p.name}</span>
+                    </a>
                   </td>
                   <td data-label="Sq ft">{p.sqft.toLocaleString()}</td>
                   <td data-label="Bays">{p.cars}</td>
@@ -168,6 +231,8 @@ export default function GaragePlansHub() {
                     </span>
                   </td>
                   <td data-label="Overhead doors">{p.doors}</td>
+                  <td data-label="Roof">{p.roofFrame}</td>
+                  <td data-label="Notable">{p.features}</td>
                   <td data-label="Price">{GARAGE_PRICE}</td>
                   <td data-label="">
                     <a className="shed-buy" href={p.url} target="_blank" rel="noopener noreferrer">
@@ -181,7 +246,7 @@ export default function GaragePlansHub() {
         </div>
         <p className="affiliate-note" style={{ marginTop: 14 }}>
           Plans are sold through our Etsy shop (ProjectCalcShop) as instant digital
-          downloads — {GARAGE_PRICE} each. More sizes (2-car and 3-car) are being added.
+          downloads — {GARAGE_PRICE} each. More sizes (3-car and larger) are being added.
           Links open in a new tab.
         </p>
 

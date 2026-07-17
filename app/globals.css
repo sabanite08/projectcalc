@@ -2196,3 +2196,99 @@ footer.site-footer a:hover { color: var(--hi-vis); }
 }
 .shed-buy:hover { filter: brightness(1.08); }
 .shed-buy:active { transform: translateY(1px); }
+
+/* Plan cards (/garage-plans) — the hero + name + blurb grid above the compare table.
+   Per-card borders with a real gap: never the old container-background-bleed pattern, which
+   rendered empty trailing cells as gray boxes when the card count didn't fill the last row. */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+.plan-card {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.plan-shot {
+  display: block;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-3);
+}
+.plan-shot img {
+  display: block;
+  width: 100%;
+  height: auto;          /* renders 1000x800 -> exact 5:4 box, so no layout shift on load */
+  transition: transform 0.35s ease;
+}
+.plan-card:hover .plan-shot img { transform: scale(1.02); }
+.plan-body {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.plan-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.plan-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.22rem;
+  color: var(--ink);
+  margin: 5px 0 8px;
+  line-height: 1.15;
+}
+.plan-blurb {
+  font-size: 14px;
+  line-height: 1.62;
+  color: var(--ink-2);
+  margin: 0;
+}
+.plan-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+.plan-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+.plan-price {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.1rem;
+  color: var(--hi-vis);
+}
+.plan-compare-h {
+  margin: 48px 0 0;
+  font-size: 1.15rem;
+}
+.shed-plan-link {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.shed-plan-link:hover .shed-plan-name { color: var(--hi-vis); }
+.shed-plan-name {
+  font-size: 12px;
+  color: var(--ink-3);
+  transition: color 0.15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plan-shot img,
+  .plan-card:hover .plan-shot img { transition: none; transform: none; }
+}
