@@ -59,6 +59,7 @@ import miniSplit from './mini-split-sizing-per-zone';
 import waterHeater from './water-heater-sizing-guide';
 import topsoil from './topsoil-yards-and-bags';
 import evCharger from './ev-charger-circuit-sizing';
+import panelClearance from './panel-clearance-nec-110-26';
 
 export const posts: BlogPost[] = [
   paverQuantity,
@@ -86,6 +87,7 @@ export const posts: BlogPost[] = [
   wireGauge,
   breakerSizing,
   panelLoad,
+  panelClearance,
   conduitBending,
   generatorSize,
   btuRoom,
