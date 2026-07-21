@@ -74,6 +74,22 @@ export const garagePlans: GaragePlan[] = [
     url: 'https://www.etsy.com/listing/4539123402',
   },
   {
+    id: 'PF-G004',
+    name: 'The Denby',
+    size: '24×30', w: 24, l: 30, sqft: 720,
+    cars: '2-Car', style: 'Gable',
+    doors: 'One 16′ carriage door',
+    roofFrame: 'Trussed',
+    features: 'Extra-deep 30′ bay + door awning',
+    blurb:
+      'The deep two-car: the same 16′ carriage door and charcoal standing-seam awning as the ' +
+      'Caldwell, stretched to 30 feet of depth — six extra feet for a full workshop or storage bay ' +
+      'across the back wall without giving up either parking bay. 16 trusses at 24″ o.c. over a ' +
+      'CS-PF portal door wall.',
+    image: '/plans/pf-g004.webp',
+    url: 'https://www.etsy.com/listing/4541250230',
+  },
+  {
     id: 'PF-G011',
     name: 'The Whitmore',
     size: '48×28', w: 48, l: 28, sqft: 1344,
